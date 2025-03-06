@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.albums.apps.AlbumsConfig',
     'apps.artists.apps.ArtistsConfig',
+    'apps.categories.apps.CategoriesConfig',
     'apps.conversations.apps.ConversationsConfig',
     'apps.favorites.apps.FavoritesConfig',
     'apps.follows.apps.FollowsConfig',
@@ -52,7 +53,7 @@ INSTALLED_APPS = [
     'apps.songs.apps.SongsConfig',
     'apps.transactions.apps.TransactionsConfig',
     'apps.users.apps.UsersConfig',
-
+    
 ]
 
 MIDDLEWARE = [

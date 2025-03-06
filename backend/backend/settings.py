@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'apps.chats.apps.ChatsConfig',
     'apps.payment_methods.apps.PaymentMethodsConfig',
     'apps.plans.apps.PlansConfig',
-    'apps.playlist_songs.apps.PlaylistSongsConfig',
     'apps.playlists.apps.PlaylistsConfig',
     'apps.roles.apps.RolesConfig',
     'apps.songs.apps.SongsConfig',

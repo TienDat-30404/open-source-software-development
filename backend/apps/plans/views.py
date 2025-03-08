@@ -5,13 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .models import Plan
 from .serializers import PlanSerializer
-
+from uuid import UUID
 class PlanAPIView(APIView):
     # permission_classes = [IsAuthenticated]  # Yêu cầu người dùng phải đăng nhập
 
     def get(self, request, pk=None):
         """Lấy danh sách hoặc chi tiết một kế hoạch"""
         if pk:
+            print(type(pk)) 
             plan = get_object_or_404(Plan, pk=pk)
             serializer = PlanSerializer(plan)
             return Response(serializer.data)

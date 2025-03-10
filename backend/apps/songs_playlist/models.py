@@ -4,7 +4,7 @@ from apps.songs.models import Song
 from apps.playlists.models import Playlist
 # Create your models here.
 class SongPlayList(BaseModel):
-    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, related_name="playlist_song")
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     
    

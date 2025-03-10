@@ -106,11 +106,10 @@ class SongViewSet(viewsets.ModelViewSet):
         audio_file = request.FILES.get("audio_url")
         image_file = request.FILES.get("image")
 
-        audio_url = song.audio_url  # Giữ URL cũ nếu không có file mới
-        image_url = song.image  # Giữ URL cũ nếu không có ảnh mới
+        audio_url = song.audio_url  
+        image_url = song.image  
         
 
-        # Xử lý file nhạc
         if audio_file:
             try:
                 upload_result = cloudinary.uploader.upload(audio_file, resource_type="auto")
@@ -119,33 +118,30 @@ class SongViewSet(viewsets.ModelViewSet):
                 return Response({"error": f"Audio upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
         print("audio_url", audio_url)
 
-    # Xử lý file ảnh
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)
                 image_url = upload_result["secure_url"]
             except Exception as e:
                 return Response({"error": f"Image upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-        print("image_url", image_url)
 
-        # Cập nhật dữ liệu vào request.data
-        request.data["audio_url"] = audio_url
-        request.data["image"] = image_url
+        mutable_data = request.data.copy()  
+        mutable_data["audio_url"] = audio_url
+        mutable_data["image"] = image_url
 
-        # Validate và cập nhật bài hát
-        serializer = self.get_serializer(song, data=request.data, partial=True)
+
+        serializer = self.get_serializer(song, data=mutable_data, partial=True)
         serializer.is_valid(raise_exception=True)
         updated_song = serializer.save()
 
-        # Cập nhật quan hệ bài hát - nghệ sĩ
         if artist_ids:
-            song.songartist_set.all().delete()  # Xóa quan hệ cũ
+            song.songartist_set.all().delete() 
             song_artists = [SongArtist(song=updated_song, artist_id=artist_id) for artist_id in artist_ids]
             SongArtist.objects.bulk_create(song_artists)
 
         return Response(
             {
-                # "song": serializer.data,
+                "song": serializer.data,
                 "status": 200},
             status=status.HTTP_200_OK
         )

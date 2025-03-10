@@ -7,7 +7,7 @@ class Artist(BaseModel):
     bio = models.TextField()
     country = models.CharField(max_length=100)
     date_of_birth = models.DateField(blank=True, null=True)
-    # image = models.CharField(max_length=255, null=True, blank=True)
+    image = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.name
     

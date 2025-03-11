@@ -1,12 +1,12 @@
 import React from 'react'
 import Header from '../components/Header/Header'
-import MainContent from '../../pages/HomePage/MainContent/MainContent'
+import Body from '../../pages/HomePage/Body'
 
 export default function DefaultLayout() {
   return (
-    <div>
+    <div  className='bg-black h-screen w-screen flex flex-col z-50'>
       <Header />
-      <MainContent />
+      <Body />
     </div>
   )
 }

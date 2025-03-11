@@ -52,7 +52,6 @@ class SongViewSet(viewsets.ModelViewSet):
 
         audio_file = request.FILES.get("audio_url")  
         image_file = request.FILES.get("image")
-        print("image_file", image_file)
         audio_url = None
         image_url = None
         if audio_file:
@@ -116,7 +115,6 @@ class SongViewSet(viewsets.ModelViewSet):
                 audio_url = upload_result["secure_url"]
             except Exception as e:
                 return Response({"error": f"Audio upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-        print("audio_url", audio_url)
 
         if image_file:
             try:
@@ -125,9 +123,8 @@ class SongViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 return Response({"error": f"Image upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        mutable_data = request.data.copy()  
-        mutable_data["audio_url"] = audio_url
-        mutable_data["image"] = image_url
+        mutable_data = {**request.data.dict(), "audio_url": audio_url, "image": image_url}
+
 
 
         serializer = self.get_serializer(song, data=mutable_data, partial=True)
@@ -145,3 +142,5 @@ class SongViewSet(viewsets.ModelViewSet):
                 "status": 200},
             status=status.HTTP_200_OK
         )
+
+    

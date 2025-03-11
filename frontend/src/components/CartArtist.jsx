@@ -1,8 +1,13 @@
 import React from 'react';
 import { Play } from 'lucide-react';
-function CardArtist({ imageUrl, artistName, artistType }) {
+import { useNavigate } from 'react-router-dom'
+function CardArtist({id, imageUrl, artistName, artistType }) {
+  const navigate = useNavigate()
+  const switchDetailArtist = () => {
+    navigate(`artist/${id}`)
+  }
   return (
-    <div className="bg-[#282828] rounded-lg w-[20%]"> 
+    <div onClick={() => switchDetailArtist()} className="bg-[#282828] rounded-lg w-[20%]"> 
       <div className="relative">
         <img src={imageUrl} alt={artistName} className="rounded-full w-32 h-32 mx-auto mb-4" />
         <div className="absolute bottom-2 right-2 bg-[#1ED760] rounded-full p-2">

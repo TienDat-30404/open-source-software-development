@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Plus, Search, Library, ArrowRight } from "lucide-react";
-
+import { getAllPlaylist } from '../../../services/PlayListService';
+import CartPlaylist from '../../../components/CartPlaylist';
 export default function Sidebar() {
+  const [playlists, setPlaylists] = useState([])
+  useEffect(() => {
+    const fetchData = async() => {
+      const response = await getAllPlaylist()
+    setPlaylists(response.playlists)
+    }
+    fetchData()
+  }, [])
   return (
 
     <div className="w-1/4 h-full bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
@@ -36,29 +45,14 @@ export default function Sidebar() {
 
       {/* Danh sách bài hát gần đây */}
       <div className="mt-4 flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <img
-            src="https://tse1.mm.bing.net/th?id=OIP.PcQ4PvC8QyBR_T29IonoowHaHa&pid=Api&P=0&h=180"
-            alt="playlist"
-            className="w-12 h-12 rounded-md"
+        {playlists?.length > 0 && playlists?.map((playlist, index) => (
+          <CartPlaylist 
+            key = {index}
+            image = {playlist?.songs[0]?.image}
+            name_playlist={playlist?.title}
+            name_user = "Tiến Đạt"
           />
-          <div>
-            <p className="text-green-400 text-base font-semibold">123</p>
-            <p className="text-sm text-gray-400">Danh sách phát · T Đạt</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <img
-            src="https://tse2.mm.bing.net/th?id=OIP.3jBRDaeXjRDmBxe8EkudOQHaEK&pid=Api&P=0&h=180"
-            alt="playlist"
-            className="w-12 h-12 rounded-md"
-          />
-          <div>
-            <p className="text-white text-base font-semibold">jj</p>
-            <p className="text-sm text-gray-400">Danh sách phát · T Đạt</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
 

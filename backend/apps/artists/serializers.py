@@ -11,7 +11,18 @@ class ArtistSerializer(serializers.ModelSerializer):
         
     def get_songs(self, obj):
         return [
-            {"id" : sa.song.id, "name" : sa.song.title}
+            {
+                "id" : sa.song.id,
+                "name" : sa.song.title,
+                "created_at" : sa.song.created_at,
+                "updated_at" : sa.song.updated_at,
+                "deleted_at" : sa.song.deleted_at,
+                "duration" : sa.song.duration,
+                "release_date" : sa.song.release_date,
+                "audio_url" : sa.song.audio_url,
+                "image" : sa.song.image
+                
+            }
             for sa in obj.artist_song.all()
         ]
 

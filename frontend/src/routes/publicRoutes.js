@@ -5,8 +5,10 @@ import Cart from "../pages/Cart/Cart";
 import DetailProduct from "../pages/DetailProduct/DetailProduct";
 import DetailArtist from "../pages/DetailArtist/DetailArtist";
 import MainContent from "../pages/HomePage/MainContent/MainContent";
+import DetailPlayList from "../pages/DetailPlaylist/DetailPlaylist";
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
-    {path : '/artist/:id', page : DetailArtist, layout : DefaultLayout}
+    {path : '/artist/:id', page : DetailArtist, layout : DefaultLayout},
+    {path : '/playlist/:id', page : DetailPlayList, layout : DefaultLayout}
 ]

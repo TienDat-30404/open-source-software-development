@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
-import { getAllArtist } from '../../services/ArtistService';
+import { getAllPlaylist } from '../../services/PlayListService';
 import { CircleCheckBig, Ellipsis, CirclePlus, Play, Pause } from 'lucide-react';
 
-export default function DetailArtist() {
+export default function DetailPlayList() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const [currentSong, setCurrentSong] = useState(null);
@@ -14,7 +14,7 @@ export default function DetailArtist() {
   useEffect(() => {
     audioRef.current = new Audio()
     const fetchData = async () => {
-      const response = await getAllArtist(id);
+      const response = await getAllPlaylist(id);
       setDetails(response);
     };
     fetchData();
@@ -38,13 +38,13 @@ export default function DetailArtist() {
       setIsPlaying(true)
     }
   }
-  console.log(currentSong)
+  
   return (
     <div>
       {details && (
         <Fragment>
           <div className="relative w-full h-64 bg-gray-800 rounded-lg overflow-hidden">
-            <img src={details?.image} alt={details?.name} className="absolute inset-0 w-full object-cover" />
+            <img src={details?.songs?.[0]?.image}  className="absolute inset-0 w-full object-cover" />
             <div className="absolute bottom-4 left-4 text-white">
               <div className="flex items-center mb-2">
                 <CircleCheckBig className="text-blue-500 mr-2" />

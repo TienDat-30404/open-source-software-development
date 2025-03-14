@@ -1,17 +1,26 @@
 import React from 'react'
 import { Music } from 'lucide-react'
-export default function CartPlaylist({image, name_playlist, name_user}) {
+import { useNavigate } from 'react-router-dom'
+
+export default function CartPlayList({ id, image, name_playlist, name_user }) {
+    const navigate = useNavigate()
+    const switchPlayList = () => {
+        navigate(`/playlist/${id}`)
+    }
     return (
-        <div className="flex items-center gap-2">
+        <div
+            className="flex items-center gap-2"
+            onClick={() => switchPlayList(id)}
+        >
             {image ? (
                 <img
                     src={image}
                     alt="playlist"
-                    className="w-12 h-12 rounded-md"
+                    className="w-1/6 h-12 rounded-md"
                 />
-            ) : <Music />}
+            ) : <Music className='w-1/6' />}
             <div>
-                <p className="text-white text-base font-semibold">{name_playlist}</p>
+                <p className="text-white text-sm font-semibold">{name_playlist}</p>
                 <p className="text-sm text-gray-400">Danh sách phát · {name_user}</p>
             </div>
         </div>

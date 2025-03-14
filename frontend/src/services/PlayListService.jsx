@@ -1,6 +1,9 @@
-export const getAllPlaylist = async() => {
-    const url = import.meta.env.VITE_API_URL 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/`, {
+export const getAllPlaylist = async(query) => {
+    if(query)
+    {
+        query += "/"
+    }
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${query}`, {
         method : 'GET',
         headers : {
             'Content-Type' : 'application/json'

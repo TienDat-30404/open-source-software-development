@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Plus, Search, Library, ArrowRight } from "lucide-react";
 import { getAllPlaylist } from '../../../services/PlayListService';
-import CartPlaylist from '../../../components/CartPlaylist';
+import CartPlayList from '../../../components/CartPlayList';
 export default function Sidebar() {
   const [playlists, setPlaylists] = useState([])
   useEffect(() => {
-    const fetchData = async() => {
-      const response = await getAllPlaylist()
-    setPlaylists(response.playlists)
+    const fetchData = async () => {
+      const response = await getAllPlaylist('')
+      setPlaylists(response.playlists)
     }
     fetchData()
   }, [])
@@ -46,11 +46,12 @@ export default function Sidebar() {
       {/* Danh sách bài hát gần đây */}
       <div className="mt-4 flex flex-col gap-2">
         {playlists?.length > 0 && playlists?.map((playlist, index) => (
-          <CartPlaylist 
-            key = {index}
-            image = {playlist?.songs[0]?.image}
+          <CartPlayList
+            key={index}
+            id={playlist?.id}
+            image={playlist?.songs[0]?.image}
             name_playlist={playlist?.title}
-            name_user = "Tiến Đạt"
+            name_user="Tiến Đạt"
           />
         ))}
       </div>

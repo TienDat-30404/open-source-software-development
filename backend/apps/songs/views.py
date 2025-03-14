@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
-
+from mutagen import File  
 
 class SongViewSet(viewsets.ModelViewSet):
     serializer_class = SongSerializer
@@ -58,18 +58,25 @@ class SongViewSet(viewsets.ModelViewSet):
             try:
                 audio_file.open()
                 file_buffer = io.BytesIO(audio_file.read())
-                audio_file.seek(0)
+                # file_buffer.seek(0)
+
+                audio_info = File(file_buffer)
+                if audio_info is not None and audio_info.info is not None:
+                    duration = round(audio_info.info.length)  # Độ dài (tính bằng giây)
+                else:
+                    return Response({"error": "Unsupported audio format"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                # file_buffer.seek(0)
                 upload_result = cloudinary.uploader.upload(file_buffer, resource_type="auto")
                 
                 audio_url = upload_result["secure_url"]
                 request.data.pop("audio_url", None)
-                
-                # request.data["audio_file"] = audio_url
+                request.data["duration"] = duration
+
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST)
-        
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)

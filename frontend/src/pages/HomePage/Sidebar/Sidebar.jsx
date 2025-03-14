@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { Plus, Search, Library, ArrowRight } from "lucide-react";
-import { getAllPlaylist } from '../../../services/PlayListService';
+import { Plus, Search, Library, ArrowRight, Music, FolderPlus } from "lucide-react";
+import { createPlayList, getAllPlaylist } from '../../../services/PlayListService';
 import CartPlayList from '../../../components/CartPlayList';
 export default function Sidebar() {
   const [playlists, setPlaylists] = useState([])
+  const [showCreatePlayList, setShowCreatePlayList] = useState(false)
+ 
+  const user = "07e1a821-a856-4efc-9d11-5957b5322a63"
+  const handleCreatePlayList = async () => {
+    console.log("user", user)
+    const response = await createPlayList({
+      user: user,
+      title : "",
+      description : ""
+    })
+    console.log("response", response)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllPlaylist('')
       setPlaylists(response.playlists)
     }
     fetchData()
-  }, [])
+  }, [handleCreatePlayList])
+
   return (
 
     <div className="w-1/4 h-full bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
@@ -19,8 +33,30 @@ export default function Sidebar() {
           <Library size={20} />
           <span className="font-semibold text-base">Thư viện</span>
         </div>
-        <div className='flex items-center'>
-          <Plus size={20} className="text-gray-300 cursor-pointer mr-3" />
+        <div className='flex items-center relative'>
+          <Plus
+            size={20}
+            className="text-gray-300 cursor-pointer mr-3"
+            onClick={() => setShowCreatePlayList(!showCreatePlayList)}
+          />
+          {showCreatePlayList && (
+            <div className="absolute top-full right-9 mt-2 w-56 bg-[#282828] px-3 rounded-md shadow-lg z-10">
+              <div className='flex items-center py-2'>
+                <Music size={17} />
+                <h2
+                  className="text-white text-sm ml-2"
+                  onClick={() => handleCreatePlayList()}
+                >
+                  Tạo danh sách phát mới
+                </h2>
+              </div>
+              <div className='flex items-center py-2'>
+                <FolderPlus size={17} />
+                <h2 className="text-white text-sm ml-2">Tạo danh sách phát mới</h2>
+              </div>
+
+            </div>
+          )}
           <ArrowRight size={20} className="text-gray-300 cursor-pointer" />
         </div>
 
@@ -50,7 +86,8 @@ export default function Sidebar() {
             key={index}
             id={playlist?.id}
             image={playlist?.songs[0]?.image}
-            name_playlist={playlist?.title}
+
+            name_playlist={playlist?.title != "" ? playlist?.title : `Danh sách phát của tôi # ${index + 1}`}
             name_user="Tiến Đạt"
           />
         ))}

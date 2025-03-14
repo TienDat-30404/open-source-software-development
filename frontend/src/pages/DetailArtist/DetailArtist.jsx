@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllArtist } from '../../services/ArtistService';
 import { CircleCheckBig, Ellipsis, CirclePlus, Play, Pause } from 'lucide-react';
-
+import { switchDurationVideo } from '../../until/function';
 export default function DetailArtist() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
@@ -114,10 +114,10 @@ export default function DetailArtist() {
                   </div>
                   <div className="flex items-center">
                     <span className="mr-4">14.059.103</span>
-                    {hoveringSong === song.id && (
+                    {hoveringSong === song?.id && (
                       <CirclePlus size={17} className='mr-3 text-gray-300' />
                     )}
-                    <span className='mr-3'>4:17</span>
+                    <span className='mr-3'>{switchDurationVideo(song?.duration)}</span>
                     {hoveringSong === song.id && (
                       <Ellipsis size={20} />
                     )}

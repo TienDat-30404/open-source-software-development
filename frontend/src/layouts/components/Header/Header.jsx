@@ -1,15 +1,20 @@
 import React from 'react';
 import { Search, House, Bell } from "lucide-react";
-
+import { useNavigate } from 'react-router-dom';
 export default function Header() {
+  const navigate = useNavigate()
   return (
     <div className="fixed top-0 left-0 w-full h-16 bg-black text-white flex items-center justify-between shadow-lg z-50 px-4">
       <div className="flex items-center space-x-4">
-        <div className="w-8 h-8">
+        <div 
+          className="w-8 h-8 "
+          onClick={() => navigate('/')}
+          >
           <img src="https://tse2.mm.bing.net/th?id=OIP.fkSXxvt9TDjfoykMqGhrWAHaHa&pid=Api&P=0&h=180" alt="Spotify Logo" className="w-full h-full" />
         </div>
 
-        <div className='bg-[#282828] rounded-full p-3'>
+        <div
+          className='bg-[#282828] rounded-full p-3'>
           <House />
         </div>
 
@@ -34,6 +39,6 @@ export default function Header() {
         </div>
       </div>
     </div>
-   
+
   );
 }

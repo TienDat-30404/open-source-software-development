@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from apps.songs.serializers import SongSerializer
 
 class PlaylistViewSet(viewsets.ModelViewSet):
-    queryset = Playlist.objects.all().order_by("-created_at")
+    queryset = Playlist.objects.all().order_by("created_at")
     serializer_class = PlaylistSerializer
 
     def list(self, request, *args, **kwargs):

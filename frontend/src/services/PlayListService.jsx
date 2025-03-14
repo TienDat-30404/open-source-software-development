@@ -11,3 +11,14 @@ export const getAllPlaylist = async(query) => {
     })
     return response.json()
 }
+
+export const createPlayList = async(data) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/`, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    })
+    return response.json()
+}

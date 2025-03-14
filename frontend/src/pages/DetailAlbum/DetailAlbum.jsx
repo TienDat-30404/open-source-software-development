@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
-import { getAllPlaylist } from '../../services/PlayListService';
+import { getAllAlbum } from '../../services/AlbumService';
 import { CircleCheckBig, Ellipsis, CirclePlus, Play, Pause } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
-export default function DetailPlayList() {
+export default function DetailAlbum() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const [currentSong, setCurrentSong] = useState(null);
@@ -14,7 +14,7 @@ export default function DetailPlayList() {
   useEffect(() => {
     audioRef.current = new Audio()
     const fetchData = async () => {
-      const response = await getAllPlaylist(id);
+      const response = await getAllAlbum(id);
       setDetails(response);
     };
     fetchData();
@@ -38,13 +38,13 @@ export default function DetailPlayList() {
       setIsPlaying(true)
     }
   }
-  
+
   return (
     <div>
       {details && (
         <Fragment>
           <div className="relative w-full h-64 bg-gray-800 rounded-lg overflow-hidden">
-            <img src={details?.songs?.[0]?.image}  className="absolute inset-0 w-full object-cover" />
+            <img src={details?.image} alt={details?.name} className="absolute inset-0 w-full object-cover" />
             <div className="absolute bottom-4 left-4 text-white">
               <div className="flex items-center mb-2">
                 <CircleCheckBig className="text-blue-500 mr-2" />
@@ -110,7 +110,7 @@ export default function DetailPlayList() {
                     }
 
                     <img src={song?.image} alt={song?.name} className="w-18 h-10 rounded-md mr-2" />
-                    <span className={currentSong?.audio_url === song.audio_url ? "text-green-500 font-bold" : ""}>{song?.name}</span>
+                    <span className={currentSong?.audio_url === song?.audio_url ? "text-green-500 font-bold" : ""}>{song?.name}</span>
                   </div>
                   <div className="flex items-center">
                     <span className="mr-4">14.059.103</span>
@@ -118,7 +118,7 @@ export default function DetailPlayList() {
                       <CirclePlus size={17} className='mr-3 text-gray-300' />
                     )}
                     <span className='mr-3'>{switchDurationVideo(song?.duration)}</span>
-                    {hoveringSong === song.id && (
+                    {hoveringSong === song?.id && (
                       <Ellipsis size={20} />
                     )}
 

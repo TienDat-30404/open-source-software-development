@@ -15,6 +15,7 @@ export default function DetailPlayList() {
     audioRef.current = new Audio()
     const fetchData = async () => {
       const response = await getAllPlaylist(id);
+      console.log(response)
       setDetails(response);
     };
     fetchData();

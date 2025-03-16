@@ -8,7 +8,7 @@ export default function Album() {
         const fetchData = async () => {
             const response = await getAllAlbum('')
             setAlbums(response)
-            console.log(response)
+            console.log(response?.albums)
         }
         fetchData()
     }, [])

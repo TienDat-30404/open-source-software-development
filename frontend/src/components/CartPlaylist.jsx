@@ -2,15 +2,16 @@ import React from 'react'
 import { Music } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-export default function CartPlayList({ id, image, name_playlist, name_user }) {
+export default function CartPlayList({ id, image, name_playlist, name_user, clickRight }) {
     const navigate = useNavigate()
     const switchPlayList = () => {
         navigate(`/playlist/${id}`)
     }
     return (
         <div
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 hover:bg-[#282828] rounded-md cursor-pointer"
             onClick={() => switchPlayList(id)}
+            onContextMenu={(e) => clickRight(e, id)}
         >
             {image ? (
                 <img

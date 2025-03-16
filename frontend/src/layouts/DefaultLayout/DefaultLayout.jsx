@@ -8,10 +8,12 @@ export default function DefaultLayout({ children }) {
     <div className='bg-black h-screen w-screen flex flex-col z-50'>
       <Header />
       {/* <Body /> */}
-      <div className='flex h-screen pt-16'>
-        <Sidebar />
-        <div className='ml-[calc(25.3%)] flex-1 bg-[#131212] text-white rounded-lg'>
-          {children}
+      <div className='flex w-full h-5/6  pt-16'>
+        <div className='w-1/4 h-full'>
+          <Sidebar />
+        </div>
+        <div className="w-3/4 text-white rounded-lg h-full overflow-y-auto">
+        {children}
         </div>
       </div>
       <Footer />

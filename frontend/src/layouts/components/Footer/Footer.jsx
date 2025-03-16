@@ -67,7 +67,7 @@ export default function Footer() {
     }
 
     return (
-        <div className="fixed bottom-0 left-0 w-full h-24 bg-black text-white flex items-center px-6 justify-between shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 w-full h-1/6 bg-black text-white flex items-center px-6 justify-between shadow-lg z-50">
             {/* Thông tin bài hát */}
             <div className="flex items-center w-1/4">
                 <img src="http://www.freeiconspng.com/uploads/blue-user-icon-32.jpg" className="w-12 h-12 rounded mr-4" />

@@ -1,33 +1,59 @@
 import React, { useEffect, useState } from 'react'
-import { Plus, Search, Library, ArrowRight, Music, FolderPlus } from "lucide-react";
-import { createPlayList, getAllPlaylist } from '../../../services/PlayListService';
+import {
+  Plus, Search, Library, ArrowRight, Music, ListPlus, UserRoundX, Pen, Trash, FolderPlus, HeartOff, Folder, Pin, Share2
+} from "lucide-react";
 import CartPlayList from '../../../components/CartPlayList';
+import { usePlaylists, useCreatePlaylist, useDeletePlayList } from '../../../hooks/usePlaylists';
+import MenuItem from '../../../components/MenuItem';
+import { deletePlaylist } from '../../../services/PlayListService';
+import EditPlaylistModal from './EditPlaylistModal';
 export default function Sidebar() {
-  const [playlists, setPlaylists] = useState([])
+  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists();
+  const createPlaylistMutation = useCreatePlaylist('');
+  const deletePlaylistMutation = useDeletePlayList()
+
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
- 
+  const [selectedPlaylist, setSelectedPlaylist] = useState({
+    menuVisible: false,
+    modalEdit : false,
+    playlist: null
+  })
   const user = "07e1a821-a856-4efc-9d11-5957b5322a63"
   const handleCreatePlayList = async () => {
-    console.log("user", user)
-    const response = await createPlayList({
+    createPlaylistMutation.mutate({
       user: user,
-      title : "",
-      description : ""
+      title: "",
+      description: "",
+      image : ""
     })
-    console.log("response", response)
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getAllPlaylist('')
-      setPlaylists(response.playlists)
-    }
-    fetchData()
-  }, [handleCreatePlayList])
+  const handleSelectedPlaylist = (e, playlist) => {
+    e.preventDefault()
+    setSelectedPlaylist({
+      menuVisible: true,
+      playlist: playlist
+    })
+  }
+  const handleClickOutside = () => {
+    if (selectedPlaylist.modalEdit) return;
+    setSelectedPlaylist({
+      menuVisible: false,
+      idPlaylist: null
+    })
+  };
 
+  const handleDeletePlaylist = async (id) => {
+    deletePlaylistMutation.mutate(id)
+    setSelectedPlaylist({
+      menuVisible: false,
+      idPlaylist: null
+    })
+  }
+  console.log(selectedPlaylist)
   return (
 
-    <div className="w-1/4 h-full bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
+    <div className="w-1/4 h-5/6 bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-300">
           <Library size={20} />
@@ -40,21 +66,13 @@ export default function Sidebar() {
             onClick={() => setShowCreatePlayList(!showCreatePlayList)}
           />
           {showCreatePlayList && (
-            <div className="absolute top-full right-9 mt-2 w-56 bg-[#282828] px-3 rounded-md shadow-lg z-10">
-              <div className='flex items-center py-2'>
-                <Music size={17} />
-                <h2
-                  className="text-white text-sm ml-2"
-                  onClick={() => handleCreatePlayList()}
-                >
-                  Tạo danh sách phát mới
-                </h2>
-              </div>
-              <div className='flex items-center py-2'>
-                <FolderPlus size={17} />
-                <h2 className="text-white text-sm ml-2">Tạo danh sách phát mới</h2>
-              </div>
-
+            <div className="absolute top-full right-9 mt-2 w-60 bg-[#282828] px-2 rounded-md shadow-lg z-10">
+              <MenuItem
+                icon={<Music size={17} />}
+                text="Tạo danh sách phát mới"
+                handleClick={handleCreatePlayList}
+              />
+              <MenuItem icon={<FolderPlus size={17} />} text="Tạo danh sách phát mới" />
             </div>
           )}
           <ArrowRight size={20} className="text-gray-300 cursor-pointer" />
@@ -79,16 +97,48 @@ export default function Sidebar() {
         />
       </div>
 
-      {/* Danh sách bài hát gần đây */}
+      {selectedPlaylist.menuVisible && (
+        <div className="bg-[#282828] text-white rounded-md w-72 py-2 absolute top-20">
+          <MenuItem
+            size={8}
+            icon={<ListPlus />}
+            clickOutside = {() => handleClickOutside()}
+            text="Thêm vào danh sách chờ"
+          />
+          <MenuItem icon={<UserRoundX />} text="Xóa khỏi hồ sơ" />
+          <MenuItem
+            icon={<Pen />}
+            text="Sửa thông tin chi tiết"
+            handleClick={() => setSelectedPlaylist(prev => ({...prev, modalEdit : true})) }
+          />
+          <MenuItem
+            icon={<Trash />}
+            text="Xóa"
+            handleClick={() => handleDeletePlaylist(selectedPlaylist?.playlist?.id)}
+          />
+          <MenuItem icon={<Music />} text="Tạo danh sách phát" />
+          <MenuItem icon={<FolderPlus />} text="Tạo thư mục" />
+          <MenuItem icon={<HeartOff />} text="Loại bỏ khỏi hồ sơ sở thích của bạn" />
+          <MenuItem icon={<Folder />} text="Di chuyển sang thư mục" />
+          <MenuItem icon={<Pin />} text="Ghim danh sách phát" />
+          <MenuItem icon={<Share2 />} text="Chia sẻ" />
+        </div>
+      )}
+
+      <EditPlaylistModal 
+        show={selectedPlaylist?.modalEdit} 
+        data={selectedPlaylist?.playlist} 
+        close = {() => setSelectedPlaylist(prev => ({...prev, modalEdit : false}))}
+      />
       <div className="mt-4 flex flex-col gap-2">
-        {playlists?.length > 0 && playlists?.map((playlist, index) => (
+        {playlists?.results?.length > 0 && playlists?.results?.map((playlist, index) => (
           <CartPlayList
             key={index}
             id={playlist?.id}
-            image={playlist?.songs[0]?.image}
-
+            image={playlist?.image}
             name_playlist={playlist?.title != "" ? playlist?.title : `Danh sách phát của tôi # ${index + 1}`}
             name_user="Tiến Đạt"
+            clickRight={(e) => handleSelectedPlaylist(e, playlist)}
           />
         ))}
       </div>

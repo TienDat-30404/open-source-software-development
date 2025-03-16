@@ -1,8 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllAlbum } from '../../services/AlbumService';
-import { CircleCheckBig, Ellipsis, CirclePlus, Play, Pause } from 'lucide-react';
+import {
+  CircleCheckBig, Ellipsis, CirclePlus, Play, Pause, Plus, Heart, List, Radio, User,
+  Disc, FileText, Upload,
+} from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
+import MenuItem from '../../components/MenuItem';
+import Header from './Header';
 export default function DetailAlbum() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
@@ -39,26 +44,16 @@ export default function DetailAlbum() {
     }
   }
 
+
   return (
     <div>
       {details && (
-        <Fragment>
-          <div className="relative w-full h-64 bg-gray-800 rounded-lg overflow-hidden">
-            <img src={details?.image} alt={details?.name} className="absolute inset-0 w-full object-cover" />
-            <div className="absolute bottom-4 left-4 text-white">
-              <div className="flex items-center mb-2">
-                <CircleCheckBig className="text-blue-500 mr-2" />
-                <span className="text-sm">Nghệ sĩ được xác minh</span>
-              </div>
-              <h1 className="text-6xl font-bold py-2">{details?.name}</h1>
-              <p className="text-base py-3">394.233 người nghe hằng tháng</p>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-b from-[#601d1d] to-[#121212] text-white p-4 rounded-lg w-full">
+        <div className='w-full h-full p-1'>
+          <Header details={details} />
+          <div className="bg-gradient-to-b h-36 from-[#601d1d] to-[#121212] text-white p-4 rounded-lg w-full">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <div className="bg-[#1DB954] rounded-full p-2 mr-2">
+                <div className="bg-[#1DB954] rounded-full">
                   {isPlaying ? (
                     <Pause
                       onClick={() => {
@@ -69,6 +64,7 @@ export default function DetailAlbum() {
                     />
                   ) :
                     currentSong != null ? (
+
                       <Play
                         className="w-10 h-7"
                         onClick={() => handlePlaySong(currentSong)}
@@ -90,11 +86,21 @@ export default function DetailAlbum() {
 
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-4">Phổ biến</h2>
-
+            <h2 className="text-2xl font-bold mb-4 ">Phổ biến</h2>
+            {/* <div className="bg-[#282828] text-white rounded-md w-72 py-2 absolute top-20">
+              <MenuItem icon={<Plus />} text="Add to playlist" />
+              <MenuItem icon={<Heart />} text="Save to your Liked Songs" />
+              <MenuItem icon={<List />} text="Add to queue" />
+              <MenuItem icon={<Radio />} text="Go to song radio" />
+              <MenuItem icon={<User />} text="Go to artist" />
+              <MenuItem icon={<Disc />} text="Go to album" />
+              <MenuItem icon={<FileText />} text="View credits" />
+              <MenuItem icon={<Upload />} text="Share" />
+            </div> */}
+          
             <div className="space-y-1">
               {details?.songs?.map((song, index) => (
-                <div key={song.id} className="flex items-center justify-between cursor-pointer hover:bg-[#424141] p-2 rounded-lg"
+                <div key={song.id} className="flex items-center justify-between cursor-pointer hover:bg-[#424141] py-2 rounded-lg"
                   onClick={() => handlePlaySong(song)}
                   onMouseEnter={() => setHoveringSong(song.id)}
                   onMouseLeave={() => setHoveringSong(null)}
@@ -106,18 +112,19 @@ export default function DetailAlbum() {
                     ) : hoveringSong === song?.id ? (
                       <Play size={17} />
                     ) :
-                      <span className="mr-4 text-base ">{index + 1}</span>
+                      <span className="pr-4 text-base ">{index + 1}</span>
                     }
 
-                    <img src={song?.image} alt={song?.name} className="w-18 h-10 rounded-md mr-2" />
-                    <span className={currentSong?.audio_url === song?.audio_url ? "text-green-500 font-bold" : ""}>{song?.name}</span>
+                    <img src={song?.image} alt={song?.name} className="w-18 h-10 rounded-md pr-2" />
+                    <span className={currentSong?.audio_url === song?.audio_url ? "text-green-500 font-bold" : ""}>{song?.title}</span>
                   </div>
+
                   <div className="flex items-center">
-                    <span className="mr-4">14.059.103</span>
+                    <span className="pr-4">14.059.103</span>
                     {hoveringSong === song.id && (
-                      <CirclePlus size={17} className='mr-3 text-gray-300' />
+                      <CirclePlus size={17} className='pr-3 text-gray-300' />
                     )}
-                    <span className='mr-3'>{switchDurationVideo(song?.duration)}</span>
+                    <span className='pr-3'>{switchDurationVideo(song?.duration)}</span>
                     {hoveringSong === song?.id && (
                       <Ellipsis size={20} />
                     )}
@@ -127,7 +134,7 @@ export default function DetailAlbum() {
               ))}
             </div>
           </div>
-        </Fragment>
+        </div>
       )}
       {/* Audio element */}
       {/* <audio ref={audioRef} onEnded={() => setIsPlaying(false)} /> */}

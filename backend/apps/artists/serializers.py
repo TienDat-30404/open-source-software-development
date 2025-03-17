@@ -13,7 +13,7 @@ class ArtistSerializer(serializers.ModelSerializer):
         return [
             {
                 "id" : sa.song.id,
-                "name" : sa.song.title,
+                "title" : sa.song.title,
                 "created_at" : sa.song.created_at,
                 "updated_at" : sa.song.updated_at,
                 "deleted_at" : sa.song.deleted_at,

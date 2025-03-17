@@ -37,3 +37,20 @@ export const updateItemByFormData = async(url, id, data) => {
     })
     return response.json()
 }
+
+export const addItemToItem = async(url, id, urlMethod, data) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}/${id}/${urlMethod}/`, {
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    })
+    return response.json()
+}
+
+export const deleteItemOutOfIem = async(url, idItemParent, urlMethod, idItemChild) => {
+    await fetch(`${import.meta.env.VITE_API_URL}/${url}/${idItemParent}/${urlMethod}/${idItemChild}/`, {
+        method : "DELETE",
+    })
+}

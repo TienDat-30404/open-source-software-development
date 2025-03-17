@@ -26,8 +26,10 @@ export const handleChangeInput = (e, setInformations) => {
     }))
 }
 
+
 export const handleChangeFile = (e, setInformations) => {
     const selectedFileImage = e.target.files[0]
     setInformations(selectedFileImage)
 }
+
 

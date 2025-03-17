@@ -1,4 +1,4 @@
-import { getItem, createItem, deleteItem, updateItemByFormData } from "./apis"
+import { getItem, createItem, deleteItem, updateItemByFormData, addItemToItem, deleteItemOutOfIem } from "./apis"
 export const getAllPlaylist = async(query) => {
     return getItem('playlists', query)
 }
@@ -15,6 +15,14 @@ export const updatePlaylist = async(id, data) => {
     return updateItemByFormData('playlists', id, data)
 }
 
+
+export const addSongOnPlaylist = async(id, data) => {
+    return addItemToItem('playlists', id, 'add-song-to-playlist', data)
+}
+
+export const deleteSongOutOfPlaylist = async(idParent, idChild) => {
+    return deleteItemOutOfIem('playlists', idParent, 'remove-song-out-playlist', idChild)
+}
 
 
 

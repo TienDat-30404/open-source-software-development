@@ -14,6 +14,7 @@ export default function Album() {
     }, [])
     return (
         <div className=''>
+            <h1 className='text-2xl'>Album</h1>
             <div className='flex items-center'>
                 {albums?.results?.length > 0 && albums?.results?.map((album, index) => (
                     <CardAlbum key={index}

@@ -16,8 +16,8 @@ export default function MainContent() {
         <button className="text-gray-400">Hiện tất cả</button>
       </div>
       {/* <Radio /> */}
-      {/* <Artist /> */}
       <Album />
+      <Artist />
     </div>
   )
 }

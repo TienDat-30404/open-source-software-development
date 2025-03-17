@@ -21,7 +21,7 @@ export default function MenuItem({ icon, text, handleClick, clickOutside = () =>
         e.stopPropagation(); 
         handleClick && handleClick();
       }} 
-      className="flex items-center px-4 py-2 hover:bg-[#3E3E3E] cursor-pointer"
+      className="flex items-center px-4 py-2 hover:bg-[#3E3E3E] cursor-pointer z-10"
     >
       <span className="mr-3 ">{icon}</span>
       <span className="flex-1 text-sm">{text}</span>

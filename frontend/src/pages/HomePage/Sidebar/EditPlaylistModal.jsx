@@ -49,7 +49,6 @@ function EditPlaylistModal({ show, data, close }) {
     setFileInputKey(Date.now());
 
   }
-  console.log("informations", informations)
   return (
     <div className={`fixed inset-0 ${show ? 'flex' : 'hidden'} items-center justify-center bg-black bg-opacity-50`}>
       <div className="bg-[#282828] text-white rounded-lg p-6 w-[500px]">

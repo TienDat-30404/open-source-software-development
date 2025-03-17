@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, House, Bell } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import SearchComponent from '../../../components/SearchComponent';
 export default function Header() {
   const navigate = useNavigate()
   return (
@@ -18,15 +19,14 @@ export default function Header() {
           <House />
         </div>
 
-        <div className="relative flex items-center">
-          <Search className="absolute left-3 text-gray-400 w-5 h-5" />
+        <SearchComponent 
+          background="bg-[#282828]"
+          placeholder="Bạn muốn phát nội dung gì"
+          width = "5"
+          height = "5"
+          isRounded
+        />
 
-          <input
-            type="text"
-            placeholder="Bạn muốn phát nội dung gì?"
-            className="bg-[#282828] rounded-full py-2 pl-10 pr-4 w-96 focus:outline-none"
-          />
-        </div>
       </div>
       <div className="flex items-center space-x-4">
         <button className="bg-white text-black rounded-full py-1 px-3 font-semibold">

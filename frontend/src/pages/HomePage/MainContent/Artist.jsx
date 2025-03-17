@@ -14,6 +14,7 @@ export default function Artist() {
     }, [])
     return (
         <div className=''>
+            <h1 className='text-2xl'>Nghệ sĩ</h1>
             <div className='flex items-center'>
                 {artists?.results?.length > 0 && artists?.results?.map((artist, index) => (
                     <CardArtist key={index}

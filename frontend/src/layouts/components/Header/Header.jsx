@@ -1,27 +1,32 @@
 import React from 'react';
 import { Search, House, Bell } from "lucide-react";
-
+import { useNavigate } from 'react-router-dom';
+import SearchComponent from '../../../components/SearchComponent';
 export default function Header() {
+  const navigate = useNavigate()
   return (
     <div className="fixed top-0 left-0 w-full h-16 bg-black text-white flex items-center justify-between shadow-lg z-50 px-4">
       <div className="flex items-center space-x-4">
-        <div className="w-8 h-8">
+        <div 
+          className="w-8 h-8 "
+          onClick={() => navigate('/')}
+          >
           <img src="https://tse2.mm.bing.net/th?id=OIP.fkSXxvt9TDjfoykMqGhrWAHaHa&pid=Api&P=0&h=180" alt="Spotify Logo" className="w-full h-full" />
         </div>
 
-        <div className='bg-[#282828] rounded-full p-3'>
+        <div
+          className='bg-[#282828] rounded-full p-3'>
           <House />
         </div>
 
-        <div className="relative flex items-center">
-          <Search className="absolute left-3 text-gray-400 w-5 h-5" />
+        <SearchComponent 
+          background="bg-[#282828]"
+          placeholder="Bạn muốn phát nội dung gì"
+          width = "5"
+          height = "5"
+          isRounded
+        />
 
-          <input
-            type="text"
-            placeholder="Bạn muốn phát nội dung gì?"
-            className="bg-[#282828] rounded-full py-2 pl-10 pr-4 w-96 focus:outline-none"
-          />
-        </div>
       </div>
       <div className="flex items-center space-x-4">
         <button className="bg-white text-black rounded-full py-1 px-3 font-semibold">
@@ -34,6 +39,6 @@ export default function Header() {
         </div>
       </div>
     </div>
-   
+
   );
 }

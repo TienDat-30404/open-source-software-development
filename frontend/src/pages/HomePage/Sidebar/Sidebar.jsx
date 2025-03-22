@@ -1,17 +1,80 @@
-import React from 'react'
-import { Plus, Search, Library, ArrowRight } from "lucide-react";
-
+import React, { useEffect, useState } from 'react'
+import {
+  Plus, Search, Library, ArrowRight, Music, ListPlus, UserRoundX, Pen, Trash, FolderPlus, HeartOff, Folder, Pin, Share2
+} from "lucide-react";
+import CartPlayList from '../../../components/CartPlayList';
+import { usePlaylists, useCreatePlaylist, useDeletePlayList } from '../../../hooks/usePlaylists';
+import MenuItem from '../../../components/MenuItem';
+import { deletePlaylist } from '../../../services/PlayListService';
+import EditPlaylistModal from './EditPlaylistModal';
 export default function Sidebar() {
+  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists();
+  const createPlaylistMutation = useCreatePlaylist('');
+  const deletePlaylistMutation = useDeletePlayList()
+
+  const [showCreatePlayList, setShowCreatePlayList] = useState(false)
+  const [selectedPlaylist, setSelectedPlaylist] = useState({
+    menuVisible: false,
+    modalEdit : false,
+    playlist: null
+  })
+  const user = "07e1a821-a856-4efc-9d11-5957b5322a63"
+  const handleCreatePlayList = async () => {
+    createPlaylistMutation.mutate({
+      user: user,
+      title: "",
+      description: "",
+      image : ""
+    })
+  }
+
+  const handleSelectedPlaylist = (e, playlist) => {
+    e.preventDefault()
+    setSelectedPlaylist({
+      menuVisible: true,
+      playlist: playlist
+    })
+  }
+  const handleClickOutside = () => {
+    if (selectedPlaylist.modalEdit) return;
+    setSelectedPlaylist({
+      menuVisible: false,
+      idPlaylist: null
+    })
+  };
+
+  const handleDeletePlaylist = async (id) => {
+    deletePlaylistMutation.mutate(id)
+    setSelectedPlaylist({
+      menuVisible: false,
+      idPlaylist: null
+    })
+  }
+  console.log(selectedPlaylist)
   return (
 
-    <div className="w-1/4 h-full bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
+    <div className="w-1/4 h-5/6 bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-300">
           <Library size={20} />
           <span className="font-semibold text-base">Thư viện</span>
         </div>
-        <div className='flex items-center'>
-          <Plus size={20} className="text-gray-300 cursor-pointer mr-3" />
+        <div className='flex items-center relative'>
+          <Plus
+            size={20}
+            className="text-gray-300 cursor-pointer mr-3"
+            onClick={() => setShowCreatePlayList(!showCreatePlayList)}
+          />
+          {showCreatePlayList && (
+            <div className="absolute top-full right-9 mt-2 w-60 bg-[#282828] px-2 rounded-md shadow-lg z-10">
+              <MenuItem
+                icon={<Music size={17} />}
+                text="Tạo danh sách phát mới"
+                handleClick={handleCreatePlayList}
+              />
+              <MenuItem icon={<FolderPlus size={17} />} text="Tạo danh sách phát mới" />
+            </div>
+          )}
           <ArrowRight size={20} className="text-gray-300 cursor-pointer" />
         </div>
 
@@ -34,31 +97,50 @@ export default function Sidebar() {
         />
       </div>
 
-      {/* Danh sách bài hát gần đây */}
-      <div className="mt-4 flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <img
-            src="https://tse1.mm.bing.net/th?id=OIP.PcQ4PvC8QyBR_T29IonoowHaHa&pid=Api&P=0&h=180"
-            alt="playlist"
-            className="w-12 h-12 rounded-md"
+      {selectedPlaylist.menuVisible && (
+        <div className="bg-[#282828] text-white rounded-md w-72 py-2 absolute top-20">
+          <MenuItem
+            size={8}
+            icon={<ListPlus />}
+            clickOutside = {() => handleClickOutside()}
+            text="Thêm vào danh sách chờ"
           />
-          <div>
-            <p className="text-green-400 text-base font-semibold">123</p>
-            <p className="text-sm text-gray-400">Danh sách phát · T Đạt</p>
-          </div>
+          <MenuItem icon={<UserRoundX />} text="Xóa khỏi hồ sơ" />
+          <MenuItem
+            icon={<Pen />}
+            text="Sửa thông tin chi tiết"
+            handleClick={() => setSelectedPlaylist(prev => ({...prev, modalEdit : true})) }
+          />
+          <MenuItem
+            icon={<Trash />}
+            text="Xóa"
+            handleClick={() => handleDeletePlaylist(selectedPlaylist?.playlist?.id)}
+          />
+          <MenuItem icon={<Music />} text="Tạo danh sách phát" />
+          <MenuItem icon={<FolderPlus />} text="Tạo thư mục" />
+          <MenuItem icon={<HeartOff />} text="Loại bỏ khỏi hồ sơ sở thích của bạn" />
+          <MenuItem icon={<Folder />} text="Di chuyển sang thư mục" />
+          <MenuItem icon={<Pin />} text="Ghim danh sách phát" />
+          <MenuItem icon={<Share2 />} text="Chia sẻ" />
         </div>
+      )}
 
-        <div className="flex items-center gap-2">
-          <img
-            src="https://tse2.mm.bing.net/th?id=OIP.3jBRDaeXjRDmBxe8EkudOQHaEK&pid=Api&P=0&h=180"
-            alt="playlist"
-            className="w-12 h-12 rounded-md"
+      <EditPlaylistModal 
+        show={selectedPlaylist?.modalEdit} 
+        data={selectedPlaylist?.playlist} 
+        close = {() => setSelectedPlaylist(prev => ({...prev, modalEdit : false}))}
+      />
+      <div className="mt-4 flex flex-col gap-2">
+        {playlists?.results?.length > 0 && playlists?.results?.map((playlist, index) => (
+          <CartPlayList
+            key={index}
+            id={playlist?.id}
+            image={playlist?.image}
+            name_playlist={playlist?.title != "" ? playlist?.title : `Danh sách phát của tôi # ${index + 1}`}
+            name_user="Tiến Đạt"
+            clickRight={(e) => handleSelectedPlaylist(e, playlist)}
           />
-          <div>
-            <p className="text-white text-base font-semibold">jj</p>
-            <p className="text-sm text-gray-400">Danh sách phát · T Đạt</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
 

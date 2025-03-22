@@ -4,8 +4,9 @@ from apps.users.models import User
 # Create your models here.
 class Playlist(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
+    title = models.CharField(max_length=255, null=True, blank=True)
+    image = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(max_length=255, null=True, blank=True)
     
     class Meta: 
         db_table = 'playlists'

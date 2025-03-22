@@ -8,9 +8,10 @@ from .serializers import PlaylistSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from apps.songs.serializers import SongSerializer
+import cloudinary.uploader
 
 class PlaylistViewSet(viewsets.ModelViewSet):
-    queryset = Playlist.objects.all().order_by("-created_at")
+    queryset = Playlist.objects.all().order_by("created_at")
     serializer_class = PlaylistSerializer
 
     def list(self, request, *args, **kwargs):
@@ -18,9 +19,36 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         if user_id:
             queryset = queryset.filter(user_id=user_id)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(
             {"playlists": serializer.data, "status": 200}, status=status.HTTP_200_OK
+        )
+        
+        
+    def update(self, request, *args, **kwargs):
+        playlist = self.get_object()  
+        image_file = request.data.get("image")
+        image_url = playlist.image
+        if image_file:
+            try:
+                upload_result = cloudinary.uploader.upload(image_file)
+                image_url = upload_result["secure_url"]
+            except Exception as e:
+                return Response({"error": f"Image upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        mutable_data = {**request.data.dict(), "image": image_url}
+        serializer = self.get_serializer(playlist, data=mutable_data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {
+                "playlist": serializer.data,
+                "status": 200},
+            status=status.HTTP_200_OK
         )
 
     @action(detail=True, methods=["post"], url_path="add-song-to-playlist")
@@ -76,3 +104,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
                 {"error": "Bài hát không có trong playlist"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({"message": "Xóa thành công"}, status=response.status_code)

@@ -6,11 +6,18 @@ from rest_framework import status
 from rest_framework.response import Response
 import cloudinary.uploader
 
+
 class ArtistViewSet(viewsets.ModelViewSet): 
     queryset = Artist.objects.all().order_by('-created_at')
     serializer_class = ArtistSerializer
+    
     def list(self, request, *args, **kwargs): 
         queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+    
         serializer = self.get_serializer(queryset, many = True)
         return Response({
             "artists" : serializer.data,

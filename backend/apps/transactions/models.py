@@ -21,7 +21,11 @@ class Subscription(BaseModel):
         if self.auto_renew and self.status == 'active':
             self.end_date = now() + timedelta(days=self.plan.duration_days)
             self.save()
-
+    def remaining_days(self):
+        """ Trả về số ngày còn lại của subscription """
+        if self.end_date > now():
+            return (self.end_date - now()).days
+        return 0  # Hết hạn
     def __str__(self):
         return f"{self.user.username} - {self.plan.name}"
     class Meta : 

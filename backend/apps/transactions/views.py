@@ -8,9 +8,10 @@ from ..plans.models import Plan
 from ..payment_methods.models import PaymentMethod 
 from .serializers import SubscriptionSerializer
 from ..users.models import User 
+from ..utils.response import success_response,error_response
 class PurchaseSubscriptionView(APIView):
     """ Mua gói đăng ký """
-  
+    # permission_classes = [IsAuthenticated]
     def post(self, request):
         # user = request.user
         user=User.objects.first()
@@ -66,39 +67,40 @@ class PurchaseSubscriptionView(APIView):
             # Cập nhật lại subscription_id trong giao dịch
             payment_transaction.subscription = subscription
             payment_transaction.save()
-
-            return Response({"subscription":SubscriptionSerializer(subscription).data}, status=status.HTTP_201_CREATED)
+            return success_response({"subscription":SubscriptionSerializer(subscription).data},code=status.HTTP_201_CREATED)
         else:
             return Response({"error": "Thanh toán không thành công"}, status=status.HTTP_400_BAD_REQUEST)
 
 class CancelSubscriptionView(APIView):
     """ Hủy gói đăng ký """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def put(self, request):
-        user = request.user
+        # user = request.user
+        user=User.objects.first()
         try:
             subscription = Subscription.objects.get(user=user, status='active')
         except Subscription.DoesNotExist:
-            return Response({"error": "Không có gói đăng ký nào để hủy"}, status=status.HTTP_400_BAD_REQUEST)
-
+            return error_response(message="Không có gói đăng ký nào để hủy")
         subscription.status = 'canceled'
         subscription.auto_renew = False
         subscription.save()
-        return Response({"message": "Gói đăng ký đã hủy thành công"}, status=status.HTTP_200_OK)
+        return success_response(message="Gói đăng ký đã hủy thành công")
 
 class RenewSubscriptionView(APIView):
     """ Gia hạn gói đăng ký """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def put(self, request):
-        user = request.user
-
+        # user = request.user
+        user=User.objects.first()
         try:
             subscription = Subscription.objects.get(user=user, status='active', auto_renew=True)
         except Subscription.DoesNotExist:
             return Response({"error": "Không có gói nào để gia hạn"}, status=status.HTTP_400_BAD_REQUEST)
-
+        # Chỉ gia hạn nếu gói đã hết hạn
+        if subscription.end_date > now():
+            return Response({"error": "Gói chưa hết hạn"}, status=status.HTTP_400_BAD_REQUEST)
         plan = subscription.plan
 
         # Tạo giao dịch thanh toán với trạng thái "pending"
@@ -119,34 +121,25 @@ class RenewSubscriptionView(APIView):
         if payment_transaction.status == "success":
             # Gia hạn gói đăng ký
             subscription.renew_subscription()
-            return Response({"message": "Gói đã được gia hạn thành công"}, status=status.HTTP_200_OK)
+            return success_response(message="Gói đã được gia hạn thành công")
         else:
             return Response({"error": "Thanh toán không thành công"}, status=status.HTTP_400_BAD_REQUEST)
 
 class CheckPremiumAccessView(APIView):
     """ Kiểm tra quyền truy cập Premium """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        is_premium = Subscription.objects.filter(user=request.user, status='active', end_date__gt=now()).exists()
-        return Response({"is_premium": is_premium}, status=status.HTTP_200_OK)
+        is_premium = Subscription.objects.filter(user=User.objects.first(), status='active', end_date__gt=now()).exists()
+        return success_response(data={"is_premium": is_premium})
 class CurrentSubscriptionView(APIView):
     """ Lấy thông tin gói đăng ký hiện tại của người dùng """
-    permission_classes = [IsAuthenticated]
-
+    # permission_classes = [IsAuthenticated]
     def get(self, request):
-        user = request.user
+        # user = request.user
+        user=User.objects.first()
         subscription = Subscription.objects.filter(user=user, status='active').first()
 
         if not subscription:
             return Response({"message": "Bạn chưa có gói đăng ký nào."}, status=status.HTTP_200_OK)
-
-        remaining_days = (subscription.end_date - now()).days
-
-        return Response({
-            "plan_name": subscription.plan.name,
-            "start_date": subscription.start_date.strftime("%Y-%m-%d"),
-            "end_date": subscription.end_date.strftime("%Y-%m-%d"),
-            "remaining_days": remaining_days if remaining_days > 0 else 0,
-            "auto_renew": subscription.auto_renew
-        }, status=status.HTTP_200_OK)
+        return success_response(data=SubscriptionSerializer(subscription).data)

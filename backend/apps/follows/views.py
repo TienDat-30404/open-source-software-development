@@ -9,7 +9,7 @@ from apps.users.models import User
 from apps.artists.models import Artist
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-
+from ..utils.response import success_response,error_response
 class FollowArtistAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -19,8 +19,8 @@ class FollowArtistAPIView(APIView):
         follow, created = Follow.objects.get_or_create(user=request.user, artist=artist)
         
         if created:
-            return Response({"message": "Follow thành công"}, status=status.HTTP_201_CREATED)
-        return Response({"message": "Bạn đã follow nghệ sĩ này rồi"}, status=status.HTTP_400_BAD_REQUEST)
+            return success_response(message="theo dõi nghệ sĩ thành công",code=status.HTTP_201_CREATED)
+        return error_response(message="bạn đã theo dõi nghệ sĩ này rồi ")
     
     def delete(self, request, artist_id):
         """API để unfollow một nghệ sĩ"""
@@ -29,5 +29,5 @@ class FollowArtistAPIView(APIView):
         
         if follow.exists():
             follow.delete()
-            return Response({"message": "Unfollow thành công"}, status=status.HTTP_200_OK)
-        return Response({"message": "Bạn chưa follow nghệ sĩ này"}, status=status.HTTP_400_BAD_REQUEST)
+            return success_response(message="hủy theo dõi nghệ sĩ thành công",code=status.HTTP_204_NO_CONTENT)
+        return error_response(message="Bạn chưa follow nghệ sĩ này")

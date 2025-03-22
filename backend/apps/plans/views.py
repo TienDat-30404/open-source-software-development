@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import Plan
 from .serializers import PlanSerializer
 from uuid import UUID
+from ..utils.response import success_response,error_response
 class PlanAPIView(APIView):
     # permission_classes = [IsAuthenticated]  # Yêu cầu người dùng phải đăng nhập
 
@@ -15,18 +16,18 @@ class PlanAPIView(APIView):
             print(type(pk)) 
             plan = get_object_or_404(Plan, pk=pk)
             serializer = PlanSerializer(plan)
-            return Response(serializer.data)
+            return success_response(data=serializer.data)
         plans = Plan.objects.all()
         serializer = PlanSerializer(plans, many=True)
-        return Response(serializer.data)
+        return success_response(data=serializer.data)
 
     def post(self, request):
         """Tạo một kế hoạch mới"""
         serializer = PlanSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return success_response(data=serializer.data,code=status.HTTP_201_CREATED)
+        return error_response(errors=serializer.errors)
 
     def put(self, request, pk):
         """Cập nhật toàn bộ kế hoạch"""
@@ -34,10 +35,10 @@ class PlanAPIView(APIView):
         serializer = PlanSerializer(plan, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return success_response(data=serializer.data)
+        return error_response(errors=serializer.errors)
     def delete(self, request, pk):
         """Xóa một kế hoạch"""
         plan = get_object_or_404(Plan, pk=pk)
         plan.delete()
-        return Response({"message": "Plan deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        return success_response(message="xóa kế hoạch thành công ",code=status.HTTP_204_NO_CONTENT)

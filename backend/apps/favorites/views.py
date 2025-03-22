@@ -9,7 +9,7 @@ from apps.users.models import User
 from apps.songs.models import Song
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-
+from ..utils.response import success_response,error_response
 class LikeSongAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -19,9 +19,8 @@ class LikeSongAPIView(APIView):
         favorite, created = Favorite.objects.get_or_create(user=request.user, song=song)
 
         if created:
-            return Response({"message": "Like bài hát thành công"}, status=status.HTTP_201_CREATED)
-        return Response({"message": "Bạn đã like bài hát này rồi"}, status=status.HTTP_400_BAD_REQUEST)
-
+            return success_response(message= "Like bài hát thành công",code=status.HTTP_201_CREATED)
+        return error_response(message="Bạn đã like bài hát này rồi")
     def delete(self, request, song_id):
         """API để unlike một bài hát"""
         song = get_object_or_404(Song, id=song_id)
@@ -29,5 +28,5 @@ class LikeSongAPIView(APIView):
 
         if favorite.exists():
             favorite.delete()
-            return Response({"message": "Unlike bài hát thành công"}, status=status.HTTP_200_OK)
-        return Response({"message": "Bạn chưa like bài hát này"}, status=status.HTTP_400_BAD_REQUEST)
+            return success_response(message="Unlike bài hát thành công")
+        return error_response(message="Bạn chưa like bài hát này")

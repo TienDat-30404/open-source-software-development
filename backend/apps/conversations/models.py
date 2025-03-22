@@ -5,11 +5,8 @@ from apps.users.models import User
 class Conversation(BaseModel):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_conversations')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_conversations')
-    
     class Meta: 
         db_table = 'conversations'
-
-
 class Room(BaseModel):
     name=models.CharField(max_length=255,unique=True)
     def __str__(self):

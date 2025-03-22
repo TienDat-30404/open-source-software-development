@@ -1,107 +1,152 @@
-import hashlib
-import hmac
-import urllib.parse
-from django.conf import settings
-from django.http import JsonResponse
-from datetime import datetime, timedelta
-from django.shortcuts import redirect
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
-from .models import Transaction
-from .serializers import TransactionSerializer
-from ..users.models import User
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from django.utils.timezone import now, timedelta
+from .models import  Subscription, PaymentTransaction
 from ..plans.models import Plan
-from ..payment_methods.models import PaymentMethod
-# VNPay Configuration
-VNPAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-VNPAY_RETURN_URL = "http://127.0.0.1:8000/api/transactions/vnpay-return"
-VNPAY_TMNCODE="AFRBBAVK"
-VNPAY_SECRET_KEY="IPPD39X4VQJTXG43JUC6S6C2TTCL9MP0"
-
-class TransactionAPIView(APIView):
-    # permission_classes = [IsAuthenticated]  # Chỉ user đăng nhập mới truy cập
-
-    def get(self, request, pk=None):
-        """Lấy danh sách giao dịch của user hoặc chi tiết một giao dịch"""
-        if pk:
-            transaction = get_object_or_404(Transaction, pk=pk, user=request.user)
-            serializer = TransactionSerializer(transaction)
-            return Response(serializer.data)
-        transactions = Transaction.objects.filter(user=request.user)
-        serializer = TransactionSerializer(transactions, many=True)
-        return Response(serializer.data)
-
+from ..payment_methods.models import PaymentMethod 
+from .serializers import SubscriptionSerializer
+from ..users.models import User 
+class PurchaseSubscriptionView(APIView):
+    """ Mua gói đăng ký """
+  
     def post(self, request):
-        """Tạo giao dịch mới"""
-        print(VNPAY_TMNCODE)
-        print(VNPAY_SECRET_KEY)
+        # user = request.user
         user=User.objects.first()
-        plan=Plan.objects.first()
-        payment=PaymentMethod.objects.first()
-        serializer = TransactionSerializer(data=request.data)
-        if serializer.is_valid():
-            transaction = serializer.save(user=user, status="pending",plan=plan,payment_method=payment)
-            print(transaction.id)
-            now = datetime.now()
-            expire_date = now + timedelta(minutes=15)
-            # Tạo URL thanh toán VNPay
-            vnp_params = {
-                "vnp_Version": "2.1.0",
-                "vnp_Command": "pay",
-                "vnp_TmnCode": VNPAY_TMNCODE,
-                "vnp_Amount": int(transaction.amount * 100),  # VNPay yêu cầu nhân 100
-                "vnp_CurrCode": "VND",
-                "vnp_TxnRef": str(int(transaction.id)),
-                "vnp_OrderInfo": f"Thanh toan giao dich {transaction.id}",
-                "vnp_OrderType": "other",
-                "vnp_Locale": "vn",
-                "vnp_ReturnUrl": VNPAY_RETURN_URL,
-                "vnp_IpAddr": request.META.get("REMOTE_ADDR", "127.0.0.1"),
-                "vnp_BankCode":"vnp_BankCode=VNBANK",
-                "vnp_CreateDate": now.strftime('%Y%m%d%H%M%S'),
-                "vnp_ExpireDate": expire_date.strftime('%Y%m%d%H%M%S')
-            }
-            #  Sắp xếp tham số theo thứ tự alphabet
-            sorted_params = sorted(vnp_params.items())
+        plan_id = request.data.get("plan_id")
+        payment_method_id=request.data.get("payment_method_id")
+        auto_renew = request.data.get("auto_renew", True)
+        try:
+            payment_method=PaymentMethod.objects.get(id=payment_method_id)
+        except PaymentMethod.DoesNotExist:
+            return Response({"error": "Phương thức thanh toán không tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            plan = Plan.objects.get(id=plan_id)
+        except Plan.DoesNotExist:
+            return Response({"error": "Gói đăng ký không tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
+        # Kiểm tra nếu người dùng đã có gói đăng ký active 
+        existing_subscription = Subscription.objects.filter(user=user, status='active').first()
+        if existing_subscription:
+            remaining_days = (existing_subscription.end_date - now()).days
+            if remaining_days > 0:
+                return Response({
+                    "message": f"Bạn đã có gói đăng ký  {existing_subscription.plan.name}, còn {remaining_days}  ngày sử dụng."
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    "message": f"Bạn đã có gọi đăng ký    {existing_subscription.plan.name} đã hết hạn  {existing_subscription.end_date} , vui lòng gia hạn hoặc hủy gói hiện tại"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        # Tạo giao dịch thanh toán (ban đầu ở trạng thái pending)
+        payment_transaction = PaymentTransaction.objects.create(
+            user=user,
+            subscription=None,  # Chưa có Subscription, sẽ cập nhật sau
+            amount=plan.price,
+            payment_method=payment_method,
+            status="pending"
+        )
 
-            # Không encode khi tạo chữ ký
-            sign_data = "&".join(f"{key}={value}" for key, value in sorted_params)
+        # === Giả lập thanh toán ===
+        # Ở đây bạn có thể gọi API của VNPay hoặc bất kỳ cổng thanh toán nào khác
+        # Giả sử thanh toán thành công:
+        payment_transaction.status = "success"
+        payment_transaction.save()
 
-            # Encode URL khi gửi
-            query_string = "&".join(f"{key}={urllib.parse.quote(str(value), safe='')}" for key, value in sorted_params)
+        if payment_transaction.status == "success":
+            # Tạo đăng ký mới
+            subscription = Subscription.objects.create(
+                user=user,
+                plan=plan,
+                start_date=now(),
+                end_date=now() + timedelta(days=plan.duration_days),
+                status='active',
+                auto_renew=auto_renew
+            )
 
-            # Tạo chữ ký SHA-256
-            hmac_hash = hmac.new(
-            VNPAY_SECRET_KEY.encode('utf-8'),
-            sign_data.encode('utf-8'),
-            hashlib.sha512  # Dùng SHA-256 thay vì SHA-512
-            ).hexdigest().upper()
+            # Cập nhật lại subscription_id trong giao dịch
+            payment_transaction.subscription = subscription
+            payment_transaction.save()
 
-            # Tạo URL thanh toán VNPay
-            vnp_url = f"{VNPAY_URL}?{query_string}&vnp_SecureHash={hmac_hash}"
+            return Response({"subscription":SubscriptionSerializer(subscription).data}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "Thanh toán không thành công"}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"payment_url": vnp_url}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CancelSubscriptionView(APIView):
+    """ Hủy gói đăng ký """
+    permission_classes = [IsAuthenticated]
 
+    def put(self, request):
+        user = request.user
+        try:
+            subscription = Subscription.objects.get(user=user, status='active')
+        except Subscription.DoesNotExist:
+            return Response({"error": "Không có gói đăng ký nào để hủy"}, status=status.HTTP_400_BAD_REQUEST)
 
-class VNPayReturnAPIView(APIView):
-    """Xử lý kết quả thanh toán từ VNPay"""
+        subscription.status = 'canceled'
+        subscription.auto_renew = False
+        subscription.save()
+        return Response({"message": "Gói đăng ký đã hủy thành công"}, status=status.HTTP_200_OK)
+
+class RenewSubscriptionView(APIView):
+    """ Gia hạn gói đăng ký """
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+
+        try:
+            subscription = Subscription.objects.get(user=user, status='active', auto_renew=True)
+        except Subscription.DoesNotExist:
+            return Response({"error": "Không có gói nào để gia hạn"}, status=status.HTTP_400_BAD_REQUEST)
+
+        plan = subscription.plan
+
+        # Tạo giao dịch thanh toán với trạng thái "pending"
+        payment_transaction = PaymentTransaction.objects.create(
+            user=user,
+            subscription=subscription,
+            amount=plan.price,
+            payment_method=None,
+            status="pending"
+        )
+
+        # === Giả lập thanh toán ===
+        # Ở đây có thể gọi API VNPay hoặc một cổng thanh toán khác
+        # Giả sử thanh toán thành công:
+        payment_transaction.status = "success"
+        payment_transaction.save()
+
+        if payment_transaction.status == "success":
+            # Gia hạn gói đăng ký
+            subscription.renew_subscription()
+            return Response({"message": "Gói đã được gia hạn thành công"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Thanh toán không thành công"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckPremiumAccessView(APIView):
+    """ Kiểm tra quyền truy cập Premium """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        vnp_response = request.query_params
-        vnp_txn_ref = vnp_response.get("vnp_TxnRef")  # Mã giao dịch của mình
-        vnp_response_code = vnp_response.get("vnp_ResponseCode")  # Mã phản hồi từ VNPay
-        # Kiểm tra giao dịch có tồn tại không
-        transaction = get_object_or_404(Transaction, id=vnp_txn_ref)
+        is_premium = Subscription.objects.filter(user=request.user, status='active', end_date__gt=now()).exists()
+        return Response({"is_premium": is_premium}, status=status.HTTP_200_OK)
+class CurrentSubscriptionView(APIView):
+    """ Lấy thông tin gói đăng ký hiện tại của người dùng """
+    permission_classes = [IsAuthenticated]
 
-        if vnp_response_code == "00":  # Thanh toán thành công
-            transaction.status = "success"
-        else:
-            transaction.status = "failed"
-        
-        transaction.save()
+    def get(self, request):
+        user = request.user
+        subscription = Subscription.objects.filter(user=user, status='active').first()
 
-        return JsonResponse({"message": "Payment processed", "status": transaction.status})
+        if not subscription:
+            return Response({"message": "Bạn chưa có gói đăng ký nào."}, status=status.HTTP_200_OK)
+
+        remaining_days = (subscription.end_date - now()).days
+
+        return Response({
+            "plan_name": subscription.plan.name,
+            "start_date": subscription.start_date.strftime("%Y-%m-%d"),
+            "end_date": subscription.end_date.strftime("%Y-%m-%d"),
+            "remaining_days": remaining_days if remaining_days > 0 else 0,
+            "auto_renew": subscription.auto_renew
+        }, status=status.HTTP_200_OK)

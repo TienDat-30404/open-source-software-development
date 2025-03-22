@@ -21,7 +21,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message = data['message']
         username = data['username']
-
         # Lưu tin nhắn vào database
         user = await sync_to_async(User.objects.get)(username=username)
         room = await sync_to_async(Room.objects.get)(name=self.room_name)
@@ -33,7 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 "type": "chat_message",
                 "message": message,
-                "username": username
+                "username": username,
             }
         )
 
@@ -41,5 +40,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """Gửi tin nhắn đến client"""
         await self.send(text_data=json.dumps({
             "message": event["message"],
-            "username": event["username"]
+            "username": event["username"],
         }))

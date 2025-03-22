@@ -88,6 +88,14 @@ export default function ChatApp() {
     }
   };
 
+  // 💡 Nhóm tin nhắn theo ngày
+  const groupedMessages = messages.reduce((acc, msg) => {
+    const date = new Date(msg.timestamp).toLocaleDateString('vi-VN');
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(msg);
+    return acc;
+  }, {});
+
   return (
     <div className="p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
       <h2 className="text-xl font-bold mb-2 text-center">💬 Nhóm Chat</h2>
@@ -107,52 +115,48 @@ export default function ChatApp() {
       </select>
 
       {/* Khung chat */}
-      <div
-        ref={chatRef}
-        className="border p-2 h-96 overflow-y-auto bg-gray-100 rounded-lg"
-      >
-        {messages.map((msg, index) => {
-          const isMine = msg.username === username;
-          const showAvatar =
-            index === 0 || messages[index - 1].username !== msg.username;
-
-          return (
-            <div
-              key={index}
-              className={`flex mb-2 ${
-                isMine ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              {!isMine && showAvatar && (
-                <img
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${msg.username}`}
-                  alt="Avatar"
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-              )}
-
-              <div className="flex flex-col max-w-xs">
-                {!isMine && showAvatar && (
-                  <div className="text-sm font-semibold text-gray-600 mb-1">
-                    {msg.username}
-                  </div>
-                )}
-
-                <div
-                  className={`px-3 py-2 rounded-2xl shadow ${
-                    isMine ? 'bg-blue-500 text-white' : 'bg-white text-black'
-                  }`}
-                >
-                  {msg.message}
-                </div>
-
-                <div className="text-xs text-gray-400 mt-1 text-right">
-                  {new Date(msg.timestamp).toLocaleTimeString()}
-                </div>
-              </div>
+      <div ref={chatRef} className="border p-2 h-96 overflow-y-auto bg-gray-100 rounded-lg">
+        {Object.entries(groupedMessages).map(([date, msgs]) => (
+          <div key={date}>
+            {/* Hiển thị ngày */}
+            <div className="text-center text-xs font-semibold text-gray-500 my-2">
+              {date}
             </div>
-          );
-        })}
+            {msgs.map((msg, index) => {
+              const isMine = msg.username === username;
+              const showAvatar = index === 0 || msgs[index - 1].username !== msg.username;
+
+              return (
+                <div key={index} className={`flex mb-2 ${isMine ? 'justify-end' : 'justify-start'}`}>
+                  {!isMine && showAvatar && (
+                    <img
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${msg.username}`}
+                      alt="Avatar"
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                  )}
+
+                  <div className="flex flex-col max-w-xs">
+                    {!isMine && showAvatar && (
+                      <div className="text-sm font-semibold text-gray-600 mb-1">
+                        {msg.username}
+                      </div>
+                    )}
+
+                    <div className={`px-3 py-2 rounded-2xl shadow ${isMine ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}>
+                      {msg.message}
+                    </div>
+
+                    {/* Hiển thị giờ nhắn (HH:mm) */}
+                    <div className="text-xs text-gray-400 mt-1 text-right">
+                      {new Date(msg.timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {/* Ô nhập tin nhắn */}

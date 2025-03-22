@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .models import Room, Message,User
+from .models import Room, Message, User
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -12,6 +12,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Thêm vào nhóm để broadcast tin nhắn
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+
     async def disconnect(self, close_code):
         """Ngắt kết nối WebSocket"""
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -21,18 +22,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message = data['message']
         username = data['username']
-        # Lưu tin nhắn vào database
+        timestamp = data.get('timestamp')  # Lấy timestamp từ client
+
+        # Lưu tin nhắn vào database với timestamp của client
         user = await sync_to_async(User.objects.get)(username=username)
         room = await sync_to_async(Room.objects.get)(name=self.room_name)
-        await sync_to_async(Message.objects.create)(room=room, user=user, content=message)
+        await sync_to_async(Message.objects.create)(
+            room=room, user=user, content=message, timestamp=timestamp
+        )
 
-        # Gửi tin nhắn đến nhóm WebSocket
+        # Gửi tin nhắn đến nhóm WebSocket (broadcast)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 "type": "chat_message",
                 "message": message,
                 "username": username,
+                "timestamp": timestamp,  # Gửi timestamp từ client
             }
         )
 
@@ -41,4 +47,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": event["message"],
             "username": event["username"],
+            "timestamp": event["timestamp"],  # Trả timestamp về client
         }))

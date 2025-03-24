@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllPlaylist, createPlayList, deletePlaylist, updatePlaylist, deleteSongOutOfPlaylist } from '../services/PlayListService';
-import { use } from 'react';
 
 export const usePlaylists = (query = "") => {
   return useQuery({
     queryKey: ['playlists', query],
-    queryFn: () => getAllPlaylist(query)
+    queryFn: () => getAllPlaylist(query),
+    
   })
 }
 

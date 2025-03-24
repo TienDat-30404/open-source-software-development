@@ -8,20 +8,24 @@ import MenuItem from '../../../components/MenuItem';
 import { deletePlaylist } from '../../../services/PlayListService';
 import EditPlaylistModal from './EditPlaylistModal';
 export default function Sidebar() {
-  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists();
+  const userId = "07e1a821-a856-4efc-9d11-5957b5322a63"
+  const [searchPlaylist, setSearchPlaylist] = useState('')
+  let queryPlaylist = `user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
+  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
+  console.log(playlists)
   const createPlaylistMutation = useCreatePlaylist('');
   const deletePlaylistMutation = useDeletePlayList()
-
+  console.log("playlists", playlists)
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
   const [selectedPlaylist, setSelectedPlaylist] = useState({
     menuVisible: false,
     modalEdit : false,
     playlist: null
   })
-  const user = "07e1a821-a856-4efc-9d11-5957b5322a63"
+
   const handleCreatePlayList = async () => {
     createPlaylistMutation.mutate({
-      user: user,
+      user: userId,
       title: "",
       description: "",
       image : ""
@@ -92,7 +96,9 @@ export default function Sidebar() {
         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           type="text"
+          value = {searchPlaylist}
           placeholder="Tìm kiếm"
+          onChange={(e) => setSearchPlaylist(e.target.value) }
           className="w-full bg-[#282828] text-sm rounded-full py-2 pl-10 pr-4 text-white focus:outline-none"
         />
       </div>

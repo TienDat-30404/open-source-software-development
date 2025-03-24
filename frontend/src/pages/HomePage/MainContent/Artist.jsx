@@ -6,7 +6,7 @@ export default function Artist() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getAllArtist('')
+            const response = await getAllArtist()
             console.log(response)
             setArtists(response)
         }

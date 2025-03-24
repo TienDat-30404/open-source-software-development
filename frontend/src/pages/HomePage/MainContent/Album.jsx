@@ -6,9 +6,8 @@ export default function Album() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getAllAlbum('')
+            const response = await getAllAlbum()
             setAlbums(response)
-            console.log(response?.albums)
         }
         fetchData()
     }, [])

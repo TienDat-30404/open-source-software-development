@@ -21,8 +21,7 @@ export default function DetailAlbum() {
     };
     fetchData();
   }, [id]);
-  console.log(details)
-  console.log(currentSong)
+
   return (
     <div>
       {details && (

@@ -5,14 +5,15 @@ import SearchComponent from '../SearchComponent'
 import { usePlaylists } from '../../hooks/usePlaylists'
 import { addSongOnPlaylist } from '../../services/PlayListService'
 export default function SongPlaylist({ song }) {
-    const userId = "07e1a821-a856-4efc-9d11-5957b5322a63"
+    const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
 
     const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(`user_id=${userId}`);
-
+    console.log(playlists)
     const handleAddSongOnPlaylist = async (idPlaylist) => {
         const response = await addSongOnPlaylist(idPlaylist, {
             song_id: song?.id
         })
+        console.log(playlists)
     }
     return (
         <div className='absolute right-[100%] w-[250px] bg-[#282828] z-10 max-h-[200px] overflow-y-auto '>

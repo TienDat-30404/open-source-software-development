@@ -8,7 +8,7 @@ import MenuItem from '../../../components/MenuItem';
 import { deletePlaylist } from '../../../services/PlayListService';
 import EditPlaylistModal from './EditPlaylistModal';
 export default function Sidebar() {
-  const userId = "07e1a821-a856-4efc-9d11-5957b5322a63"
+  const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
   const [searchPlaylist, setSearchPlaylist] = useState('')
   let queryPlaylist = `user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
   const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);

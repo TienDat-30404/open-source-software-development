@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ManageRoom() {
   const [rooms, setRooms] = useState([]);
-  const [newRoom, setNewRoom] = useState('');
+  const [roomName, setRoomName] = useState('');
   const [editingRoom, setEditingRoom] = useState(null);
-  const [editName, setEditName] = useState('');
+  const [message, setMessage] = useState(null); // Lưu thông báo
+  const [messageType, setMessageType] = useState('success'); // success | error
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,26 +21,64 @@ export default function ManageRoom() {
         setRooms(data.data);
       }
     } catch (err) {
-      console.error('Error fetching rooms:', err);
+      showMessage('Lỗi tải danh sách phòng!', 'error');
     }
   };
 
-  const handleAddRoom = async () => {
-    if (!newRoom.trim()) return;
-    try {
-      const res = await fetch('http://127.0.0.1:8000/api/conversations/rooms', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newRoom }),
-      });
+  const handleAddOrUpdateRoom = async () => {
+    if (!roomName.trim()) {
+      showMessage('Tên phòng không được để trống!', 'error');
+      return;
+    }
 
-      if (res.ok) {
-        const newRoomData = await res.json(); // Nhận dữ liệu từ server
-        setRooms((prevRooms) => [...prevRooms, newRoomData.data]); // Cập nhật state rooms
-        setNewRoom('');
+    if (editingRoom) {
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/conversations/rooms/${editingRoom.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: roomName }),
+          }
+        );
+
+        if (res.ok) {
+          setRooms((prevRooms) =>
+            prevRooms.map((room) =>
+              room.id === editingRoom.id ? { ...room, name: roomName } : room
+            )
+          );
+          showMessage('Cập nhật phòng thành công!', 'success');
+          setEditingRoom(null);
+          setRoomName('');
+        } else {
+          showMessage('Cập nhật phòng thất bại!', 'error');
+        }
+      } catch (err) {
+        showMessage('Lỗi kết nối khi cập nhật phòng!', 'error');
       }
-    } catch (err) {
-      console.error('Error adding room:', err);
+    } else {
+      try {
+        const res = await fetch(
+          'http://127.0.0.1:8000/api/conversations/rooms',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: roomName }),
+          }
+        );
+
+        if (res.ok) {
+          const newRoomData = await res.json();
+          setRooms((prevRooms) => [...prevRooms, newRoomData.data]);
+          setRoomName('');
+          showMessage('Thêm phòng thành công!', 'success');
+        } else {
+          showMessage('Thêm phòng thất bại!', 'error');
+        }
+      } catch (err) {
+        showMessage('Lỗi kết nối khi thêm phòng!', 'error');
+      }
     }
   };
 
@@ -55,36 +94,19 @@ export default function ManageRoom() {
 
       if (res.ok) {
         setRooms((prevRooms) => prevRooms.filter((room) => room.id !== id));
+        showMessage('Xóa phòng thành công!', 'success');
+      } else {
+        showMessage('Xóa phòng thất bại!', 'error');
       }
     } catch (err) {
-      console.error('Error deleting room:', err);
+      showMessage('Lỗi kết nối khi xóa phòng!', 'error');
     }
   };
 
-  const handleUpdateRoom = async () => {
-    if (!editName.trim()) return;
-    try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/conversations/rooms/${editingRoom.id}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: editName }),
-        }
-      );
-
-      if (res.ok) {
-        setRooms((prevRooms) =>
-          prevRooms.map((room) =>
-            room.id === editingRoom.id ? { ...room, name: editName } : room
-          )
-        );
-        setEditingRoom(null);
-        setEditName('');
-      }
-    } catch (err) {
-      console.error('Error updating room:', err);
-    }
+  const showMessage = (text, type) => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(null), 2000);
   };
 
   return (
@@ -93,25 +115,17 @@ export default function ManageRoom() {
         💬 Quản lý phòng
       </h2>
 
-      {/* Thêm phòng */}
-      <div className="mb-6 flex gap-4">
-        <input
-          type="text"
-          value={newRoom}
-          onChange={(e) => setNewRoom(e.target.value)}
-          placeholder="Nhập tên phòng..."
-          className="border rounded p-2"
-        />
-        <button
-          onClick={handleAddRoom}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+      {message && (
+        <div
+          className={`mb-4 px-4 py-2 rounded text-white ${
+            messageType === 'success' ? 'bg-green-500' : 'bg-red-500'
+          }`}
         >
-          Thêm phòng
-        </button>
-      </div>
+          {message}
+        </div>
+      )}
 
-      {/* Bảng danh sách phòng */}
-      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg overflow-auto mb-6 max-h-96">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
@@ -122,50 +136,59 @@ export default function ManageRoom() {
           <tbody>
             {rooms.map((room) => (
               <tr key={room.id} className="border-t">
-                <td className="p-3">
-                  {editingRoom?.id === room.id ? (
-                    <input
-                      type="text"
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      className="border p-1 w-full"
-                    />
-                  ) : (
-                    <span>{room.name}</span>
-                  )}
-                </td>
+                <td className="p-3">{room.name}</td>
                 <td className="p-3 flex gap-2 justify-center">
-                  {editingRoom?.id === room.id ? (
-                    <button
-                      onClick={handleUpdateRoom}
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                    >
-                      Lưu
-                    </button>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => {
-                          setEditingRoom(room);
-                          setEditName(room.name);
-                        }}
-                        className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                      >
-                        Sửa
-                      </button>
-                      <button
-                        onClick={() => handleDeleteRoom(room.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                      >
-                        Xóa
-                      </button>
-                    </>
-                  )}
+                  <button
+                    onClick={() => {
+                      setEditingRoom(room);
+                      setRoomName(room.name);
+                    }}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    onClick={() => handleDeleteRoom(room.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  >
+                    Xóa
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex gap-4 items-center mt-4">
+        <input
+          type="text"
+          value={roomName}
+          onChange={(e) => setRoomName(e.target.value)}
+          placeholder="Nhập tên phòng..."
+          className="border rounded p-2 w-64"
+        />
+        <button
+          onClick={handleAddOrUpdateRoom}
+          className={`px-3 py-1 rounded text-white ${
+            editingRoom
+              ? 'bg-blue-500 hover:bg-blue-600'
+              : 'bg-green-500 hover:bg-green-600'
+          }`}
+        >
+          {editingRoom ? 'Lưu' : 'Thêm phòng'}
+        </button>
+        {editingRoom && (
+          <button
+            onClick={() => {
+              setEditingRoom(null);
+              setRoomName('');
+            }}
+            className="px-3 py-1 rounded bg-gray-500 text-white hover:bg-gray-600"
+          >
+            Hủy
+          </button>
+        )}
       </div>
     </div>
   );

@@ -101,50 +101,55 @@ export default function ManagePlans() {
     setPlanForm({ name: '', price: '', description: '', duration_days: '' });
     setEditingPlan(null);
   };
-
+  const showMessage = (text, type) => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(null), 2000);
+  };
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">
         📦 Quản lý gói dịch vụ
       </h2>
-
       {/* Bảng danh sách gói */}
       <div className="w-full max-w-4xl bg-white shadow-md rounded-lg overflow-hidden mb-6">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="p-3 text-left">Tên gói</th>
-              <th className="p-3 text-left">Giá</th>
-              <th className="p-3 text-left">Mô tả</th>
-              <th className="p-3 text-left">Thời gian (ngày)</th>
-              <th className="p-3 text-center">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {plans.map((plan) => (
-              <tr key={plan.id} className="border-t">
-                <td className="p-3">{plan.name}</td>
-                <td className="p-3">{plan.price}</td>
-                <td className="p-3">{plan.description}</td>
-                <td className="p-3">{plan.duration_days}</td>
-                <td className="p-3 flex gap-2 justify-center">
-                  <button
-                    onClick={() => handleEditPlan(plan)}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                  >
-                    Sửa
-                  </button>
-                  <button
-                    onClick={() => handleDeletePlan(plan.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  >
-                    Xóa
-                  </button>
-                </td>
+        <div className="overflow-auto max-h-96">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="p-3 text-left">Tên gói</th>
+                <th className="p-3 text-left">Giá</th>
+                <th className="p-3 text-left">Mô tả</th>
+                <th className="p-3 text-left">Thời gian (ngày)</th>
+                <th className="p-3 text-center">Hành động</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {plans.map((plan) => (
+                <tr key={plan.id} className="border-t">
+                  <td className="p-3">{plan.name}</td>
+                  <td className="p-3">{plan.price}</td>
+                  <td className="p-3">{plan.description}</td>
+                  <td className="p-3">{plan.duration_days}</td>
+                  <td className="p-3 flex gap-2 justify-center">
+                    <button
+                      onClick={() => handleEditPlan(plan)}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    >
+                      Sửa
+                    </button>
+                    <button
+                      onClick={() => handleDeletePlan(plan.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    >
+                      Xóa
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Form thêm / sửa gói */}

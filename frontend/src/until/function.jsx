@@ -33,3 +33,9 @@ export const handleChangeFile = (e, setInformations) => {
 }
 
 
+
+export const handleSwitchPage = (newPage, setPage, data) => {
+    if (newPage >= 1 && (data?.next || data?.previous)) {
+        setPage(newPage);
+    }
+};

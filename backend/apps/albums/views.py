@@ -15,11 +15,15 @@ class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all().order_by('-created_at')
     serializer_class = AlbumSerializer
     def list(self, request, *args, **kwargs): 
+        paginator = self.paginator
+        paginator.page_size = 7
         queryset = self.get_queryset()
-        page = self.paginate_queryset(self.queryset)
+        page = paginator.paginate_queryset(queryset, request)
+
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
+        
         serializer = self.get_serializer(queryset, many = True)
         return Response({
             "albums" : serializer.data,

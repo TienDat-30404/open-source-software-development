@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import CardAlbum from '../../../components/CardAlbum'
-import { getAllAlbum } from '../../../services/AlbumService'
+import CardSong from '../../../components/CardSong'
+import { getAllSong } from '../../../services/SongService'
 import PaginationLeftButton from '../../../components/Pagination/PaginationLeftButton'
 import PaginationRightButton from '../../../components/Pagination/PaginationRightButton'
-export default function Album() {
+export default function Song() {
     const [albums, setAlbums] = useState({})
     const [page, setPage] = useState(1)
     useEffect(() => {
         let query = `page=${page}`
         const fetchData = async () => {
-            const response = await getAllAlbum(query)
+            const response = await getAllSong(query)
             setAlbums(response)
         }
         fetchData()
     }, [page])
     return (
         <div className='relative'>
-            <h1 className='text-2xl'>Album</h1>
+            <h1 className='text-2xl'>Song</h1>
             <div className='flex items-center'>
                 <PaginationLeftButton
                     page={page}
@@ -26,11 +26,10 @@ export default function Album() {
                 />
 
                 {albums?.results?.length > 0 && albums?.results?.map((album, index) => (
-                    <CardAlbum key={index}
+                    <CardSong key={index}
                         id={album?.id}
                         imageUrl={album?.image}
                         title={album?.title}
-                        year={album?.release_date}
                         artist="22"
                     />
                 ))}

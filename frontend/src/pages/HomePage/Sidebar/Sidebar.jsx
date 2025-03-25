@@ -57,7 +57,7 @@ export default function Sidebar() {
   console.log(selectedPlaylist)
   return (
 
-    <div className="w-1/4 h-5/6 bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg">
+    <div className="w-1/4 h-5/6 bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg z-50">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-300">
           <Library size={20} />
@@ -136,7 +136,7 @@ export default function Sidebar() {
         data={selectedPlaylist?.playlist} 
         close = {() => setSelectedPlaylist(prev => ({...prev, modalEdit : false}))}
       />
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="mt-4 flex flex-col gap-2 max-h-[350px] overflow-y-auto">
         {playlists?.results?.length > 0 && playlists?.results?.map((playlist, index) => (
           <CartPlayList
             key={index}

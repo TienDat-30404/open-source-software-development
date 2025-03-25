@@ -2,6 +2,7 @@ import React from 'react'
 import Radio from './Radio'
 import Artist from './Artist'
 import Album from './Album'
+import Song from './Song'
 export default function MainContent() {
   return (
 
@@ -16,6 +17,7 @@ export default function MainContent() {
         <button className="text-gray-400">Hiện tất cả</button>
       </div>
       {/* <Radio /> */}
+      <Song />
       <Album />
       <Artist />
     </div>

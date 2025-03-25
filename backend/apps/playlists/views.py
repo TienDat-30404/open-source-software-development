@@ -18,21 +18,18 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         title = request.query_params.get("title")
+     
+        
         queryset = self.get_queryset().filter(user_id=user_id)
         queryset = self.get_queryset()
 
         if title:
             queryset = queryset.filter(title__icontains=title)
         page = self.paginate_queryset(queryset)
-        print(page)
-        print(page)
         
         if page is not None:
-            print("222")
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        else: 
-            print("3333")
         serializer = self.get_serializer(queryset, many=True)
         return Response(
             {"playlists": serializer.data, "status": 200}, status=status.HTTP_200_OK

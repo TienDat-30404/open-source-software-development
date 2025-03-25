@@ -20,6 +20,6 @@ class SongSerializer(serializers.ModelSerializer):
         
     def get_artists(self, obj):
         return [
-            {"id": sa.artist.id, "name": sa.artist.name}
+            {"id": sa.artist.id, "name": sa.artist.name, "image" : sa.artist.image}
             for sa in obj.song_artist.all()
         ]

@@ -31,7 +31,8 @@ export default function Album() {
                         imageUrl={album?.image}
                         title={album?.title}
                         year={album?.release_date}
-                        artist="22"
+                        artist={album?.songs[0]?.artists?.map((artist) => artist?.name).join(', ') || 'Unknown Artist'}
+
                     />
                 ))}
 

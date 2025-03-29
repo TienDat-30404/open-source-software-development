@@ -39,3 +39,7 @@ export const handleSwitchPage = (newPage, setPage, data) => {
         setPage(newPage);
     }
 };
+
+
+
+

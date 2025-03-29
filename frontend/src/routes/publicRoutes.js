@@ -8,11 +8,15 @@ import MainContent from "../pages/HomePage/MainContent/MainContent";
 import DetailPlayList from "../pages/DetailPlaylist/DetailPlaylist";
 import DetailAlbum from "../pages/DetailAlbum/DetailAlbum";
 import DetailSong from "../pages/DetailSong/DetailSong";
+import Premium from "../pages/Premium/Premium";
+import ChatApp from "../pages/Chat/Chat";
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
     {path : '/artist/:id', page : DetailArtist, layout : DefaultLayout},
     {path : '/playlist/:id', page : DetailPlayList, layout : DefaultLayout},
     {path : 'album/:id', page : DetailAlbum, layout : DefaultLayout},
-    {path : 'song/:id', page : DetailSong, layout : DefaultLayout}
+    {path : 'song/:id', page : DetailSong, layout : DefaultLayout},
+    {path : 'premium', page : Premium, layout : DefaultLayout},
+    {path : 'chat', page : ChatApp, layout : null}
 ]

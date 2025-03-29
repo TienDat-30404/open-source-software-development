@@ -4,13 +4,13 @@ import { getAllSong } from '../../../services/SongService'
 import PaginationLeftButton from '../../../components/Pagination/PaginationLeftButton'
 import PaginationRightButton from '../../../components/Pagination/PaginationRightButton'
 export default function Song() {
-    const [albums, setAlbums] = useState({})
+    const [songs, setSongs] = useState({})
     const [page, setPage] = useState(1)
     useEffect(() => {
         let query = `page=${page}`
         const fetchData = async () => {
             const response = await getAllSong(query)
-            setAlbums(response)
+            setSongs(response)
         }
         fetchData()
     }, [page])
@@ -21,24 +21,24 @@ export default function Song() {
                 <PaginationLeftButton
                     page={page}
                     setPage={setPage}
-                    next={albums.next}
-                    previous={albums.previous}
+                    next={songs.next}
+                    previous={songs.previous}
                 />
 
-                {albums?.results?.length > 0 && albums?.results?.map((album, index) => (
+                {songs?.results?.length > 0 && songs?.results?.map((song, index) => (
                     <CardSong key={index}
-                        id={album?.id}
-                        imageUrl={album?.image}
-                        title={album?.title}
-                        artist="22"
+                        id={song?.id}
+                        imageUrl={song?.image}
+                        title={song?.title}
+                        artist={song?.artists && song?.artists[0]?.name}
                     />
                 ))}
 
                 <PaginationRightButton
                     page={page}
                     setPage={setPage}
-                    next={albums.next}
-                    previous={albums.previous}
+                    next={songs.next}
+                    previous={songs.previous}
                 />
             </div>
         </div>

@@ -9,6 +9,7 @@ export default function ChatApp() {
   const [rooms, setRooms] = useState([]);
   const chatRef = useRef(null);
 
+
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/conversations/rooms')
       .then((res) => res.json())

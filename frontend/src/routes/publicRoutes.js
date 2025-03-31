@@ -10,6 +10,9 @@ import DetailAlbum from "../pages/DetailAlbum/DetailAlbum";
 import DetailSong from "../pages/DetailSong/DetailSong";
 import Premium from "../pages/Premium/Premium";
 import ChatApp from "../pages/Chat/Chat";
+import SignUp from "../pages/SignUp/SignUp";
+import SignUpByStepOne from "../pages/SignUp/SignUpByStepOne";
+import SignUpByStepTwo from "../pages/SignUp/SignUpByStepTwo";
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
@@ -18,5 +21,8 @@ export const publicRoutes = [
     {path : 'album/:id', page : DetailAlbum, layout : DefaultLayout},
     {path : 'song/:id', page : DetailSong, layout : DefaultLayout},
     {path : 'premium', page : Premium, layout : DefaultLayout},
-    {path : 'chat', page : ChatApp, layout : null}
+    {path : 'chat', page : ChatApp, layout : null},
+    {path : 'sign-up', page : SignUp, layout : null},
+    {path : 'sign-up/step=1', page : SignUpByStepOne, layout : null},
+    {path : 'sign-up/step=2', page : SignUpByStepTwo, layout : null}
 ]

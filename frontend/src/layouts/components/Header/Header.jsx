@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, House, Bell } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from '../../../components/SearchComponent';
@@ -37,9 +37,16 @@ export default function Header() {
         </Link>
         <button className="text-gray-400">Cài đặt ứng dụng</button>
         <Bell />
-        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+        <Link
+          to="sign-up"
+        >
+          Đăng ký
+        </Link>
+        {/* <Link
+          className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center"
+        >
           T
-        </div>
+        </Link> */}
       </div>
     </div>
 

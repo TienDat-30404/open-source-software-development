@@ -10,12 +10,11 @@ import EditPlaylistModal from './EditPlaylistModal';
 export default function Sidebar() {
   const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
   const [searchPlaylist, setSearchPlaylist] = useState('')
-  let queryPlaylist = `user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
+  let queryPlaylist = `/?user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
   const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
   console.log(playlists)
   const createPlaylistMutation = useCreatePlaylist('');
   const deletePlaylistMutation = useDeletePlayList()
-  console.log("playlists", playlists)
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
   const [selectedPlaylist, setSelectedPlaylist] = useState({
     menuVisible: false,

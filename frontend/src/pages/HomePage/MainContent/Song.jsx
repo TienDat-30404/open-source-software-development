@@ -7,7 +7,7 @@ export default function Song() {
     const [songs, setSongs] = useState({})
     const [page, setPage] = useState(1)
     useEffect(() => {
-        let query = `page=${page}`
+        let query = `/?page=${page}`
         const fetchData = async () => {
             const response = await getAllSong(query)
             setSongs(response)

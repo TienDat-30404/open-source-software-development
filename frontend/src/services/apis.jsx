@@ -1,8 +1,9 @@
+// get all items
 export const getItem = async (endpoint, query) => { 
     let url = `${import.meta.env.VITE_API_URL}/${endpoint}`
     if(query)
     {
-        url += query.includes("=") ? `/?${query}` : `/${query}/`;
+        url += query.includes("=") ? `${query}` : `/${query}/`;
     }
     else {
         url += '/'
@@ -17,6 +18,8 @@ export const getItem = async (endpoint, query) => {
     return response.json()
 }
 
+// get Detail item
+
 export const getDetailItem = async (url, id) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}/${id}/`, {
         method: 'GET',
@@ -27,8 +30,22 @@ export const getDetailItem = async (url, id) => {
     return response.json()
 }
 
+// add item
 export const createItem = async (url, data) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json()
+}
+
+
+// crete item draft which not /
+export const createItemDraft = async (url, data) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ export default function Artist() {
     const [page, setPage] = useState(1)
     useEffect(() => {
         const fetchData = async () => {
-            let query = `page=${page}`
+            let query = `/?page=${page}`
             const response = await getAllArtist(query)
             console.log(response)
             setArtists(response)

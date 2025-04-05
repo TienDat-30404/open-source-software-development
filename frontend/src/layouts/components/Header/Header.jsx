@@ -38,7 +38,7 @@ export default function Header() {
         <button className="text-gray-400">Cài đặt ứng dụng</button>
         <Bell />
         <Link
-          to="sign-up"
+          to="./sign-up"
         >
           Đăng ký
         </Link>

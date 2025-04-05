@@ -13,6 +13,10 @@ import ChatApp from "../pages/Chat/Chat";
 import SignUp from "../pages/SignUp/SignUp";
 import SignUpByStepOne from "../pages/SignUp/SignUpByStepOne";
 import SignUpByStepTwo from "../pages/SignUp/SignUpByStepTwo";
+import Payment from "../pages/Payment/Payment";
+import PaymentVnpayReturn from "../pages/Payment/PaymentVnpayReturn";
+import PaymentZalopayReturn from "../pages/Payment/PaymentZalopayReturn";
+import PaymentMomoReturn from "../pages/Payment/PaymentMomoReturn";
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
@@ -24,5 +28,11 @@ export const publicRoutes = [
     {path : 'chat', page : ChatApp, layout : null},
     {path : 'sign-up', page : SignUp, layout : null},
     {path : 'sign-up/step=1', page : SignUpByStepOne, layout : null},
-    {path : 'sign-up/step=2', page : SignUpByStepTwo, layout : null}
+    {path : 'sign-up/step=2', page : SignUpByStepTwo, layout : null},
+    {path : 'payment', page : Payment, layout : null},
+    {path : '/payment-vnpay-return', page : PaymentVnpayReturn, layout : null},
+    {path : '/payment-zalopay-return', page : PaymentZalopayReturn, layout : null},
+    {path : '/payment-momo-return', page : PaymentMomoReturn, layout : null},
+
+
 ]

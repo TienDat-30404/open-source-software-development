@@ -14,29 +14,30 @@ export default function Payment() {
     const handleBuyPremium = async () => {
         try {
             if (id) {
+                if(selectPaymentMethod === null)
+                {
+                    toast.error("Vui lòng chọn phương thức thanh toán")
+                }
                 const paymentMethod = paymentMethods?.data?.find(payment => payment.id === selectPaymentMethod);
-             
+                localStorage.setItem('informationPayment', JSON.stringify({
+                    plan_id: id,
+                    payment_method_id: selectPaymentMethod,
+                }))
                 if (paymentMethod?.name === 'ZALOPAY') {
                     const response = await paymentZalopayService({
                         amount: price
                     })
-                    localStorage.setItem('informationPayment', JSON.stringify({
-                        plan_id: id,
-                        payment_method_id: selectPaymentMethod,
-                    }))
+
                     window.location.href = response.order_url
 
                 }
 
                 else if (paymentMethod?.name === 'VNPAY') {
                     const response = await paymentByVnpService({
-                        amount: price
+                        amount: price,
+                        content: title
                     })
-                    localStorage.setItem('informationPayment', JSON.stringify({
-                        plan_id: id,
-                        payment_method_id: selectPaymentMethod,
-                    }))
-                    console.log(response)
+
                     window.location.href = response.url
 
                 }
@@ -44,13 +45,9 @@ export default function Payment() {
                 else if (paymentMethod?.name === 'MOMO') {
                     const response = await paymentMomoService({
                         amount: price,
-                        orderInfo : `Thanh toán gói Premium ${title}`,
+                        orderInfo: title
                     })
-                    localStorage.setItem('informationPayment', JSON.stringify({
-                        plan_id: id,
-                        payment_method_id: selectPaymentMethod,
-                    }))
-                    console.log(response)
+
                     window.location.href = response.payUrl
 
                 }
@@ -107,7 +104,7 @@ export default function Payment() {
                         </div>
                     </div>
                     <div className="ml-auto text-right">
-                        <p className="text-[16px] font-bold">{price}</p>
+                        <p className="text-[16px] font-bold">{price.toLocaleString('vi-VN')}đ</p>
                         <p className="text-sm text-gray-600">Cho {duration} tháng</p>
                     </div>
 
@@ -116,8 +113,8 @@ export default function Payment() {
                 <ul className="text-[15px] font-[Roboto]  mt-1 list-disc pl-5">
                     <li>
                         <span className='text-gray-600 font-semibold'>Hôm nay : </span>
-                        2 tháng với giá 59.000 ₫</li>
-                    <li> Bắt đầu từ {startDate}: 59.000 ₫/tháng</li>
+                        2 tháng với giá {price.toLocaleString('vi-VN')} ₫</li>
+                    <li> Bắt đầu từ {startDate}: {price.toLocaleString('vi-VN')} ₫/tháng</li>
                     <li> Hủy bất cứ lúc nào trên mạng. <a href="#" className="underline">Có áp dụng các điều khoản ưu đãi.</a></li>
                 </ul>
 

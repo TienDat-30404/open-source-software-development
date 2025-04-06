@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import { checkTranSactionZaloPay, buyPremiumService } from '../../services/TransactionService';
 import LoadingHamster from '../../components/LoadingHamster';
+import TransactionFailed from '../../components/TransactionFailure';
 export default function PaymentZalopayReturn() {
     const [result, setResult] = useState({})
     const [isLoading, setIsLoading] = useState(true)
@@ -40,7 +41,7 @@ export default function PaymentZalopayReturn() {
     }, [])
 
     if (isLoading) {
-        return <Loading />
+        return <LoadingHamster />
     }
     return (
         <div style={{ height: '100vh' }} className='bg-white d-flex justify-content-center align-items-center'>
@@ -88,13 +89,7 @@ export default function PaymentZalopayReturn() {
                     </div>
                 </div>
             ) :
-                <div style={{ width: '400px' }} class=" py-5 text-center" >
-                    <img style={{ width: '120px' }} src="https://tse2.mm.bing.net/th?id=OIP.2DsT9kz1pM-5dum3u5-rowAAAA&pid=Api&P=0&h=180" class="card-img-top" alt="..." />
-                    <div class="card-body">
-                        <h5 class={`card-title text-danger text-uppercase mt-3`}>Thanh toán thất bại</h5>
-                        <a href="http://localhost:3000" class="btn btn-primary mt-3">Quay về trang chủ</a>
-                    </div>
-                </div>
+                <TransactionFailed />
             }
         </div>
 

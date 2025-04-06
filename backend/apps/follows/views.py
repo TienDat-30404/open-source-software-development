@@ -10,22 +10,32 @@ from apps.artists.models import Artist
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from ..utils.response import success_response,error_response
+from .serializers import FollowSerializer
 class FollowArtistAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
-    def post(self, request, artist_id):
+    def get(self, request):
+        user=User.objects.first()
+        follows = Follow.objects.filter(user=user)
+        serializer = FollowSerializer(follows, many=True)
+        return success_response(data=serializer.data)
+    def post(self, request):
         """API để follow một nghệ sĩ"""
+        artist_id = request.data.get('artist_id')
         artist = get_object_or_404(Artist, id=artist_id)
-        follow, created = Follow.objects.get_or_create(user=request.user, artist=artist)
+        user=User.objects.first()
+        follow, created = Follow.objects.get_or_create(user=user, artist=artist)
         
         if created:
             return success_response(message="theo dõi nghệ sĩ thành công",code=status.HTTP_201_CREATED)
         return error_response(message="bạn đã theo dõi nghệ sĩ này rồi ")
     
-    def delete(self, request, artist_id):
+    def delete(self, request):
         """API để unfollow một nghệ sĩ"""
+        artist_id = request.data.get('artist_id')
         artist = get_object_or_404(Artist, id=artist_id)
-        follow = Follow.objects.filter(user=request.user, artist=artist)
+        user=User.objects.first()
+        follow = Follow.objects.filter(user=user, artist=artist)
         
         if follow.exists():
             follow.delete()

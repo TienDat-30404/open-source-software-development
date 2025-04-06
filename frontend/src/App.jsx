@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { publicRoutes } from './routes/publicRoutes';
-import ChatApp from './pages/Chat/Chat';
+
 import RoomsPage from './pages/Room/RoomsPage';
 import ChatRoom from './pages/Chat/ChatRoom';
 import ManageRooms from './pages/Room/ManageRoom';

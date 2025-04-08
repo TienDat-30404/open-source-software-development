@@ -6,6 +6,7 @@ import PaginationRightButton from '../../../components/Pagination/PaginationRigh
 export default function Artist() {
     const [artists, setArtists] = useState({})
     const [page, setPage] = useState(1)
+
     useEffect(() => {
         const fetchData = async () => {
             let query = `/?page=${page}`

@@ -1,0 +1,43 @@
+.add_room {
+    position: relative;
+    margin-left : 20;
+    padding : 10px 10px;
+    width: 100%;
+  }
+
+  .add_room input {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px #fff solid;
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .add_room input:focus,
+  .add_room input:valid {
+    outline: 0;
+    border-bottom-color: lightblue;
+  }
+
+  .add_room label {
+    position: absolute;
+    top: 15px;
+    pointer-events: none;
+  }
+
+  .add_room label span {
+    display: inline-block;
+    font-size: 14px;
+    min-width: 5px;
+    color: #fff;
+    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .add_room input:focus+label span,
+  .add_room input:valid+label span {
+    color: lightblue;
+    transform: translateY(-10px);
+  }

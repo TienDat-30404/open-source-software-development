@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
 export default function ChatApp() {
-  const [username, setUsername] = useState('lahuuman');
+  const [username, setUsername] = useState('admin');
   const [roomName, setRoomName] = useState('');
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
@@ -11,7 +11,7 @@ export default function ChatApp() {
 
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/conversations/rooms')
+    fetch('http://127.0.0.1:8000/api/conversations/rooms/')
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 'success' && Array.isArray(data.data)) {
@@ -82,6 +82,7 @@ export default function ChatApp() {
   };
 
   const handleSendMessage = () => {
+    console.log(socket)
     if (message.trim() && socket) {
       const timestamp = new Date().toISOString();
       socket.send(JSON.stringify({ username, message, timestamp }));
@@ -98,7 +99,7 @@ export default function ChatApp() {
   }, {});
 
   return (
-    <div className="p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
+    <div className={` p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg`}>
       <h2 className="text-xl font-bold mb-2 text-center">💬 Nhóm Chat</h2>
 
       {/* Chọn phòng chat */}

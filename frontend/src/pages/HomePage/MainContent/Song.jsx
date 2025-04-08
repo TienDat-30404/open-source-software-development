@@ -7,8 +7,8 @@ export default function Song() {
     const [songs, setSongs] = useState({})
     const [page, setPage] = useState(1)
     useEffect(() => {
-        let query = `/?page=${page}`
         const fetchData = async () => {
+            let query = `/?page=${page}`
             const response = await getAllSong(query)
             setSongs(response)
         }
@@ -25,7 +25,7 @@ export default function Song() {
                     previous={songs.previous}
                 />
 
-                {songs?.results?.length > 0 && songs?.results?.map((song, index) => (
+                {songs && songs?.results?.length > 0 && songs?.results?.map((song, index) => (
                     <CardSong key={index}
                         id={song?.id}
                         imageUrl={song?.image}

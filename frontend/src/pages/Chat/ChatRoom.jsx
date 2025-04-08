@@ -1,38 +1,70 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef, Fragment } from "react";
+import styled from 'styled-components';
+import TextAnimation from "../../components/Element/TextAnimation";
+import './ChatRoom.scss';
+export default function ChatRoom({ roomName, onCloseRoom }) {
+  // const [username] = useState("admin");
 
-export default function ChatRoom() {
-  const { roomName } = useParams(); // Lấy roomName từ URL
-  const [username] = useState("lahuuman");
+  // test
+  const [username, setUsername] = useState("");
+  const [showUsernameInput, setShowUsernameInput] = useState(true);
+
+
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const chatRef = useRef(null);
 
+  // useEffect(() => {
+  //   if (!roomName) return;
+  //   const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
+  //   setSocket(newSocket);
+
+  //   newSocket.onopen = () => {
+  //     console.log("WebSocket connected");
+  //     setMessages([]);
+  //     loadMessages(roomName);
+  //   };
+
+  //   newSocket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     setMessages((prev) => [
+  //       ...prev,
+  //       { username: data.username, message: data.message, timestamp: data.timestamp },
+  //     ]);
+  //   };
+
+  //   newSocket.onclose = () => console.log("WebSocket disconnected");
+
+  //   return () => newSocket.close();
+  // }, [roomName]);
+
+
+  // test 
   useEffect(() => {
-    if (!roomName) return;
+    if (username && roomName) {
+      const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
+      setSocket(newSocket);
 
-    const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
-    setSocket(newSocket);
+      newSocket.onopen = () => {
+        console.log("WebSocket connected");
+        setMessages([]);
+        loadMessages(roomName);
+      };
 
-    newSocket.onopen = () => {
-      console.log("WebSocket connected");
-      setMessages([]);
-      loadMessages(roomName);
-    };
+      newSocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setMessages((prev) => [
+          ...prev,
+          { username: data.username, message: data.message, timestamp: data.timestamp },
+        ]);
+      };
 
-    newSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMessages((prev) => [
-        ...prev,
-        { username: data.username, message: data.message, timestamp: data.timestamp },
-      ]);
-    };
+      newSocket.onclose = () => console.log("WebSocket disconnected");
 
-    newSocket.onclose = () => console.log("WebSocket disconnected");
-
-    return () => newSocket.close();
-  }, [roomName]);
+      return () => newSocket.close();
+    }
+  }, [roomName, username]);
 
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
@@ -72,60 +104,112 @@ export default function ChatRoom() {
     return acc;
   }, {});
 
+  const handleUsernameSubmit = () => {
+    if (username.trim()) {
+      setShowUsernameInput(false);
+    }
+  };
+
   return (
-    <div className="p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-2 text-center">💬 Phòng: {roomName}</h2>
+    <Fragment>
 
-      <div ref={chatRef} className="border p-2 h-96 overflow-y-auto bg-gray-100 rounded-lg">
-        {Object.entries(groupedMessages).map(([date, msgs]) => (
-          <div key={date}>
-            <div className="text-center text-xs font-semibold text-gray-500 my-2">{date}</div>
-            {msgs.map((msg, index) => {
-              const isMine = msg.username === username;
-              const showAvatar = index === 0 || msgs[index - 1].username !== msg.username;
+      <div className="w-[500px] background_room  fixed z-50 top-32 right-12  mx-auto bg-white dark:bg-zinc-800 shadow-md rounded-lg overflow-hidden">
+        <div className="flex flex-col h-[400px] ">
+          <div className="px-4 py-3 flex items-center justify-between border-b dark:border-zinc-700">
+            <div className="flex space-x-2 items-center">
+              <h2 className="text-[22px] font-semibold  ">Phòng:</h2>
+              <TextAnimation text={roomName} />
 
-              return (
-                <div key={index} className={`flex mb-2 ${isMine ? "justify-end" : "justify-start"}`}>
-                  {!isMine && showAvatar && (
-                    <img
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${msg.username}`}
-                      alt="Avatar"
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                  )}
-
-                  <div className="flex flex-col max-w-xs">
-                    {!isMine && showAvatar && (
-                      <div className="text-sm font-semibold text-gray-600 mb-1">{msg.username}</div>
-                    )}
-
-                    <div className={`px-3 py-2 rounded-2xl shadow ${isMine ? "bg-blue-500 text-white" : "bg-white text-black"}`}>
-                      {msg.message}
-                    </div>
-
-                    <div className="text-xs text-gray-400 mt-1 text-right">
-                      {new Date(msg.timestamp).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            </div>
+            <p
+              onClick={onCloseRoom}
+              className=" text-white text-[20px] p-2 hover:text-gray-500 cursor-pointer"
+            >
+              X
+            </p>
           </div>
-        ))}
+
+          <div ref={chatRef} className="flex-1 p-3 overflow-y-auto flex flex-col space-y-2">
+            {Object.entries(groupedMessages).map(([date, msgs]) => (
+              <div key={date}>
+                <div className="text-center text-xs font-semibold text-gray-500 my-2">{date}</div>
+                {msgs.map((msg, index) => {
+                  const isMine = msg.username === username;
+                  const showAvatar = index === 0 || msgs[index - 1].username !== msg.username;
+
+                  return (
+                    <div className={` flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+
+                      <div key={index} className={`chat-message  max-w-[70%] rounded-lg px-3 py-1.5 text-sm`}>
+                        {!isMine && showAvatar && (
+                          <div className="flex items-center mb-1">
+                            <img
+                              src={`https://api.dicebear.com/7.x/initials/svg?seed=${msg.username}`}
+                              alt="Avatar"
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                            <div className="text-sm font-semibold text-gray-600">{msg.username}</div>
+                          </div>
+                        )}
+
+                        <div className={`px-3 py-2  break-words  rounded-lg shadow ${isMine ? "bg-blue-500 text-white" : "bg-white text-black break-words"}`}>
+                          {msg.message}
+                        </div>
+
+                        <div className="text-xs text-gray-700 mt-1 text-right">
+                          {new Date(msg.timestamp).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          <div className="px-3 py-2 border-t">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Nhập tin nhắn..."
+                className="flex-1 p-2 border rounded-lg dark:bg-zinc-700 text-black  dark:border-zinc-600 text-sm"
+              />
+              <button
+                onClick={() => handleSendMessage()}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-lg transition duration-300 ease-in-out text-sm"
+              >
+                Gửi
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="flex items-center border-t pt-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Nhập tin nhắn..."
-          className="flex-1 p-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button onClick={handleSendMessage} className="ml-2 bg-blue-500 text-white p-2 px-4 rounded-full shadow-md hover:bg-blue-600">
-          Gửi
-        </button>
-      </div>
-    </div>
-  );
+      {showUsernameInput ? (
+        <div>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your username"
+            className="border p-2 text-black"
+          />
+          <button onClick={handleUsernameSubmit}>Submit</button>
+        </div>
+      ) : (
+        <div>
+          <p>Welcome, {username}!</p>
+        </div>
+      )}
+    </Fragment>
+  )
 }
+

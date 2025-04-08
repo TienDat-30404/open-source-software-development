@@ -25,6 +25,14 @@ export default function SongActions(
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const handleClick = (item) => {
+        if (typeof item.onClick === 'function') {
+          item.onClick(); 
+        } else {
+          console.warn('onClick is not a function for item:', item);
+        }
+      }
     return (
         <div className="flex items-center relative">
             <span className="pr-4">14.059.103</span>
@@ -38,7 +46,8 @@ export default function SongActions(
                         <SongPlaylist song={song} />
                     )}
                     {menuItems?.map((item, index) => (
-                        <div className="flex items-center w-100 bg-[#3E3E3E]"
+                        <div
+                            className="flex items-center w-100 bg-[#3E3E3E]"
 
                             onMouseEnter={() => {
                                 if (item.isSubMenu) {
@@ -49,11 +58,7 @@ export default function SongActions(
                             <MenuItem
                                 icon={item.icon}
                                 text={item.text}
-                                handleClick={() => {
-                                    if (!item.isSubMenu) {
-                                        item.onClick();
-                                    }
-                                }}
+                                handleClick={() => handleClick(item)} 
                                 clickOutside={() => setShowAddPlaylist(false)}
                             />
 

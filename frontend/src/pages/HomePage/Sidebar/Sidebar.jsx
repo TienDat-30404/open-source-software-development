@@ -13,7 +13,7 @@ export default function Sidebar() {
   let queryPlaylist = `/?user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
   const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
   console.log(playlists)
-  const createPlaylistMutation = useCreatePlaylist('');
+  const createPlaylistMutation = useCreatePlaylist();
   const deletePlaylistMutation = useDeletePlayList()
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
   const [selectedPlaylist, setSelectedPlaylist] = useState({

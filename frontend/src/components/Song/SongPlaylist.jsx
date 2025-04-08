@@ -7,7 +7,7 @@ import { addSongOnPlaylist } from '../../services/PlayListService'
 export default function SongPlaylist({ song }) {
     const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
 
-    const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(`user_id=${userId}`);
+    const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(`/?user_id=${userId}`);
     console.log(playlists)
     const handleAddSongOnPlaylist = async (idPlaylist) => {
         const response = await addSongOnPlaylist(idPlaylist, {

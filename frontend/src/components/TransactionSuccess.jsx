@@ -15,6 +15,11 @@ export default function TransactionSuccess(
         totalPrice,
         content,
         createdAt,
+
+        idOrderZaloPay,
+        totalPriceZaloPay,
+        createdAtZaloPay
+
     }) 
     {
    
@@ -29,12 +34,12 @@ export default function TransactionSuccess(
 
                 <div className="mb-4 text-left flex items-center space-x-2">
                     <p className="text-gray-400 text-sm ">Mã đơn:</p>
-                    <p className="font-medium">{paymentReferenceId || orderId}</p>
+                    <p className="font-medium">{paymentReferenceId || orderId || idOrderZaloPay}</p>
                 </div>
 
                 <div className="mb-4 text-left flex items-center space-x-2">
                     <p className="text-gray-400 text-sm">Tổng tiền:</p>
-                    <p className="font-medium"> {((totalPrice || amount) / 100).toLocaleString('vi-VN')} VNĐ</p>
+                    <p className="font-medium"> {(totalPrice || amount || totalPriceZaloPay).toLocaleString('vi-VN')} VNĐ</p>
                 </div>
 
                 <div className="mb-4 text-left flex items-center space-x-2">
@@ -45,7 +50,7 @@ export default function TransactionSuccess(
                 <div className="mb-6 text-left flex items-center space-x-2">
                     <p className="text-gray-400 text-sm">Thời gian thanh toán:</p>
                     <p className="font-medium">
-                        {moment(createdAt || responseTime).format('YYYY-MM-DD HH:mm:ss')}
+                        {moment(createdAt || responseTime || createdAtZaloPay).format('YYYY-MM-DD HH:mm:ss')}
                     </p>
                 </div>
 

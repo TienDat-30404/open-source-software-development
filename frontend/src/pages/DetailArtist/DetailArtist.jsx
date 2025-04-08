@@ -1,20 +1,23 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllArtist } from '../../services/ArtistService';
-import { CircleCheckBig, Ellipsis, Plus} from 'lucide-react';
+import { CircleCheckBig, Ellipsis, Plus } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
 import CardSong from '../../components/Song/CardSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
 import useAudioPlayer from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
+import { downloadMusic } from '../../until/function';
+import { Download } from 'lucide-react';
+import LoadingDownload from '../../components/LoadingDownload';
 export default function DetailArtist() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
   const { selectedSong, handleSelectedSong, handleClickOutside, hoveringSong, setHoveringSong } = useSelectedSong();
+  const [loadingDownloadMusic, setLoadingDownloadMusic] = useState(false);
 
   useEffect(() => {
-    // audioRef.current = new Audio()
     const fetchData = async () => {
       const response = await getAllArtist(id);
       setDetails(response);
@@ -22,12 +25,21 @@ export default function DetailArtist() {
     fetchData();
   }, [id]);
 
+  const handleDownloadMusic = async (song) => {
+    const fileUrl = song?.audio_url;
+    if (fileUrl) {
+      setLoadingDownloadMusic(true);
+      await downloadMusic(fileUrl, `${song.title}.mp3`);
+      setLoadingDownloadMusic(false);
+    }
+  };
+
   return (
     <div>
       {details && (
         <Fragment>
           <div className="relative w-full h-64 bg-gray-800 rounded-lg overflow-hidden">
-            <img src={details?.image}  className="absolute inset-0 w-full object-cover" />
+            <img src={details?.image} className="absolute inset-0 w-full object-cover" />
             <div className="absolute bottom-4 left-4 text-white">
               <div className="flex items-center mb-2">
                 <CircleCheckBig className="text-blue-500 mr-2" />
@@ -80,12 +92,24 @@ export default function DetailArtist() {
                       icon: <Plus />,
                       text: "Thêm vào danh sách phát",
                       isSubMenu: true
+                    },
+                    {
+                      icon: <Download />,
+                      text: "Tải bài hát",
+                      isSubMenu: false,
+                      onClick: () => handleDownloadMusic(song)
                     }
                   ]}
                 />
               ))}
             </div>
           </div>
+
+          {loadingDownloadMusic && (
+            <div className="absolute inset-0 bg-opacity-50 bg-black flex items-center justify-center z-50">
+              <LoadingDownload />
+            </div>
+          )}
         </Fragment>
       )}
       {/* Audio element */}

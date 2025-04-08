@@ -2,6 +2,7 @@ import { Play, Pause } from "lucide-react";
 
 export default function PlayOrPauseMainButton({ isPlaying, currentSong, handlePlaySong, audioRef, defaultSong }) {
   const handleClick = () => {
+    console.log(isPlaying)
     if (isPlaying) {
       audioRef.current.pause();
     } else {

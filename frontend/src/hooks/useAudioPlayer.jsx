@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import { useSaveHistoryListeningMusic } from "./useMusicListeningHistory";
 
 export default function useAudioPlayer() {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(new Audio());
+  const savedHistoryListeningMusicMutation = useSaveHistoryListeningMusic();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -25,9 +27,12 @@ export default function useAudioPlayer() {
 
   const handlePlaySong = (song) => {
     const audio = audioRef.current;
-
+    savedHistoryListeningMusicMutation.mutate({
+      song_id: song?.id
+    })
     if (currentSong?.id === song.id) {
       if (audio.paused) {
+
         audio.play();
       } else {
         audio.pause();

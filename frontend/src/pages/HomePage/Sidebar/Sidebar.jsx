@@ -12,7 +12,6 @@ export default function Sidebar() {
   const [searchPlaylist, setSearchPlaylist] = useState('')
   let queryPlaylist = `/?user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
   const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
-  console.log(playlists)
   const createPlaylistMutation = useCreatePlaylist();
   const deletePlaylistMutation = useDeletePlayList()
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
@@ -53,7 +52,6 @@ export default function Sidebar() {
       idPlaylist: null
     })
   }
-  console.log(selectedPlaylist)
   return (
 
     <div className="w-1/4 h-5/6 bg-[#121212] text-white fixed top-16 left-0 p-5 rounded-lg z-50">

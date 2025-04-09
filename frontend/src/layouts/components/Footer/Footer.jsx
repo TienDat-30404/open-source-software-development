@@ -5,9 +5,14 @@ import {
     Volume1, Volume2, VolumeOff, Maximize, Pause
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import useAudioPlayer from "../../../hooks/useAudioPlayer";
+import { useGetHistoryMusicListening } from "../../../hooks/useMusicListeningHistory";
 export default function Footer() {
-    const audioRef = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(false);
+    // const audioRef = useRef(null);
+    // const [isPlaying, setIsPlaying] = useState(false);
+    const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("");
+    
+    const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(1);
     const [muted, setMuted] = useState(false);
@@ -21,16 +26,34 @@ export default function Footer() {
         return () => {
             audio.removeEventListener("timeupdate", updateProgress);
         };
-    }, []);
+    }, [audioRef]);
 
     const togglePlay = () => {
-        if (isPlaying) {
-            audioRef.current.pause();
-        } else {
+        // if (isPlaying) {
+        //     audioRef.current.pause();
+        // } else {
+        //     audioRef.current.play();
+        // }
+        // setIsPlaying(!isPlaying);
+        console.log("history", historyMusics)
+        if (audioRef.current.paused) {
             audioRef.current.play();
+        } else {
+            audioRef.current.pause();
         }
-        setIsPlaying(!isPlaying);
     };
+
+
+    useEffect(() => {
+        if (historyMusics && historyMusics?.data?.length > 0) {
+            const latestItem = historyMusics.data.reduce((latest, current) => {
+                return new Date(current.played_at) > new Date(latest.played_at) ? current : latest;
+            });
+            if (latestItem.song?.id !== currentSong?.id) {
+                handlePlaySong(latestItem.song);
+            }
+        }
+    }, [historyMusics]);
 
     const handleProgressChange = (e) => {
         const newTime = (e.target.value / 100) * audioRef.current.duration;
@@ -40,7 +63,6 @@ export default function Footer() {
 
     const handleVolumeChange = (e) => {
         setVolume(e.target.value);
-        console.log(volume)
         audioRef.current.volume = e.target.value;
         setMuted(e.target.value === "0");
     };
@@ -72,8 +94,12 @@ export default function Footer() {
             <div className="flex items-center w-1/4">
                 <img src="http://www.freeiconspng.com/uploads/blue-user-icon-32.jpg" className="w-12 h-12 rounded mr-4" />
                 <div>
-                    <h3 className="text-sm font-semibold">Nơi này có anh</h3>
-                    <p className="text-xs text-gray-400">Tiến Đạt</p>
+                    <h3 className="text-sm font-semibold">{currentSong?.title}</h3>
+                    <p className="text-xs text-gray-400">
+                        {currentSong?.artists?.map((item, index) => (
+                            item?.name
+                        ))}
+                    </p>
                 </div>
             </div>
 
@@ -142,7 +168,6 @@ export default function Footer() {
                 />
                 <Maximize size={20} />
             </div>
-            <audio ref={audioRef} src="https://res.cloudinary.com/dneh4yrye/video/upload/v1741617488/ep8uw49dwcwbesv4dwll.mp3" />
 
         </div>
     );

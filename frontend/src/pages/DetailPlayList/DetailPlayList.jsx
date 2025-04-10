@@ -5,7 +5,7 @@ import { CircleCheckBig, Ellipsis, Plus, Trash } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
 import CardSong from '../../components/Song/CardSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
-import useAudioPlayer from '../../hooks/useAudioPlayer';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import { useDeleteSongOutOfPlaylist } from '../../hooks/usePlaylists';
 export default function DetailPlayList() {
@@ -15,7 +15,6 @@ export default function DetailPlayList() {
   const { selectedSong, handleSelectedSong, handleClickOutside, hoveringSong, setHoveringSong } = useSelectedSong();
   const deleteSongOutOfPlaylistMutation = useDeleteSongOutOfPlaylist()
   useEffect(() => {
-    audioRef.current = new Audio()
     const fetchData = async () => {
       const response = await getAllPlaylist(id);
       console.log(response)

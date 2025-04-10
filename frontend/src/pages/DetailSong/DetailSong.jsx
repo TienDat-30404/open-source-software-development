@@ -5,7 +5,7 @@ import { Ellipsis, Plus, Play, Pause } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
 import Header from './Header';
 import CardSong from '../../components/Song/CardSong';
-import useAudioPlayer from '../../hooks/useAudioPlayer';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
 export default function DetailSong() {

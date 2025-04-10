@@ -5,14 +5,15 @@ import {
     Volume1, Volume2, VolumeOff, Maximize, Pause
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import useAudioPlayer from "../../../hooks/useAudioPlayer";
+import { useAudioPlayer } from "../../../hooks/useAudioPlayer";
 import { useGetHistoryMusicListening } from "../../../hooks/useMusicListeningHistory";
 export default function Footer() {
-    // const audioRef = useRef(null);
-    // const [isPlaying, setIsPlaying] = useState(false);
+    const [queuedSong, setQueuedSong] = useState(null);
+
     const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("");
     
     const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
+    console.log("isPlaying", isPlaying)
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(1);
     const [muted, setMuted] = useState(false);
@@ -29,17 +30,10 @@ export default function Footer() {
     }, [audioRef]);
 
     const togglePlay = () => {
-        // if (isPlaying) {
-        //     audioRef.current.pause();
-        // } else {
-        //     audioRef.current.play();
-        // }
-        // setIsPlaying(!isPlaying);
-        console.log("history", historyMusics)
-        if (audioRef.current.paused) {
-            audioRef.current.play();
+        if (!currentSong && queuedSong) {
+            handlePlaySong(queuedSong);
         } else {
-            audioRef.current.pause();
+            handlePlaySong(currentSong);
         }
     };
 
@@ -50,7 +44,7 @@ export default function Footer() {
                 return new Date(current.played_at) > new Date(latest.played_at) ? current : latest;
             });
             if (latestItem.song?.id !== currentSong?.id) {
-                handlePlaySong(latestItem.song);
+                setQueuedSong(latestItem.song);
             }
         }
     }, [historyMusics]);

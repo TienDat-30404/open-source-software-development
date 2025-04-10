@@ -5,7 +5,7 @@ import { Ellipsis, Plus } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
 import Header from './Header';
 import CardSong from '../../components/Song/CardSong';
-import useAudioPlayer from '../../hooks/useAudioPlayer';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
 import { Download } from 'lucide-react';
@@ -46,11 +46,10 @@ export default function DetailAlbum() {
               <div className="flex items-center">
 
                 <PlayOrPauseMainButton
-                  isPlaying={isPlaying}
                   currentSong={currentSong}
+                  isPlaying={isPlaying}
+                  songDefault={details?.songs?.length > 0 ? details.songs[0] : null}
                   handlePlaySong={handlePlaySong}
-                  audioRef={audioRef}
-                  defaultSong={details?.songs?.length > 0 ? details.songs[0] : null}
                 />
 
                 <button class=" inline-flex items-center justify-center p-0.5 ms-3 me-3 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-white border border-white">

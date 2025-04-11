@@ -2,20 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
-function SignUp() {
+function Login() {
   return (
     <div className="bg-black min-h-screen flex items-center justify-center w-screen">
       <div className=" p-8 rounded-lg max-w-[400px]">
         <div className="flex justify-center mb-6">
           <img className='w-20' src="https://tse3.mm.bing.net/th?id=OIP.ffhuObhbmntvqca2gpkTywAAAA&pid=Api&P=0&h=180" alt="" />
         </div>
-        <h2 className="text-white text-5xl font-bold mb-6 text-center max-w-[300px]">Đăng ký để bắt đầu nghe</h2>
+        <h2 className="text-white text-5xl font-bold mb-6 text-center max-w-[300px]">Đăng nhập để bắt đầu nghe</h2>
         <input
           type="email"
-          placeholder="Địa chỉ email"
+          placeholder="Username"
           className="w-full p-3 rounded-md bg-[#282828] text-white mb-4"
         />
-        <button className="text-green-500 block mb-4">Dùng số điện thoại</button>
+         <input
+          type="password"
+          placeholder="password"
+          className="w-full p-3 rounded-md bg-[#282828] text-white mb-4"
+        />
         <Link to="/sign-up/step=1">
           <div className="bg-green-500 flex justify-center text-black w-full p-3 rounded-full font-bold mb-6">
             Tiếp theo
@@ -47,7 +51,7 @@ function SignUp() {
 
         <div className="bg-black text-white text-center p-4">
           <p className="mb-2">
-            Bạn đã có tài khoản? <a href="/login" className="underline">Đăng nhập tại đây.</a>
+            Nếu chưa có tài khoản? <a href="/sign-up" className="underline">Đăng ký tại đây.</a>
           </p>
           <p className="text-xs text-gray-400">
             This site is protected by reCAPTCHA and the Google <a href="/privacy" className="underline">Privacy Policy</a> and <a href="/terms" className="underline">Terms of Service</a> apply.
@@ -58,4 +62,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;

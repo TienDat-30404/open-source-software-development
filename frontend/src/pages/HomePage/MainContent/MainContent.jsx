@@ -5,8 +5,11 @@ import Album from './Album'
 import Song from './Song'
 import IconChat from '../../../components/Element/IconChat'
 import RoomsPage from '../../Room/RoomsPage'
+import IconAi from '../../../components/Element/IconAi'
+import ChatAI from '../../Chat/ChatAI'
 export default function MainContent() {
   const [showRoom, setShowRoom] = useState(false)
+  const [showChatAI, setShowChatAI] = useState(false)
   return (
 
     <div className='p-4'>
@@ -24,10 +27,17 @@ export default function MainContent() {
       >
         <IconChat />
       </div>
+      <div
+        className='fixed z-20 top-40 right-10 cursor-pointer'
+        onClick={() => setShowChatAI(!showChatAI)}
+      >
+        <IconAi />
+      </div>
       <RoomsPage show={showRoom} />
       <Song />
       <Album />
       <Artist />
+      <ChatAI show = {showChatAI} onCloseChatAi={() => setShowChatAI(false)} />
     </div>
   )
 }

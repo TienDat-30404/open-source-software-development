@@ -8,15 +8,16 @@ from rest_framework import status
 from .models import Song
 from rest_framework.decorators import action
 from .serializers import SongSerializer
-from apps.artists.models import Artist
 from apps.songs_artist.models import SongArtist
-from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from mutagen import File  
+import google.generativeai as genai
+import os
+
 
 class SongViewSet(viewsets.ModelViewSet):
     serializer_class = SongSerializer
@@ -158,4 +159,36 @@ class SongViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
+    
+    @action(detail=False, methods=["get"], url_path="suggest-songs-ai")
+    def suggest_songs_ai(self, request):
+        query = request.query_params.get("query", None)
+        if not query:
+            return Response({"error": "Missing query parameter."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Cấu hình Gemini với API Key
+            genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+
+
+            # Khởi tạo model
+            model = genai.GenerativeModel("gemini-1.5-pro")
+            print("model", model)
+            # Prompt để AI hiểu đúng yêu cầu
+            prompt = f"Suggest 5 popular or interesting song titles that match this theme or keyword: '{query}'"
+
+            # Gọi AI trả lời
+            response = model.generate_content(prompt)
+
+            suggestions = response.text.strip().split("\n")
+
+            return Response({
+                "suggestions": suggestions,
+                "status": status.HTTP_200_OK
+            })
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
     

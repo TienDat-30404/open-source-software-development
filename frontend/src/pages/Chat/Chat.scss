@@ -1,0 +1,17 @@
+.background-chat-ai {
+    width: 80%;
+    max-height: 500px;
+    z-index : 100;
+    position : fixed;
+    right : 2%;
+    background: linear-gradient(
+        45deg,
+        transparent 33.33%,
+        rgba(57, 144, 179, 0.1) 33.33%,
+        rgba(0, 0, 0, 0.1) 66.66%,
+        transparent 66.66%
+      ),
+      lightblue;
+    background-size: 20px 20px;
+  }
+  

@@ -9,6 +9,7 @@ import RoomsPage from './pages/Room/RoomsPage';
 import ChatRoom from './pages/Chat/ChatRoom';
 import ManageRooms from './pages/Room/ManageRoom';
 import ManagePlans from './pages/plans/MangePlans';
+import { privateRoutes } from './routes/privateRoutes';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -18,12 +19,8 @@ function App() {
         <Routes>
           {publicRoutes.map((route, i) => {
             let Page = route.page;
-            let Layout = route.layout;
-            if (route.layout) {
-              Layout = route.layout;
-            } else if (route.layout === null) {
-              Layout = Fragment;
-            }
+            let Layout = route.layout || Fragment
+         
             return (
               <Route
                 key={i}
@@ -36,6 +33,24 @@ function App() {
               />
             );
           })}
+
+          {privateRoutes.map((route, i) => {
+            let Page = route.page
+            let Layout = route.layout || Fragment
+          
+            return (
+              <Route
+                key={i}
+                path={route.path}
+                element = {
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            )
+          })}
+
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/chat/:roomName" element={<ChatRoom />} />
           <Route path="/manageroom" element={<ManageRooms />} />

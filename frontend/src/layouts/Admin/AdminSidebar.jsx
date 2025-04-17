@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-  Home,
   LayoutDashboard,
-  Type,
-  Bell,
-  Lock,
-  UserPlus,
-  Image,
-  File,
+  PersonStanding,
+  Music,
+  Album,
+  Crown,
+  User,
+  ShieldUser
 } from 'lucide-react'; // Import các icon từ lucide-react
 import { useNavigate } from 'react-router-dom'
 export default function AdminSidebar() {
@@ -20,22 +19,21 @@ export default function AdminSidebar() {
       </div>
       <nav className="flex-1 px-2 py-4">
         <div
-          className="space-y-2"
-          onClick={() => navigate('/dashboard')}
+          className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-3 rounded-md"
+          onClick={() => navigate('/admin/dashboard')}
         >
-          <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+          <LayoutDashboard />
+          <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide ">
             DashBoard
-          </div>
-          <div className="space-y-1">
-
           </div>
         </div>
         <div
-          onClick={() => navigate('/artist')}
-          className="mt-6 space-y-2"
+          onClick={() => navigate('/admin/artist')}
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
         >
+          <PersonStanding />
           <div
-            onClick={() => navigate('/artist')}
+            onClick={() => navigate('/admin/artist')}
             className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Artist
           </div>
@@ -43,10 +41,12 @@ export default function AdminSidebar() {
 
           </div>
         </div>
+
         <div
-          onClick={() => navigate('/song')}
-          className="mt-6 space-y-2"
+          onClick={() => navigate('/admin/song')}
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
         >
+          <Music />
           <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Song
           </div>
@@ -55,9 +55,10 @@ export default function AdminSidebar() {
           </div>
         </div>
         <div
-          onClick={() => navigate('/album')}
-
-          className="mt-6 space-y-2">
+          onClick={() => navigate('/admin/album')}
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
+        >
+          <Album />
           <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Album
           </div>
@@ -67,9 +68,23 @@ export default function AdminSidebar() {
         </div>
 
         <div
-          className="mt-6 space-y-2"
-          onClick={() => navigate('/plan')}
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
+          onClick={() => navigate('/admin/plan')}
         >
+          <User />
+          <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            User
+          </div>
+          <div className="space-y-1">
+
+          </div>
+        </div>
+
+        <div
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
+          onClick={() => navigate('/admin/plan')}
+        >
+          <Crown />
           <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Plan
           </div>
@@ -77,6 +92,21 @@ export default function AdminSidebar() {
 
           </div>
         </div>
+
+        <div
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md"
+          onClick={() => navigate('/admin/plan')}
+        >
+          <ShieldUser />
+          <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            Role
+          </div>
+          <div className="space-y-1">
+
+          </div>
+        </div>
+
+       
 
 
       </nav>

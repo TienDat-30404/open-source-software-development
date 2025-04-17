@@ -32,14 +32,23 @@ class SongViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         paginator = self.paginator
-        paginator.page_size = 7
+        search = request.query_params.get("search", None)
+        
         queryset = self.get_queryset()
+        if search:
+            print("search", search)
+            queryset = queryset.filter(title__icontains=search)
+            
+        paginator.page_size = 7
         page = paginator.paginate_queryset(queryset, request)
 
+       
+            
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
 
+        
         serializer = self.get_serializer(queryset, many=True)
         return Response(
             {

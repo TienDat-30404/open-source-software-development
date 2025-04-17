@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./frontend/.env 
+    ports:
+      - "5173:5173" # Mở cổng 80 trên máy chủ để truy cập ứng dụng
+    volumes:
+      - .:/app # Mount thư mục hiện tại vào trong container để dễ dàng phát triển (tuỳ chọn)
+    environment:
+      - NODE_ENV=production # Chạy ứng dụng trong môi trường production
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

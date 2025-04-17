@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 export default function CardSong({id, imageUrl, title, artist }) {
     const navigate = useNavigate()
     const switchDetailSong = () => {
-      navigate(`song/${id}`)
+      navigate(`/song/${id}`)
     }
     return (
       <div 

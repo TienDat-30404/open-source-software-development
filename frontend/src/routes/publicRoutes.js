@@ -18,6 +18,7 @@ import PaymentVnpayReturn from "../pages/Payment/PaymentVnpayReturn";
 import PaymentZalopayReturn from "../pages/Payment/PaymentZalopayReturn";
 import PaymentMomoReturn from "../pages/Payment/PaymentMomoReturn";
 import Login from "../pages/Login/Login";
+import FindSong from "../pages/FindSong/FindSong";
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
@@ -26,6 +27,7 @@ export const publicRoutes = [
     {path : 'album/:id', page : DetailAlbum, layout : DefaultLayout},
     {path : 'song/:id', page : DetailSong, layout : DefaultLayout},
     {path : 'premium', page : Premium, layout : DefaultLayout},
+    {path : '/search', page : FindSong, layout : DefaultLayout},
     // {path : 'chat', page : ChatApp, layout : null},
     {path : 'login', page : Login, layout : null},
     {path : 'sign-up', page : SignUp, layout : null},

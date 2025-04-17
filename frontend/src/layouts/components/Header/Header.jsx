@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import SearchComponent from '../../../components/SearchComponent';
 import { Link } from 'react-router-dom';
 export default function Header() {
+  const [search, setSearch] = useState('')
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+  }
   const navigate = useNavigate()
   return (
     <div className="fixed top-0 left-0 w-full h-16 bg-black text-white flex items-center justify-between shadow-lg z-50 px-4">
@@ -20,12 +24,25 @@ export default function Header() {
           <House />
         </div>
 
-        <SearchComponent
+        {/* <SearchComponent
           background="bg-[#282828]"
           placeholder="Bạn muốn phát nội dung gì"
           width="5"
           height="5"
           isRounded
+        /> */}
+        <input 
+          value={search}
+          onChange={handleSearch}
+          type="text"
+          placeholder="Tìm kiếm bài hát"
+          className="bg-[#282828] rounded-full py-2 pl-10 pr-4 w-96 focus:outline-none"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              navigate(`/search?name=${search}`)
+            }
+          }}
         />
 
       </div>

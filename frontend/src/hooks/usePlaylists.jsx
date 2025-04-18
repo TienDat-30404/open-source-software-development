@@ -43,7 +43,7 @@ export const useUpdatePlaylist = () => {
       queryClient.invalidateQueries(['playlists'])
     },
     onError: (error) => {
-      console.error('Error deleting playlist:', error);
+      console.error('Error update playlist:', error);
     }
   })
 }

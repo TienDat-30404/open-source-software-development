@@ -42,6 +42,16 @@ export const createItem = async (url, data) => {
 }
 
 
+// create item using FormData
+export const createItemByFormData = async (url, formData) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}/`, {
+        method: 'POST',
+        body: formData
+    })
+    return response.json()
+}
+
+
 // crete item draft which not /
 export const createItemDraft = async (url, data) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}`, {

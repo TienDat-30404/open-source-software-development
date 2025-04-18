@@ -13,7 +13,7 @@ class ArtistViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs): 
         paginator = self.paginator
-        paginator.page_size = 6
+        paginator.page_size = 100
         
         queryset = self.get_queryset()
         page = paginator.paginate_queryset(queryset, request)
@@ -48,16 +48,19 @@ class ArtistViewSet(viewsets.ModelViewSet):
         
     def update(self, request, *args, **kwargs):
         artist = self.get_object()  
+        data = request.data.copy()
         image_file = request.data.get("image")
-        image_url = None 
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)
                 image_url = upload_result["secure_url"]
+                data["image"] = image_url
             except Exception as e:
                 return Response({"error": f"Image upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-        request.data['image'] = image_url 
-        serializer = self.get_serializer(artist, data=request.data, partial=True)
+        else:
+            data.pop("image", None)
+             
+        serializer = self.get_serializer(artist, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(

@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import Plan
 from .serializers import PlanSerializer
 from uuid import UUID
+from .pagination import CustomPagination
 from ..utils.response import success_response,error_response
 class PlanAPIView(APIView):
     # permission_classes = [IsAuthenticated]  # Yêu cầu người dùng phải đăng nhập
@@ -18,8 +19,10 @@ class PlanAPIView(APIView):
             serializer = PlanSerializer(plan)
             return success_response(data=serializer.data)
         plans = Plan.objects.all()
-        serializer = PlanSerializer(plans, many=True)
-        return success_response(data=serializer.data)
+        paginator = CustomPagination()  # tạo bộ phân trang
+        paginated_plans = paginator.paginate_queryset(plans, request)  # phân trang theo request
+        serializer = PlanSerializer(paginated_plans, many=True)  # serialize danh sách đã phân trang
+        return paginator.get_paginated_response(serializer.data) 
 
     def post(self, request):
         """Tạo một kế hoạch mới"""

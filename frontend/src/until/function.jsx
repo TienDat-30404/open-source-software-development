@@ -80,3 +80,35 @@ export const formatTime = (createdAt) => {
     return `${diffDays} ngày trước`;
 };
 
+
+export const visiblePagination = (page, totalPage) => {
+    const pages = []
+
+    if (page == 1 && totalPage >= 3) {
+        pages.push(page)
+        pages.push(page + 1)
+        pages.push(page + 2)
+    }
+    else if (page == totalPage && totalPage > 3) {
+        pages.push(page - 2)
+        pages.push(page - 1)
+        pages.push(page)
+    }
+
+    else {
+        if (page > 1) {
+            pages.push(page - 1)
+        }
+        pages.push(page)
+        if (page < totalPage) {
+            pages.push(page + 1)
+        }
+    }
+    return pages
+}
+export const handlePagination = (newPage, data, setPage) => {
+    if (newPage >= 1 && (data?.next || data?.previous)) {
+      setPage(newPage)
+    }
+  }
+

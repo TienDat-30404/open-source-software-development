@@ -12,7 +12,7 @@ class SongSerializer(serializers.ModelSerializer):
  
     
     genre = CategorySerializer(read_only=True)
-    # genre_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='genre', write_only=True)
+    genre_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='genre', write_only=True)
     
     class Meta:
         model = Song

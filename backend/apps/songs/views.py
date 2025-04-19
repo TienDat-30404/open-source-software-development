@@ -20,7 +20,7 @@ import os
 import redis
 from django.http import HttpResponse
 import time
-
+import math
 redis_client = redis.StrictRedis(
     host="localhost", port=6379, db=0, decode_responses=True
 )
@@ -32,32 +32,44 @@ class SongViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         paginator = self.paginator
+        size = request.query_params.get("size", None)
+        if size is not None: 
+            try:
+                size = int(size)
+                if size > 0:
+                    paginator.page_size = size
+                else:
+                    paginator.page_size = 7
+            except ValueError:
+                return Response(
+                    {"error": "Invalid page size"}, status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            paginator.page_size = 7
+            
         search = request.query_params.get("search", None)
         
         queryset = self.get_queryset()
         if search:
             print("search", search)
             queryset = queryset.filter(title__icontains=search)
-            
-        paginator.page_size = 7
+      
         page = paginator.paginate_queryset(queryset, request)
 
-       
-            
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return paginator.get_paginated_response(serializer.data)
-
-        
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(
-            {
-                "songs": serializer.data,
-                "status": status.HTTP_200_OK,
-                "method": request.method,
-            },
-            status=status.HTTP_200_OK,
-        )
+            total_pages = math.ceil(paginator.page.paginator.count / paginator.page_size)
+            
+            return Response({
+                'results': serializer.data,
+                'count': paginator.page.paginator.count,
+                'total_pages': total_pages,
+                'next': paginator.get_next_link(),
+                'previous': paginator.get_previous_link(),
+                'status': 200
+            }, status=status.HTTP_200_OK)
+            
+       
 
     @action(detail=False, methods=["get"], url_path="by-artist/(?P<artist_id>[^/.]+)")
     def by_artist(self, request, artist_id=None):

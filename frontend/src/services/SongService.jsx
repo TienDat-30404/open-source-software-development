@@ -1,6 +1,11 @@
-import { createItem, getItem } from "./apis"
+import { createItem, createItemByFormData, getItem } from "./apis"
 export const getAllSong = async (query) => {
     return getItem('songs', query)
+}
+
+
+export const createSong = async(data) => {
+    return createItemByFormData('songs', data)
 }
 
 

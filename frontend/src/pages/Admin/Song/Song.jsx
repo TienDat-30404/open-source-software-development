@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useCreateArtist, useDeleteArtist, useGetAllArtist } from '../../../hooks/useArtist';
-import AddArtistModal from './AddArtistModal';
 import { MoreHorizontal } from 'lucide-react';
-import EditArtistModal from './EditArtistModal';
 import Pagination from '../../../components/Pagination/Pagination';
 import { visiblePagination } from '../../../until/function';
-function Artist() {
+import { useGetAllSong } from '../../../hooks/useSong';
+import AddSongModal from './AddSongModal';
+function Song() {
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
   let query = `/?page=${page}&size=${size}`
-  const { data: artists, isLoading, isError, error } = useGetAllArtist(query)
-  const [showModalAddArtist, setShowModalAddArtist] = useState(false)
+  const { data: songs, isLoading, isError, error } = useGetAllSong(query)
+  const [showModalAddSong, setShowModalAddSong] = useState(false)
   const [showModalEditArtist, setShowModalEditArtist] = useState(false)
   const [dataArtist, setDataArtist] = useState(null)
   const [selectedArtist, setSelectedArtist] = useState(null)
@@ -34,7 +34,7 @@ function Artist() {
   }
 
   const handlePagination = (newPage) => {
-    if (newPage >= 1 && (artists?.next || artists?.previous)) {
+    if (newPage >= 1 && (songs?.next || songs?.previous)) {
       setPage(newPage)
     }
   }
@@ -44,25 +44,25 @@ function Artist() {
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <button
-            onClick={() => setShowModalAddArtist(true)}
+            onClick={() => setShowModalAddSong(true)}
             className="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Add Artist
+            Add Song
           </button>
           <div className="flex items-center space-x-4 text-sm text-gray-500">
             <span>Show rows</span>
             <select
               className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              value = {size}
-              onChange = {(e) => {
+              value={size}
+              onChange={(e) => {
                 setSize(e.target.value)
                 setPage(1)
               }}
             >
-              <option value = "5">5</option>
-              <option value = "10">10</option>
-              <option value = "25">25</option>
-              <option value = "50">50</option>
-              <option value = "100">100</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </select>
             {/* <span>Viewing 1 - {data.length} of {data.length}</span> */}
             <button className="outline-none focus:outline-none">
@@ -80,16 +80,16 @@ function Artist() {
                   Id
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Artist
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Genre
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Country
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date of birth
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Bio
+                  Duration
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Created At
@@ -104,45 +104,45 @@ function Artist() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {artists && artists?.results?.length > 0 && artists?.results?.map((artist, index) => (
+              {songs && songs?.results?.length > 0 && songs?.results?.map((song, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="ml-2 text-sm font-medium text-gray-900">
-                      {(artist?.id).slice(0, 10)}...
+                      {(song?.id).slice(0, 10)}...
                     </div>
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center gap-2">
-                    {artist?.name}
-                    <img className='w-10 ' src={artist?.image} />
+                    {song?.artists[0]?.name}
+                    <img className='w-10 ' src={song[0]?.artists?.image} />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{artist?.country}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{artist.date_of_birth}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{artist?.bio}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song?.genre?.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song?.duration}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(artist?.created_at).toLocaleString('vi-VN')}
+                    {new Date(song?.created_at).toLocaleString('vi-VN')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(artist?.updated_at).toLocaleString('vi-VN')}
+                    {new Date(song?.updated_at).toLocaleString('vi-VN')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
                     <button className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
-                      onClick={() => handleSelectedArtist(artist?.id)}
+                      onClick={() => handleSelectedArtist(song?.id)}
                     >
                       <MoreHorizontal />
                     </button>
-                    {selectedArtist === artist?.id && (
+                    {selectedArtist === song?.id && (
                       <div className="absolute right-6 top-9 mt-2 p-3 rounded bg-gray-500 shadow text-white z-10">
                         <h2
                           className="cursor-pointer hover:underline"
-                          onClick={() => handleSelectedArtistEdit(artist)}
+                          onClick={() => handleSelectedArtistEdit(song)}
                         >
                           Update
                         </h2>
                         <div className='border border-gray-black my-2 w-full'></div>
                         <h2
                           className="cursor-pointer hover:underline"
-                          onClick={() => handleDeleteArtist(artist?.id)}
+                          onClick={() => handleDeleteArtist(song?.id)}
                         >
                           Delete
                         </h2>
@@ -156,21 +156,19 @@ function Artist() {
         </div>
       </div>
 
-      {artists && artists?.total_pages > 1 && (
+      {songs && songs?.total_pages > 1 && (
         <Pagination
-          totalPage={artists?.total_pages}
+          totalPage={songs?.total_pages}
           handlePagination={handlePagination}
           page={page}
           visiblePagination={visiblePagination}
         />
       )}
 
+      <AddSongModal show={showModalAddSong} onClose={() => setShowModalAddSong(false)} />
 
-
-      <AddArtistModal show={showModalAddArtist} onClose={() => setShowModalAddArtist(false)} />
-      <EditArtistModal show={showModalEditArtist} onClose={() => setShowModalEditArtist(false)} data={dataArtist} />
     </div>
   );
 }
 
-export default Artist;
+export default Song;

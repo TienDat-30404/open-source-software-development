@@ -5,7 +5,7 @@ from .serializers import ArtistSerializer
 from rest_framework import status
 from rest_framework.response import Response
 import cloudinary.uploader
-
+import math
 
 class ArtistViewSet(viewsets.ModelViewSet): 
     queryset = Artist.objects.all().order_by('-created_at')
@@ -13,19 +13,45 @@ class ArtistViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs): 
         paginator = self.paginator
-        paginator.page_size = 100
+        
+        size = request.query_params.get('size', None)
+        paginate = False
+        if size is not None:
+            try:
+                paginate = True
+                size = int(size)
+                if size > 0:
+                    paginator.page_size = size
+                else:
+                    paginator.page_size = 5 
+            except ValueError:
+                return Response({"error": "Invalid page size"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            paginator.page_size = 5 
         
         queryset = self.get_queryset()
-        page = paginator.paginate_queryset(queryset, request)
-        if page is not None:
+        
+        if paginate:
+            page = paginator.paginate_queryset(queryset, request)
             serializer = self.get_serializer(page, many=True)
-            return paginator.get_paginated_response(serializer.data)
-    
-        serializer = self.get_serializer(queryset, many = True)
-        return Response({
-            "artists" : serializer.data,
-            "status" : 200
-        }, status = status.HTTP_200_OK)
+            total_pages = math.ceil(paginator.page.paginator.count / paginator.page_size)
+
+            return Response({
+                'results': serializer.data,
+                'count': paginator.page.paginator.count,
+                'total_pages': total_pages,
+                'next': paginator.get_next_link(),
+                'previous': paginator.get_previous_link(),
+                'status': 200
+            }, status=status.HTTP_200_OK)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({
+                'results': serializer.data,
+                'count': len(serializer.data),
+                'total_pages': 1,
+                'status': 200
+            }, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         image_file = request.data.get("image")

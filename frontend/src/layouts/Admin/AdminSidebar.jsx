@@ -27,15 +27,29 @@ export default function AdminSidebar() {
             DashBoard
           </div>
         </div>
+
         <div
           onClick={() => navigate('/admin/artist')}
           className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md  text-gray-400"
         >
           <PersonStanding />
           <div
-            onClick={() => navigate('/admin/artist')}
             className="text-xs font-semibold uppercase tracking-wide">
             Artist
+          </div>
+          <div className="space-y-1">
+
+          </div>
+        </div>
+
+        <div
+          onClick={() => navigate('/admin/category')}
+          className="p-3 flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-md  text-gray-400"
+        >
+          <PersonStanding />
+          <div
+            className="text-xs font-semibold uppercase tracking-wide">
+            Category
           </div>
           <div className="space-y-1">
 

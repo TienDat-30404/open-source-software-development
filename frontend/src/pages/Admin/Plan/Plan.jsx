@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useCreateArtist, useDeleteArtist, useGetAllArtist } from '../../../hooks/useArtist';
-import AddArtistModal from './AddArtistModal';
 import { MoreHorizontal } from 'lucide-react';
-import EditArtistModal from './EditArtistModal';
 import Pagination from '../../../components/Pagination/Pagination';
 import { visiblePagination } from '../../../until/function';
-function Artist() {
+function Plan() {
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
   let query = `/?page=${page}&size=${size}`
@@ -46,7 +44,7 @@ function Artist() {
           <button
             onClick={() => setShowModalAddArtist(true)}
             className="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Add Artist
+            Add Plan
           </button>
           <div className="flex items-center space-x-4 text-sm text-gray-500">
             <span>Show rows</span>
@@ -55,7 +53,6 @@ function Artist() {
               value = {size}
               onChange = {(e) => {
                 setSize(e.target.value)
-                setPage(1)
               }}
             >
               <option value = "5">5</option>
@@ -167,10 +164,8 @@ function Artist() {
 
 
 
-      <AddArtistModal show={showModalAddArtist} onClose={() => setShowModalAddArtist(false)} />
-      <EditArtistModal show={showModalEditArtist} onClose={() => setShowModalEditArtist(false)} data={dataArtist} />
     </div>
   );
 }
 
-export default Artist;
+export default Plan;

@@ -83,7 +83,7 @@ export default function AdminSidebar() {
 
         <div
           className="p-3 flex items-center space-x-2 text-gray-400 cursor-pointer text-gray-40 hover:bg-gray-100 rounded-md"
-          onClick={() => navigate('/admin/plan')}
+          onClick={() => navigate('/admin/user')}
         >
           <User />
           <div className="text-xs font-semibold  uppercase tracking-wide">
@@ -109,7 +109,7 @@ export default function AdminSidebar() {
 
         <div
           className="p-3 flex items-center space-x-2 text-gray-400 cursor-pointer hover:bg-gray-100 rounded-md"
-          onClick={() => navigate('/admin/plan')}
+          onClick={() => navigate('/admin/role')}
         >
           <ShieldUser />
           <div className="text-xs font-semibold uppercase tracking-wide">

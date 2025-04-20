@@ -1,82 +1,92 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
-import { useUpdateArtist } from "../../../hooks/useArtist";
-const EditArtistModal = ({ show, onClose, data }) => {
+import Select from "react-select";
+import { useGetAllSong } from "../../../hooks/useSong";
 
+import { useCreateAlbum } from "../../../hooks/useAlbum";
+
+const AddAlbumModal = ({ show, onClose }) => {
     const [form, setForm] = useState({
         name: "",
-        country: "",
-        date_of_birth: "",
-        bio: "",
+        releaseDate : "",
+        songIds : []
     });
     const [image, setImage] = useState(null);
     const [fileInputKey, setFileInputKey] = useState(Date.now());
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    const { data: songs, isLoading, isError, error } = useGetAllSong("")
 
-    useEffect(() => {
-        if (data) {
-            setForm({
-                name: data?.name || "",
-                country: data?.country || "",
-                date_of_birth: data?.date_of_birth || "",
-                bio: data?.bio || "",
-            });
-            setImage(data?.image || null);
-        }
-    }, [show])
-
-    const updateArtistMutation = useUpdateArtist({
+    const createAlbumMutation = useCreateAlbum({
         onSuccess: () => {
-            setForm({ name: "", country: "", date_of_birth: "", bio: "" });
-            setIsSubmitting(false);
+            setForm({
+                name: "",
+                releaseDate : "",
+                image : "",
+                songIds : []
+            });
             setImage(null);
             onClose();
         },
         onError: (error) => {
-            console.error("Tạo artist thất bại:", error);
+            console.error("Tạo album thất bại:", error);
         },
-    })
+    });
+
+    const options = songs?.results.map((song) => ({
+        value: song.id, label: song.title
+    }))
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const handleChooseSong = (selected) => {
+        setSelectedOptions(selected);
+    };
+
+  
 
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
+        const { name } = e.target;
         if (file) {
-            setImage(file);
-            setForm({ ...form, image: file });
+            if (name === 'image') {
+                setImage(file);
+                setForm((prev) => ({ ...prev, image: file }));
+            }
         }
         setFileInputKey(Date.now()); // Reset the file input key to force re-render
     }
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
 
 
-    const handleUpdateArtist = async (e) => {
-        console.log(data?.image)
+    const handleCreateAlbum = async (e) => {
         e.preventDefault()
-        const formData = new FormData();
         setIsSubmitting(true)
-        formData.append("name", form.name);
-        formData.append("country", form.country);
-        formData.append("date_of_birth", form.date_of_birth);
-        formData.append("bio", form.bio);
+        const formData = new FormData();
+        formData.append("title", form.name);
+        let songsOnAlbum;
+        if (selectedOptions?.length > 0) {
+            songsOnAlbum = selectedOptions?.map(song => song?.value) || [];
+        } 
+        formData.append("release_date", form?.releaseDate);
+        formData.append("release_date", "2001-05-25");
+        formData.append("image", image);
+        formData.append("song_ids", JSON.stringify(songsOnAlbum));
 
-        if (image instanceof File) {
-            formData.append("image", image);
-        }
-      
-        updateArtistMutation.mutate({
-            id: data?.id,
-            data: formData
-        });
+        createAlbumMutation.mutate(formData);
 
     };
 
+
+
     if (!show) return null;
     return (
-        <div className={`${show ? 'flex' : 'hidden'} fixed inset-0   bg-black bg-opacity-50 flex items-center justify-center z-50`}>
+        <div className={`$${show ? 'flex' : 'hidden'} fixed inset-0   bg-black bg-opacity-50 flex items-center justify-center z-50`}>
             <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
                 {isSubmitting && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-opacity-70 rounded-lg">
@@ -91,9 +101,9 @@ const EditArtistModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Artist</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Create New Album</h2>
 
-                <form onSubmit={handleUpdateArtist} className="space-y-4">
+                <form onSubmit={handleCreateAlbum} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
@@ -107,49 +117,43 @@ const EditArtistModal = ({ show, onClose, data }) => {
                     </div>
 
                     <div>
+                        <label className="block text-sm font-medium text-gray-700">Song</label>
+                        <Select
+                            isMulti
+                            value={selectedOptions}
+                            options={options}
+                            onChange={handleChooseSong}
+                            styles={{
+                                menu: (provided) => ({
+                                    ...provided,
+                                    overflowY: 'auto',
+                                    borderColor: 'red',
+                                    color: 'black'
+                                })
+                            }}
+                        />
+                    </div>
+
+                    <div>
                         <label className="block text-sm font-medium text-gray-700">Image</label>
                         <input
                             type="file"
                             name="image"
                             accept="image/*"
                             onChange={handleChangeFile}
-                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Country</label>
-                        <input
-                            type="text"
-                            name="country"
-                            value={form.country}
-                            onChange={handleChange}
                             required
                             className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                        <label className="block text-sm font-medium text-gray-700">Release Date</label>
                         <input
                             type="date"
-                            name="date_of_birth"
-                            value={form.date_of_birth}
+                            name="releaseDate"
+                            value={form.releaseDate}
                             onChange={handleChange}
-                            required
                             className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Bio</label>
-                        <textarea
-                            name="bio"
-                            value={form.bio}
-                            onChange={handleChange}
-                            rows="3"
-                            required
-                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
@@ -158,13 +162,15 @@ const EditArtistModal = ({ show, onClose, data }) => {
                             type="submit"
                             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                         >
-                            Update Artist
+                            Create
                         </button>
                     </div>
                 </form>
             </div>
+
+
         </div>
     );
 };
 
-export default EditArtistModal;
+export default AddAlbumModal;

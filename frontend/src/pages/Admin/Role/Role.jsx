@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Album() {
+export default function Role() {
   return (
     <div>
-      <h2>Album</h2>
+      <h2>Role</h2>
     </div>
   )
 }

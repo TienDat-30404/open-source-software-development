@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
 import { useUpdateArtist } from "../../../hooks/useArtist";
-const EditArtistModal = ({ show, onClose, data }) => {
+import Select from "react-select";
+import { useGetAllSong } from "../../../hooks/useSong";
+
+const UpdateAlbumModal = ({ show, onClose, data }) => {
 
     const [form, setForm] = useState({
         name: "",
-        country: "",
-        date_of_birth: "",
-        bio: "",
+        releaseDate: "",
+        songids: []
     });
     const [image, setImage] = useState(null);
     const [fileInputKey, setFileInputKey] = useState(Date.now());
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const { data: songs, isLoading, isError, error } = useGetAllSong("")
+    const options = songs?.results.map((song) => ({
+        value: song.id, label: song.title
+    }))
     useEffect(() => {
         if (data) {
+            const songsSelect = data?.songs?.map((song) => ({
+                value : song.id, label : song.title
+            }))
             setForm({
-                name: data?.name || "",
-                country: data?.country || "",
-                date_of_birth: data?.date_of_birth || "",
-                bio: data?.bio || "",
+                name: data?.title || "",
+                releaseDate: data?.release_date || "",
+                songids : songsSelect
+
             });
             setImage(data?.image || null);
         }
@@ -53,20 +62,19 @@ const EditArtistModal = ({ show, onClose, data }) => {
 
 
 
-    const handleUpdateArtist = async (e) => {
-        console.log(data?.image)
+    const handleUpdateAlbum = async (e) => {
         e.preventDefault()
         const formData = new FormData();
         setIsSubmitting(true)
-        formData.append("name", form.name);
+        formData.append("title", form.name);
         formData.append("country", form.country);
-        formData.append("date_of_birth", form.date_of_birth);
-        formData.append("bio", form.bio);
+        formData.append("release_date", form.releaseDate);
+        formData.append("", form.bio);
 
         if (image instanceof File) {
             formData.append("image", image);
         }
-      
+
         updateArtistMutation.mutate({
             id: data?.id,
             data: formData
@@ -74,6 +82,11 @@ const EditArtistModal = ({ show, onClose, data }) => {
 
     };
 
+    const handleChooseSong = (selected) => {
+        setForm({ ...form, songids: selected });
+    };
+
+    console.log("songids", form.songids)
     if (!show) return null;
     return (
         <div className={`${show ? 'flex' : 'hidden'} fixed inset-0   bg-black bg-opacity-50 flex items-center justify-center z-50`}>
@@ -91,9 +104,9 @@ const EditArtistModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Artist</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Album</h2>
 
-                <form onSubmit={handleUpdateArtist} className="space-y-4">
+                <form onSubmit={handleUpdateAlbum} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
@@ -117,24 +130,14 @@ const EditArtistModal = ({ show, onClose, data }) => {
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Country</label>
-                        <input
-                            type="text"
-                            name="country"
-                            value={form.country}
-                            onChange={handleChange}
-                            required
-                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
+
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                        <label className="block text-sm font-medium text-gray-700">Release Date</label>
                         <input
                             type="date"
-                            name="date_of_birth"
-                            value={form.date_of_birth}
+                            name="releaseDate"
+                            value={form.releaseDate}
                             onChange={handleChange}
                             required
                             className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -142,16 +145,24 @@ const EditArtistModal = ({ show, onClose, data }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Bio</label>
-                        <textarea
-                            name="bio"
-                            value={form.bio}
-                            onChange={handleChange}
-                            rows="3"
-                            required
-                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        <label className="block text-sm font-medium text-gray-700">Song</label>
+                        <Select
+                            isMulti
+                            value={form.songids}
+                            options={options}
+                            onChange={handleChooseSong}
+                            styles={{
+                                menu: (provided) => ({
+                                    ...provided,
+                                    overflowY: 'auto',
+                                    borderColor: 'red',
+                                    color: 'black'
+                                })
+                            }}
                         />
                     </div>
+
+
 
                     <div className="text-right">
                         <button
@@ -167,4 +178,4 @@ const EditArtistModal = ({ show, onClose, data }) => {
     );
 };
 
-export default EditArtistModal;
+export default UpdateAlbumModal;

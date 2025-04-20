@@ -9,7 +9,7 @@ export default function Artist() {
 
     useEffect(() => {
         const fetchData = async () => {
-            let query = `/?page=${page}`
+            let query = `/?page=${page}&size=7`
             const response = await getAllArtist(query)
             console.log(response)
             setArtists(response)

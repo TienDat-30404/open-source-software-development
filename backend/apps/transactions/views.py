@@ -29,12 +29,8 @@ def generate_mac(data, key):
 
 class PurchaseSubscriptionView(APIView):
     """ Mua gói đăng ký """
-    # permission_classes = [IsAuthenticated]
     def post(self, request):
-        # user = request.user
-        user=User.objects.first()
-        # user = User.objects.all()[1]
-
+        user = request.user
         plan_id = request.data.get("plan_id")
         payment_method_id=request.data.get("payment_method_id")
         auto_renew = request.data.get("auto_renew", True)
@@ -93,11 +89,8 @@ class PurchaseSubscriptionView(APIView):
 
 class CancelSubscriptionView(APIView):
     """ Hủy gói đăng ký """
-    # permission_classes = [IsAuthenticated]
-
     def put(self, request):
-        # user = request.user
-        user=User.objects.first()
+        user = request.user
         try:
             subscription = Subscription.objects.get(user=user, status='active')
         except Subscription.DoesNotExist:
@@ -109,11 +102,8 @@ class CancelSubscriptionView(APIView):
 
 class RenewSubscriptionView(APIView):
     """ Gia hạn gói đăng ký """
-    # permission_classes = [IsAuthenticated]
-
     def put(self, request):
-        # user = request.user
-        user=User.objects.first()
+        user = request.user
         try:
             subscription = Subscription.objects.get(user=user, status='active', auto_renew=True)
         except Subscription.DoesNotExist:
@@ -147,17 +137,13 @@ class RenewSubscriptionView(APIView):
 
 class CheckPremiumAccessView(APIView):
     """ Kiểm tra quyền truy cập Premium """
-    # permission_classes = [IsAuthenticated]
-
     def get(self, request):
-        is_premium = Subscription.objects.filter(user=User.objects.first(), status='active', end_date__gt=now()).exists()
+        is_premium = Subscription.objects.filter(user=request.user, status='active', end_date__gt=now()).exists()
         return success_response(data={"is_premium": is_premium})
 class CurrentSubscriptionView(APIView):
     """ Lấy thông tin gói đăng ký hiện tại của người dùng """
-    # permission_classes = [IsAuthenticated]
     def get(self, request):
-        # user = request.user
-        user=User.objects.first()
+        user = request.user
         subscription = Subscription.objects.filter(user=user, status='active').first()
 
         if not subscription:

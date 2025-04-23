@@ -12,10 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from ..utils.response import success_response,error_response
 from .serializers import FollowSerializer
 class FollowArtistAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
-    
     def get(self, request):
-        user=User.objects.first()
+        user = request.user
         follows = Follow.objects.filter(user=user)
         serializer = FollowSerializer(follows, many=True)
         return success_response(data=serializer.data)
@@ -23,7 +21,7 @@ class FollowArtistAPIView(APIView):
         """API để follow một nghệ sĩ"""
         artist_id = request.data.get('artist_id')
         artist = get_object_or_404(Artist, id=artist_id)
-        user=User.objects.first()
+        user = request.user
         follow, created = Follow.objects.get_or_create(user=user, artist=artist)
         
         if created:
@@ -34,7 +32,7 @@ class FollowArtistAPIView(APIView):
         """API để unfollow một nghệ sĩ"""
         artist_id = request.data.get('artist_id')
         artist = get_object_or_404(Artist, id=artist_id)
-        user=User.objects.first()
+        user = request.user
         follow = Follow.objects.filter(user=user, artist=artist)
         
         if follow.exists():

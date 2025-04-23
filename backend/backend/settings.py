@@ -165,5 +165,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',  # Chỉ sử dụng JSON
-    )
+    ),
+      'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.users.customjwt.CustomJWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    
+}
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Thời gian sống của access token
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Thời gian sống của refresh token
 }

@@ -8,6 +8,9 @@ class User(BaseModel):
     password = models.CharField(max_length=100)
     full_name = models.CharField(max_length=255)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
-    
+    @property
+    def is_authenticated(self):
+        # Bạn có thể thay đổi logic của is_authenticated ở đây nếu muốn
+        return True  # Hoặc bạn có thể kiểm tra trạng thái đăng nhập ở đây
     class Meta: 
         db_table = 'users'

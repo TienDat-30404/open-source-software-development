@@ -29,7 +29,9 @@ class LoginAPIView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             refresh = RefreshToken.for_user(user)
+            userserial= UserSerializer(user)
             return Response({
+                'data':userserial.data,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             })

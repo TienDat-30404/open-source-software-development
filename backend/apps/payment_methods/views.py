@@ -8,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .models import PaymentMethod
 from .serializers import PaymentMethodSerializer
-from ..utils.response import success_response,error_response
+from ..utils.response import success_response,error_response,check_is_admin
 class PaymentMethodAPIView(APIView):
     # permission_classes = [IsAuthenticated]  # Chỉ cho phép user đã đăng nhập
 
     def get(self, request, pk=None):
         """Lấy danh sách hoặc chi tiết phương thức thanh toán"""
+        
         if pk:
             payment_method = get_object_or_404(PaymentMethod, pk=pk)
             serializer = PaymentMethodSerializer(payment_method)
@@ -24,6 +25,7 @@ class PaymentMethodAPIView(APIView):
 
     def post(self, request):
         """Tạo phương thức thanh toán mới"""
+        check_is_admin(request.user)
         serializer = PaymentMethodSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -32,6 +34,7 @@ class PaymentMethodAPIView(APIView):
 
     def put(self, request, pk):
         """Cập nhật toàn bộ phương thức thanh toán"""
+        check_is_admin(request.user)
         payment_method = get_object_or_404(PaymentMethod, pk=pk)
         serializer = PaymentMethodSerializer(payment_method, data=request.data)
         if serializer.is_valid():
@@ -40,6 +43,7 @@ class PaymentMethodAPIView(APIView):
         return error_response(errors=serializer.errors)
     def delete(self, request, pk):
         """Xóa phương thức thanh toán"""
+        check_is_admin(request.user)
         payment_method = get_object_or_404(PaymentMethod, pk=pk)
         payment_method.delete()
         return success_response(message="delete payment_method success",code=status.HTTP_204_NO_CONTENT)

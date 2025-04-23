@@ -7,9 +7,8 @@ from .models import Plan
 from .serializers import PlanSerializer
 from uuid import UUID
 from .pagination import CustomPagination
-from ..utils.response import success_response,error_response
+from ..utils.response import success_response,error_response,check_is_admin
 class PlanAPIView(APIView):
-    # permission_classes = [IsAuthenticated]  # Yêu cầu người dùng phải đăng nhập
 
     def get(self, request, pk=None):
         """Lấy danh sách hoặc chi tiết một kế hoạch"""
@@ -26,6 +25,7 @@ class PlanAPIView(APIView):
 
     def post(self, request):
         """Tạo một kế hoạch mới"""
+        check_is_admin(request.user)
         serializer = PlanSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -34,6 +34,7 @@ class PlanAPIView(APIView):
 
     def put(self, request, pk):
         """Cập nhật toàn bộ kế hoạch"""
+        check_is_admin(request.user)
         plan = get_object_or_404(Plan, pk=pk)
         serializer = PlanSerializer(plan, data=request.data)
         if serializer.is_valid():
@@ -42,6 +43,7 @@ class PlanAPIView(APIView):
         return error_response(errors=serializer.errors)
     def delete(self, request, pk):
         """Xóa một kế hoạch"""
+        check_is_admin(request.user)
         plan = get_object_or_404(Plan, pk=pk)
         plan.delete()
         return success_response(message="xóa kế hoạch thành công ",code=status.HTTP_204_NO_CONTENT)

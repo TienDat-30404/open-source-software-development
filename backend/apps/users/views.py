@@ -29,9 +29,11 @@ class LoginAPIView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             refresh = RefreshToken.for_user(user)
+            userserial= UserSerializer(user)
             return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'data':userserial.data,
+                'refresh_token': str(refresh),
+                'access_token': str(refresh.access_token),
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class UserProfileView(APIView):

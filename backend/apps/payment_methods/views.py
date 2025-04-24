@@ -10,8 +10,6 @@ from .models import PaymentMethod
 from .serializers import PaymentMethodSerializer
 from ..utils.response import success_response,error_response,check_is_admin
 class PaymentMethodAPIView(APIView):
-    # permission_classes = [IsAuthenticated]  # Chỉ cho phép user đã đăng nhập
-
     def get(self, request, pk=None):
         """Lấy danh sách hoặc chi tiết phương thức thanh toán"""
         

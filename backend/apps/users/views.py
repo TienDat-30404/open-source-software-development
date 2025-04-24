@@ -11,6 +11,9 @@ from rest_framework.permissions import AllowAny
 from .models import User
 from ..utils.response import success_response,error_response
 from django.contrib.auth.hashers import make_password
+from ..utils.response import check_is_admin
+from django.shortcuts import get_object_or_404
+
 class RegisterAPIView(APIView):
     permission_classes = [AllowAny]  # Không yêu cầu xác thực người dùng
     def post(self, request):
@@ -50,13 +53,48 @@ class UserProfileView(APIView):
 class UpdateUserProfileView(APIView):
     def put(self, request):
         user = request.user
-        serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True cho phép cập nhật một phần
+        serializer = RegisterSerializer(user, data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            new_password = request.data.get("password")
-            if new_password:
-                user.password = make_password(new_password)  # Mã hóa mật khẩu mới
-                user.save()
-            return success_response(data=serializer.data,code=status.HTTP_200_OK,message="Cập nhật thành công")
-        return error_response(errors=serializer.errors,code=status.HTTP_400_BAD_REQUEST,message="Cập nhật không thành công")
-     
+            user=serializer.save()
+            usersrial= UserSerializer(user)
+            return success_response(data=usersrial.data,message="chỉnh sửa user thành công ",code=status.HTTP_200_OK)
+        return error_response(errors=serializer.errors,message="sửa user thất bại",code=status.HTTP_400_BAD_REQUEST)
+
+class UserAPIView(APIView):
+    def get(self, request, pk=None):
+        """Lấy danh sách hoặc chi tiết phương thức thanh toán"""
+        
+        if pk:
+            payment_method = get_object_or_404(User, pk=pk)
+            serializer = UserSerializer(payment_method)
+            return success_response(data=serializer.data)
+        payment_methods= User.objects.all()
+        serializer = UserSerializer(payment_methods, many=True)
+        return success_response(data=serializer.data)
+
+    def post(self, request):
+        """Tạo phương thức thanh toán mới"""
+        check_is_admin(request.user)
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user=serializer.save()
+            usersrial= UserSerializer(user)
+            return success_response(data=usersrial.data,code=status.HTTP_201_CREATED,message="tạo user thành công")
+        return error_response(errors=serializer.errors)
+
+    def put(self, request, pk):
+        """Cập nhật toàn bộ phương thức thanh toán"""
+        check_is_admin(request.user)
+        payment_method = get_object_or_404(User, pk=pk)
+        serializer = RegisterSerializer(payment_method, data=request.data)
+        if serializer.is_valid():
+            user=serializer.save()
+            usersrial= UserSerializer(user)
+            return success_response(data=usersrial.data,message="chỉnh sửa user thành công ",code=status.HTTP_200_OK)
+        return error_response(errors=serializer.errors,message="sửa user thất bại",code=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk):
+        """Xóa phương thức thanh toán"""
+        check_is_admin(request.user)
+        payment_method = get_object_or_404(User, pk=pk)
+        payment_method.delete()
+        return success_response(message="delete user success",code=status.HTTP_204_NO_CONTENT)

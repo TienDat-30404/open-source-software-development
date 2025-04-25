@@ -19,6 +19,8 @@ import PaymentZalopayReturn from "../pages/Payment/PaymentZalopayReturn";
 import PaymentMomoReturn from "../pages/Payment/PaymentMomoReturn";
 import Login from "../pages/Login/Login";
 import FindSong from "../pages/FindSong/FindSong";
+import Register from '../components/auth/Register';
+
 export const publicRoutes = [
     {path : '/', page : MainContent, layout : DefaultLayout},
     {path : '/cart', page : Cart, layout : CartLayout},
@@ -37,7 +39,6 @@ export const publicRoutes = [
     {path : '/payment-vnpay-return', page : PaymentVnpayReturn, layout : null},
     {path : '/payment-zalopay-return', page : PaymentZalopayReturn, layout : null},
     {path : '/payment-momo-return', page : PaymentMomoReturn, layout : null},
-
-
+    {path : '/register', page : Register, layout : null},
 ]
 

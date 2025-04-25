@@ -4,39 +4,50 @@ from apps.users.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from apps.roles.models import Role
 from apps.roles.serializers import RoleSerializer
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'full_name', 'role']
+        fields = ['id', 'username', 'email', 'password', 'full_name', 'gender', 'date_of_birth']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def create(self, validated_data):
+        # Hash password
         validated_data['password'] = make_password(validated_data['password'])
-        return super().create(validated_data)
+        # Get default user role
+        user_role = Role.objects.get(name='user')
+        # Create user with role
+        user = User.objects.create(role=user_role, **validated_data)
+        return user
+
     def update(self, instance, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
         return super().update(instance, validated_data)
+
 class LoginSerializer(serializers.Serializer):
-    
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
     def validate(self, data):
         try:
-            user = User.objects.get(username=data['username'])
+            user = User.objects.get(email=data['email'])
+            if check_password(data['password'], user.password):
+                data['user'] = user
+                return data
+            raise serializers.ValidationError("Invalid credentials")
         except User.DoesNotExist:
-            raise serializers.ValidationError("Tài khoản không tồn tại")
+            raise serializers.ValidationError("Invalid credentials")
 
-        if not check_password(data['password'], user.password):
-            raise serializers.ValidationError("Sai mật khẩu")
-
-        data['user'] = user
-        return data
 class UserSerializer(serializers.ModelSerializer):
-    role = RoleSerializer(read_only=True)
+    role_name = serializers.CharField(source='role.name', read_only=True)
+    
     class Meta:
         model = User
-        fields = ['id','username', 'email', 'full_name', 'role']
+        fields = ['id', 'username', 'email', 'full_name', 'gender', 'date_of_birth', 'role', 'role_name']
+        extra_kwargs = {
+            'role': {'write_only': True}
+        }
     

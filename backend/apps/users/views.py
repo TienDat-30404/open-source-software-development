@@ -13,6 +13,7 @@ from ..utils.response import success_response,error_response
 from django.contrib.auth.hashers import make_password
 from ..utils.response import check_is_admin
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
 
 class RegisterAPIView(APIView):
     permission_classes = [AllowAny]  # Không yêu cầu xác thực người dùng
@@ -98,3 +99,11 @@ class UserAPIView(APIView):
         payment_method = get_object_or_404(User, pk=pk)
         payment_method.delete()
         return success_response(message="delete user success",code=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def test_api(request):
+    return Response({
+        'message': 'API is working!',
+        'status': 'success'
+    })

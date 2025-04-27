@@ -27,7 +27,7 @@ class RoomAPIView(APIView):
     def post(self, request):
 
         """Tạo một phòng mới"""
-        check_is_admin(request.user)
+        # check_is_admin(request.user)
         serializer = RoomSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

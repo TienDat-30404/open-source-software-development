@@ -21,7 +21,6 @@ class PlaylistViewSet(viewsets.ModelViewSet):
      
         
         queryset = self.get_queryset().filter(user_id=user_id)
-        queryset = self.get_queryset()
 
         if title:
             queryset = queryset.filter(title__icontains=title)

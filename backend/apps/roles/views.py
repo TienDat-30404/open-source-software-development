@@ -15,7 +15,6 @@ from ..utils.response import success_response,error_response,check_is_admin
 class RoleAPIView(APIView):
 
     def get(self, request, pk=None):
-        """Lấy danh sách hoặc chi tiết phương thức thanh toán"""
         
         if pk:
             role = get_object_or_404(Role, pk=pk)

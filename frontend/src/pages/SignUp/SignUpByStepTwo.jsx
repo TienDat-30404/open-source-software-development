@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-
+import { useLocation } from 'react-router-dom';
+import { registerAccount } from '../../services/UserService';
 function SignUpByStepTwo() {
     const navigate = useNavigate();
+    const location = useLocation()
+    const {userName, email, password} = location.state
+    console.log("userName", userName)
+    console.log("email", email)
+    console.log("password", password)
+
     const [formData, setFormData] = useState({
-        full_name: '',
         gender: '',
-        date_of_birth: '',
+        fullName: '',
+        dateOfBirth: '',
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -25,23 +32,17 @@ function SignUpByStepTwo() {
         setLoading(true);
         setError('');
 
-        const password = localStorage.getItem('signup_password');
-        if (!password) {
-            setError('Vui lòng quay lại bước tạo mật khẩu');
-            setLoading(false);
-            return;
-        }
 
         try {
-            const response = await api.post('/auth/register/', {
-                ...formData,
-                password
-            });
+            const response = await registerAccount({
+                username : userName,
+                email,
+                password,
+                gender : formData.gender,
+                full_name : formData.fullName,
+                date_of_birth : formData.dateOfBirth
 
-            // Xóa mật khẩu tạm thời
-            localStorage.removeItem('signup_password');
-
-            // Chuyển hướng đến trang đăng nhập
+            })
             navigate('/login');
         } catch (err) {
             setError(err.response?.data?.message || 'Đăng ký thất bại');
@@ -77,8 +78,8 @@ function SignUpByStepTwo() {
                             <p className="text-sm text-gray-400 mb-2">Tên này sẽ xuất hiện trên hồ sơ của bạn</p>
                             <input
                                 type="text"
-                                name="full_name"
-                                value={formData.full_name}
+                                name="fullName"
+                                value={formData.fullName}
                                 onChange={handleChange}
                                 required
                                 className="w-full p-3 rounded-md bg-[#282828] text-white"
@@ -155,8 +156,8 @@ function SignUpByStepTwo() {
                                 </div>
                                 <input
                                     type="date"
-                                    name="date_of_birth"
-                                    value={formData.date_of_birth}
+                                    name="dateOfBirth"
+                                    value={formData.dateOfBirth}
                                     onChange={handleChange}
                                     required
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -165,9 +166,9 @@ function SignUpByStepTwo() {
                         </div>
                         <button
                             type="submit"
-                            disabled={loading || !formData.full_name || !formData.gender || !formData.date_of_birth}
+                            disabled={loading || !formData.fullName || !formData.gender || !formData.dateOfBirth}
                             className={`w-full p-3 rounded-full font-bold ${
-                                loading || !formData.full_name || !formData.gender || !formData.date_of_birth
+                                loading || !formData.fullName || !formData.gender || !formData.dateOfBirth
                                     ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
                                     : 'bg-green-500 text-black'
                             }`}

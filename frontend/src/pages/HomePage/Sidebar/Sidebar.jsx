@@ -7,11 +7,14 @@ import { usePlaylists, useCreatePlaylist, useDeletePlayList } from '../../../hoo
 import MenuItem from '../../../components/MenuItem';
 import { deletePlaylist } from '../../../services/PlayListService';
 import EditPlaylistModal from './EditPlaylistModal';
+import { useSelector } from 'react-redux';
 export default function Sidebar() {
-  const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
+  const {auth} = useSelector(state => state.auth)
   const [searchPlaylist, setSearchPlaylist] = useState('')
-  let queryPlaylist = `/?user_id=${userId}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
+  let queryPlaylist = `/?user_id=${auth?.id}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
+  console.log("queryPlaylist", queryPlaylist)
   const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
+  console.log("playlist", playlists)
   const createPlaylistMutation = useCreatePlaylist();
   const deletePlaylistMutation = useDeletePlayList()
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
@@ -23,7 +26,7 @@ export default function Sidebar() {
 
   const handleCreatePlayList = async () => {
     createPlaylistMutation.mutate({
-      user: userId,
+      user: auth?.id,
       title: "",
       description: "",
       image : ""

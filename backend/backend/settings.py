@@ -107,22 +107,24 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'admin',
-#         'USER' : 'postgres',
-#         'PASSWORD' : '123456',
-#         'HOST' : 'localhost',
-#         'PORT' : '5432'
-#     }
-# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # BASE_DIR là thư mục chứa settings.py
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': '2',
+        'USER' : 'postgres',
+        'PASSWORD' : '123456',
+        'HOST' : 'localhost',
+        'PORT' : '5432'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',  # BASE_DIR là thư mục chứa settings.py
+#     }
+# }
 
 
 CLOUDINARY_STORAGE = {
@@ -174,18 +176,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',  # Chỉ sử dụng JSON
-    ),
-      'DEFAULT_AUTHENTICATION_CLASSES': (
-        'apps.users.customjwt.CustomJWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+# REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': (
+#         'rest_framework.renderers.JSONRenderer',  # Chỉ sử dụng JSON
+#     ),
+#       'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'apps.users.customjwt.CustomJWTAuthentication',
+#     ),
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
     
-}
+# }
 from datetime import timedelta
 
 SIMPLE_JWT = {

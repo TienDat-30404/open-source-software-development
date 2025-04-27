@@ -5,9 +5,10 @@ import './Chat.scss'
 import { Loader2Icon, MoveRight } from 'lucide-react'
 import { useAskQuestionAI, useGetHistoryChatAi } from '../../hooks/useChatAi'
 import LoadingResponseChatAI from '../../components/Element/LoadingResponseChatAI'
+import { useSelector } from 'react-redux'
 export default function ChatAI({ show, onCloseChatAi }) {
-  const userId = "375039d7-32ac-4c2c-b2c7-fd3708b45d4a"
-  const query = `/?user=${userId}`
+  const {auth} = useSelector(state => state.auth)
+  const query = `/?user=${auth.id}`
   const { data: historyChat, isLoading, isError, error, refetch } = useGetHistoryChatAi(query)
   const askQuestionMutation = useAskQuestionAI()
   const [message, setMessage] = useState("")
@@ -17,7 +18,7 @@ export default function ChatAI({ show, onCloseChatAi }) {
     setStatusResponse(true)
     askQuestionMutation.mutate({
       query : message,
-      user : userId
+      user : auth.id
     })
   }
   return (

@@ -31,6 +31,8 @@ class PurchaseSubscriptionView(APIView):
     """ Mua gói đăng ký """
     def post(self, request):
         user = request.user
+        print("user", user)
+       
         plan_id = request.data.get("plan_id")
         payment_method_id=request.data.get("payment_method_id")
         auto_renew = request.data.get("auto_renew", True)
@@ -376,3 +378,5 @@ class CheckTransactionMomoView(APIView):
             return Response(result.json(), status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as err:
             return JsonResponse({"error": f"Fail when checking status Momo: {str(err)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        

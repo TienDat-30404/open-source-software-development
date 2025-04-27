@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { EyeOff, Eye, Check, ChevronLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 function SignUpByStepOne() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const {userName, email} = location.state || {}
+ 
+
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -21,19 +25,18 @@ function SignUpByStepOne() {
         };
     };
 
-    const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-        // Lưu mật khẩu vào localStorage để sử dụng ở bước tiếp theo
-        localStorage.setItem('signup_password', newPassword);
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const validation = validatePassword(password);
         
         if (validation.isValid) {
-            navigate('/sign-up/step=2');
+            navigate('/sign-up/step=2', {
+                state : {
+                    userName : userName,
+                    email : email,
+                    password : password
+                }
+            });
         } else {
             setError('Vui lòng đảm bảo mật khẩu đáp ứng tất cả các yêu cầu.');
         }
@@ -70,7 +73,7 @@ function SignUpByStepOne() {
                                     type={showPassword ? "text" : "password"}
                                     className="w-full p-2 rounded-md bg-[#282828] text-white border border-white"
                                     value={password}
-                                    onChange={handlePasswordChange}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <button
                                     type="button"

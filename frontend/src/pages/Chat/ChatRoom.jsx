@@ -2,13 +2,14 @@ import { useEffect, useState, useRef, Fragment } from "react";
 import styled from 'styled-components';
 import TextAnimation from "../../components/Element/TextAnimation";
 import './ChatRoom.scss';
+import { useSelector } from "react-redux";
 export default function ChatRoom({ roomName, onCloseRoom }) {
-  // const [username] = useState("admin");
 
-  // test
+  const {auth} = useSelector(state => state.auth)
   const [username, setUsername] = useState("");
-  const [showUsernameInput, setShowUsernameInput] = useState(true);
-
+  useEffect(() => {
+    setUsername(auth.username)
+  }, [])
 
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -104,12 +105,6 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
     return acc;
   }, {});
 
-  const handleUsernameSubmit = () => {
-    if (username.trim()) {
-      setShowUsernameInput(false);
-    }
-  };
-
   return (
     <Fragment>
 
@@ -193,22 +188,7 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
         </div>
       </div>
 
-      {showUsernameInput ? (
-        <div>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
-            className="border p-2 text-black"
-          />
-          <button onClick={handleUsernameSubmit}>Submit</button>
-        </div>
-      ) : (
-        <div>
-          <p>Welcome, {username}!</p>
-        </div>
-      )}
+    
     </Fragment>
   )
 }

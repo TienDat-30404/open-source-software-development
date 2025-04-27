@@ -8,7 +8,7 @@ from apps.roles.serializers import RoleSerializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'full_name', 'gender', 'date_of_birth']
+        fields = ['id', 'username', 'email', 'password', 'gender', 'full_name', 'date_of_birth' ]
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -16,9 +16,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Hash password
         validated_data['password'] = make_password(validated_data['password'])
+        # Gỡ role nếu có trong validated_data (do form gửi lên)
+        validated_data.pop("role", None)
         # Get default user role
-        user_role = Role.objects.get(name='user')
-        # Create user with role
+        user_role = Role.objects.get(name='User')
+        # Create user
         user = User.objects.create(role=user_role, **validated_data)
         return user
 
@@ -28,12 +30,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    username = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, data):
         try:
-            user = User.objects.get(email=data['email'])
+            user = User.objects.get(username=data['username'])
             if check_password(data['password'], user.password):
                 data['user'] = user
                 return data
@@ -50,4 +52,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'role': {'write_only': True}
         }
+        
+class RefreshTokenSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
     

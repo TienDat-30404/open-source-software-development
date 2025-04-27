@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import api from '../../services/api';
-
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../redux/authSlice';
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -26,14 +28,9 @@ function Login() {
 
     try {
       const response = await api.post('/auth/login/', formData);
-      const { access_token, refresh_token, data } = response.data;
-      
-      // Lưu tokens
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-      localStorage.setItem('user', JSON.stringify(data));
+      console.log("respionse", response.data)
+      dispatch(setCredentials(response.data))
 
-      // Chuyển hướng sau khi đăng nhập thành công
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Đăng nhập thất bại');
@@ -47,10 +44,8 @@ function Login() {
       const response = await api.post('/auth/google/', {
         credential: credentialResponse.credential
       });
-      const { access_token, refresh_token, data } = response.data;
+      const {data } = response.data;
       
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('user', JSON.stringify(data));
 
       navigate('/');
@@ -73,11 +68,11 @@ function Login() {
             </div>
           )}
           <input
-            type="email"
-            name="email"
-            placeholder="Email"
+            type="username"
+            name="username"
+            placeholder="Username"
             className="w-full p-3 rounded-md bg-[#282828] text-white mb-4"
-            value={formData.email}
+            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -111,7 +106,7 @@ function Login() {
             onSuccess={handleLoginGoogle}
             onError={() => setError('Đăng nhập Google thất bại')}
             cookiePolicy="single_host_origin"
-            scope="profile email"
+            scope="profile username"
           />
         </GoogleOAuthProvider>
 

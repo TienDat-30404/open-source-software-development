@@ -6,8 +6,9 @@ import PaginationRightButton from '../../../components/Pagination/PaginationRigh
 export default function Album() {
     const [albums, setAlbums] = useState({})
     const [page, setPage] = useState(1)
+    
     useEffect(() => {
-        let query = `/?page=${page}`
+        let query = `/?page=${page}&size=7`
         const fetchData = async () => {
             const response = await getAllAlbum(query)
             setAlbums(response)

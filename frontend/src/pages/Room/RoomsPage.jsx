@@ -4,7 +4,9 @@ import { useCreateRoom, useDeleteRoom, useGetAllRoom } from '../../hooks/useRoom
 import { formatTime } from '../../until/function';
 import ChatRoom from '../Chat/ChatRoom';
 import './Room.scss'
+import { useSelector } from 'react-redux';
 export default function RoomsPage({ show }) {
+  const {auth} = useSelector(state => state.auth)
   const [selectedRoom, setSelectedRoom] = useState(false)
   const [roomName, setRoomName] = useState(null)
   const [addNameRoom, setAddNameRoom] = useState('')
@@ -24,7 +26,7 @@ export default function RoomsPage({ show }) {
   const handleCreateRoom = async () => {
     createRoomMutation.mutate({
       name: addNameRoom,
-      user: "3cb043a1-3ed1-4844-a6a4-b7ac3e27ac30"
+      user: auth.id
     })
     setAddNameRoom('')
   }

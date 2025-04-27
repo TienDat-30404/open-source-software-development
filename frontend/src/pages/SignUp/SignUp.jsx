@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-
+import { useNavigate } from 'react-router-dom';
 function SignUp() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('')
+  const handleSwitchSignUpNext = () => {
+    navigate('/sign-up/step=1',
+      {
+        state: {
+          email: email,
+          userName : userName
+        }
+      }
+    );
+  }
   return (
     <div className="bg-black min-h-screen flex items-center justify-center w-screen">
       <div className=" p-8 rounded-lg max-w-[400px]">
@@ -11,16 +24,26 @@ function SignUp() {
         </div>
         <h2 className="text-white text-5xl font-bold mb-6 text-center max-w-[300px]">Đăng ký để bắt đầu nghe</h2>
         <input
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          type="text"
+          placeholder="Username"
+          className="w-full p-3 rounded-md bg-[#282828] text-white mb-4"
+        />
+
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="Địa chỉ email"
           className="w-full p-3 rounded-md bg-[#282828] text-white mb-4"
         />
-        <button className="text-green-500 block mb-4">Dùng số điện thoại</button>
-        <Link to="/sign-up/step=1">
-          <div className="bg-green-500 flex justify-center text-black w-full p-3 rounded-full font-bold mb-6">
-            Tiếp theo
-          </div>
-        </Link>
+        <div
+          onClick={() => handleSwitchSignUpNext()}
+          className="bg-green-500 flex justify-center text-black w-full p-3 rounded-full font-bold mb-6"
+        >
+          Tiếp theo
+        </div>
         <div className="flex items-center justify-center mb-4">
           <div className="border-b border-gray-600 w-1/3"></div>
           <span className="text-white mx-2">hoặc</span>
@@ -33,8 +56,8 @@ function SignUp() {
           />
           Đăng ký bằng Google
         </button> */}
-        
-        <GoogleOAuthProvider  clientId={import.meta.env.VITE_CLIENTID_AUTH}  >
+
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID_AUTH}  >
           <GoogleLogin
             buttonText="Login with Google"
             // onSuccess={handleLoginGoogle}
@@ -43,7 +66,7 @@ function SignUp() {
             scope="profile email"
           />
         </GoogleOAuthProvider>
-       
+
 
         <div className="bg-black text-white text-center p-4">
           <p className="mb-2">

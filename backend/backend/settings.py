@@ -111,7 +111,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '2',
+        'NAME': '1',
         'USER' : 'postgres',
         'PASSWORD' : '123456',
         'HOST' : 'localhost',
@@ -176,18 +176,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'rest_framework.renderers.JSONRenderer',  # Chỉ sử dụng JSON
-#     ),
-#       'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'apps.users.customjwt.CustomJWTAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',  # Chỉ sử dụng JSON
+    ),
+      'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.users.customjwt.CustomJWTAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     
-# }
+}
 from datetime import timedelta
 
 SIMPLE_JWT = {

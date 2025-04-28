@@ -4,15 +4,17 @@ from .models import Room
 
 
 from rest_framework import status
-from rest_framework.response import Response
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .models import Room,Message
 from .serializers import RoomSerializer,MessageSerializer
 from ..utils.response import success_response,error_response,check_is_admin
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
+
+import time 
 class RoomAPIView(APIView):
-    permission_classes = [AllowAny]
     def get(self, request, pk=None):
        
         """Lấy danh sách hoặc chi tiết một phòng"""
@@ -25,9 +27,8 @@ class RoomAPIView(APIView):
         return success_response(data=serializer.data)
 
     def post(self, request):
-
         """Tạo một phòng mới"""
-        # check_is_admin(request.user)
+        request.data['user'] = request.user.id
         serializer = RoomSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -36,8 +37,11 @@ class RoomAPIView(APIView):
 
     def put(self, request, pk):
         """Cập nhật thông tin phòng"""
-        check_is_admin(request.user)
         room = get_object_or_404(Room, pk=pk)
+        
+        if room.user != request.user:
+          raise PermissionDenied("Bạn không có quyền cập nhật phòng này.")
+
         serializer = RoomSerializer(room, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -45,12 +49,14 @@ class RoomAPIView(APIView):
         return  error_response(errors=serializer.errors,message=serializer.error_messages)
 
     def delete(self, request, pk):
+        
         """Xóa một phòng"""
-        check_is_admin(request.user)
         room = get_object_or_404(Room, pk=pk)
+        if room.user != request.user:
+          raise PermissionDenied("Bạn không có quyền cập nhật phòng này.")
         room.delete()
-        return success_response(message="Xóa phòng thành công",code=status.HTTP_204_NO_CONTENT)
-
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
 class RoomMessagesAPIView(APIView):
     def get(self, request, room_name):

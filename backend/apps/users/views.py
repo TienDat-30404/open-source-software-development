@@ -139,7 +139,7 @@ class UserAPIView(APIView):
         check_is_admin(request.user)
         payment_method = get_object_or_404(User, pk=pk)
         payment_method.delete()
-        return success_response(message="delete user success",code=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

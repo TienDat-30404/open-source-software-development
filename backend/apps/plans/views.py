@@ -7,9 +7,13 @@ from .models import Plan
 from .serializers import PlanSerializer
 from uuid import UUID
 from .pagination import CustomPagination
+import requests
+from ..artists.models import Artist
+import time 
 from ..utils.response import success_response,error_response,check_is_admin
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
+OLLAMA_URL = 'http://localhost:11434/api/generate'
 class PlanAPIView(APIView):
 
     def get_permissions(self):
@@ -34,7 +38,7 @@ class PlanAPIView(APIView):
 
     def post(self, request):
         """Tạo một kế hoạch mới"""
-        check_is_admin(request.user)
+        # check_is_admin(request.user)
         serializer = PlanSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -55,4 +59,85 @@ class PlanAPIView(APIView):
         check_is_admin(request.user)
         plan = get_object_or_404(Plan, pk=pk)
         plan.delete()
-        return success_response(message="xóa kế hoạch thành công ",code=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+ 
+class ChatOllamaPlan(APIView):
+    def post(self, request):
+        prompt = request.data.get('prompt')
+        if not prompt:
+            return Response({"error": "Prompt is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Lấy toàn bộ các Plan hiện có
+        plans_data = Plan.objects.all()
+        
+        # Tạo nội dung yêu cầu cho AI
+        context = "Dưới đây là danh sách các gói:\n"
+        for artist in plans_data:
+            context += f"- Tên: {artist.name}, Giá: {artist.price}, Mô tả: {artist.description}, hạn: {artist.duration_days} ngày.\n"
+
+        # Final prompt
+        final_prompt = f"""
+{context}
+
+Dựa trên thông tin trên, hãy trả lời câu hỏi sau một cách ngắn gọn, chính xác và chỉ dựa trên dữ liệu đã cho. 
+Nếu không tìm thấy câu trả lời trong dữ liệu, hãy trả lời: "Không tìm thấy thông tin."
+
+Câu hỏi: {prompt}
+"""
+        # Gửi request tới Ollama server để nhận câu trả lời
+        try:
+            response = requests.post(OLLAMA_URL, json={
+                "model": "mistral",
+                "prompt": final_prompt,
+                "stream": False  # lấy luôn kết quả 1 lần
+            })
+            response.raise_for_status()
+            data = response.json()
+            ai_response = data.get('response', 'Không có phản hồi từ AI.')
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({
+            "user_prompt": prompt,
+            "ai_response": ai_response
+        })
+class ChatOllamaArtist(APIView):
+    def post(self, request):
+        prompt = request.data.get('prompt')
+        if not prompt:
+            return Response({"error": "Prompt is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Lấy toàn bộ các Plan hiện có
+        art_data = Artist.objects.all()
+        
+        # Tạo nội dung yêu cầu cho AI
+        context = "Dưới đây là danh sách các nghệ sĩ:\n"
+        for artist in art_data:
+            context += f"- Tên: {artist.name}, Tiểu sử: {artist.bio}, Nơi ở: {artist.created_at}, Ngày sinh: {artist.date_of_birth}.\n"
+
+        # Final prompt
+        final_prompt = f"""
+{context}
+
+Dựa trên thông tin trên, hãy trả lời câu hỏi sau một cách ngắn gọn, chính xác và chỉ dựa trên dữ liệu đã cho. 
+Nếu không tìm thấy câu trả lời trong dữ liệu, hãy trả lời: "Không tìm thấy thông tin."
+
+Câu hỏi: {prompt}
+"""
+        # Gửi request tới Ollama server để nhận câu trả lời
+        try:
+            response = requests.post(OLLAMA_URL, json={
+                "model": "mistral",
+                "prompt": final_prompt,
+                "stream": False  # lấy luôn kết quả 1 lần
+            })
+            response.raise_for_status()
+            data = response.json()
+            ai_response = data.get('response', 'Không có phản hồi từ AI.')
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({
+            "user_prompt": prompt,
+            "ai_response": ai_response
+        })

@@ -20,3 +20,5 @@ class User(BaseModel):
 
     class Meta:
         db_table = "users"
+    def __str__(self):
+        return self.username

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
 import { useUpdateArtist } from "../../../hooks/useArtist";
+import { useSelector } from "react-redux";
 const EditArtistModal = ({ show, onClose, data }) => {
-
+    const {accessToken} = useSelector(state => state.auth)
     const [form, setForm] = useState({
         name: "",
         country: "",
@@ -54,7 +55,6 @@ const EditArtistModal = ({ show, onClose, data }) => {
 
 
     const handleUpdateArtist = async (e) => {
-        console.log(data?.image)
         e.preventDefault()
         const formData = new FormData();
         setIsSubmitting(true)
@@ -66,10 +66,10 @@ const EditArtistModal = ({ show, onClose, data }) => {
         if (image instanceof File) {
             formData.append("image", image);
         }
-      
         updateArtistMutation.mutate({
             id: data?.id,
-            data: formData
+            data: formData,
+            token : accessToken
         });
 
     };

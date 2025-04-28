@@ -1,17 +1,23 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-export const PrivateRoute = ({ children, requireAdmin = false }) => {
-  const { user, isAdmin } = useAuth();
+const PrivateRoute = ({ children, requireAdmin = false }) => {
+  // Lấy trạng thái xác thực và thông tin người dùng từ Redux
+  const { auth, isAuthenticated} = useSelector((state) => state.auth);
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  // Kiểm tra nếu người dùng không xác thực, điều hướng đến trang login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && !isAdmin()) {
-    return <Navigate to="/" />;
+  // Kiểm tra nếu cần quyền admin mà người dùng không phải admin
+  if (requireAdmin && auth.role_name !== 'admin') {
+    return <Navigate to="/" replace />;
   }
 
+  // Nếu tất cả đều hợp lệ, cho phép render children (tức là nội dung của route)
   return children;
-}; 
+};
+
+export default PrivateRoute;

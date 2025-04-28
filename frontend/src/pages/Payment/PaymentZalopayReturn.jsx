@@ -4,7 +4,9 @@ import { checkTranSactionZaloPay, buyPremiumService } from '../../services/Trans
 import LoadingHamster from '../../components/LoadingHamster';
 import TransactionFailed from '../../components/TransactionFailure';
 import TransactionSuccess from '../../components/TransactionSuccess';
+import { useSelector } from 'react-redux';
 export default function PaymentZalopayReturn() {
+    const {accessToken} = useSelector(state => state.auth)
     const [result, setResult] = useState({})
     const [isLoading, setIsLoading] = useState(true)
     let params
@@ -19,12 +21,14 @@ export default function PaymentZalopayReturn() {
         const fetchData = async () => {
             try {
 
-                const response = await checkTranSactionZaloPay({ apptransid })
+                const response = await checkTranSactionZaloPay({ apptransid }, accessToken)
                 setResult(response)
                 const informations = localStorage.getItem('informationPayment');
                 const parsedInfo = informations ? JSON.parse(informations) : null;
-                if (response && informations && response?.result?.returncode === 1) {
-                    await buyPremiumService(parsedInfo)
+                console.log("response", response)
+                if (response && informations && response?.returncode === 1) {
+                    console.log("222")
+                    await buyPremiumService(parsedInfo, accessToken)
                     localStorage.removeItem('informationPayment')
                 }
             }

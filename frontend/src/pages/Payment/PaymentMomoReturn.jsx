@@ -7,7 +7,10 @@ import Button from '../../components/Button';
 import moment from 'moment';
 import TransactionFailed from '../../components/TransactionFailure';
 import TransactionSuccess from '../../components/TransactionSuccess';
+import { useSelector } from 'react-redux';
+
 export default function PaymentMomoReturn() {
+    const {accessToken} = useSelector(state => state.auth)
     const [result, setResult] = useState({})
     const [isLoading, setIsLoading] = useState(true);
     let params
@@ -22,12 +25,12 @@ export default function PaymentMomoReturn() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await checkTransactionMomo({ orderId })
+                const response = await checkTransactionMomo({ orderId }, accessToken)
                 setResult(response)
                 const informations = localStorage.getItem('informationPayment');
                 const parsedInfo = informations ? JSON.parse(informations) : null;
                 if (response?.resultCode === 0) {
-                    await buyPremiumService(parsedInfo)
+                    await buyPremiumService(parsedInfo, accessToken)
                     localStorage.removeItem('informationPayment')
                 }
             }

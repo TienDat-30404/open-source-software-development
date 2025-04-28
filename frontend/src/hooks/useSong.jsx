@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createArtist, deleteArtist, getAllArtist, updateArtist } from '../services/ArtistService';
-import { createSong, getAllSong } from '../services/SongService';
+import { createSong, getAllSong, updateSong } from '../services/SongService';
 
 export const useGetAllSong = (query = "") => {
   return useQuery({
@@ -10,11 +10,11 @@ export const useGetAllSong = (query = "") => {
   })
 }
 
-export const useCreateSong = ({ onSuccess, onError }) => {
+export const useCreateSong = ({ onSuccess, onError, token }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn : createSong,
+    mutationFn : (data) => createSong(data, token),
     onSuccess:  (...args) => {
       queryClient.invalidateQueries(['songs']);
 
@@ -34,24 +34,27 @@ export const useCreateSong = ({ onSuccess, onError }) => {
 
 
 
-export const useUpdateArtist = ({ onSuccess, onError }) => {
+
+
+export const useUpdateSong = ({ onSuccess, onError }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }) => updateArtist(id, data),
+    mutationFn: ({ id, data, token }) => updateSong({id, data, token}),
     onSuccess: (...args) => {
-      queryClient.invalidateQueries(['artists'])
+      queryClient.invalidateQueries(['songs'])
       if (onSuccess) {
         onSuccess(...args);
       }
     },
     onError: (error) => {
-      console.error('Error create artist:', error);
+      console.error('Error create song:', error);
       if (onError) {
         onError(error);
       }
     }
   })
 }
+
 
 
 

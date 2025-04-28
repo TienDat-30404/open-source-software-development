@@ -8,8 +8,17 @@ from .serializers import PlanSerializer
 from uuid import UUID
 from .pagination import CustomPagination
 from ..utils.response import success_response,error_response,check_is_admin
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 class PlanAPIView(APIView):
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        elif self.request.method in ['POST', 'PUT', 'DELETE']:
+            return [IsAuthenticated()]
+        return []  
+    
     def get(self, request, pk=None):
         """Lấy danh sách hoặc chi tiết một kế hoạch"""
         if pk:
@@ -32,11 +41,11 @@ class PlanAPIView(APIView):
             return success_response(data=serializer.data,code=status.HTTP_201_CREATED)
         return error_response(errors=serializer.errors)
 
-    def put(self, request, pk):
+    def patch(self, request, pk):
         """Cập nhật toàn bộ kế hoạch"""
         check_is_admin(request.user)
         plan = get_object_or_404(Plan, pk=pk)
-        serializer = PlanSerializer(plan, data=request.data)
+        serializer = PlanSerializer(plan, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return success_response(data=serializer.data)

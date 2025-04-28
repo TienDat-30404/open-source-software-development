@@ -5,11 +5,20 @@ from .serializers import ArtistSerializer
 from rest_framework import status
 from rest_framework.response import Response
 import cloudinary.uploader
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+
 import math
 
 class ArtistViewSet(viewsets.ModelViewSet): 
     queryset = Artist.objects.all().order_by('-created_at')
     serializer_class = ArtistSerializer
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:  # Cho phép list và retrieve không cần đăng nhập
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
     
     def list(self, request, *args, **kwargs): 
         paginator = self.paginator

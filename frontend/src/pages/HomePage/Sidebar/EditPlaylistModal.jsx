@@ -3,7 +3,9 @@ import { X, Music } from 'lucide-react';
 import { updatePlaylist } from '../../../services/PlayListService';
 import { handleChangeFile, handleChangeInput } from '../../../until/function';
 import { useUpdatePlaylist } from '../../../hooks/usePlaylists';
+import { useSelector } from 'react-redux';
 function EditPlaylistModal({ show, data, close }) {
+  const {accessToken} = useSelector(state => state.auth)
   const updatePlaylistMutation = useUpdatePlaylist()
   const [informations, setInformations] = useState({
     id: '',
@@ -34,7 +36,8 @@ function EditPlaylistModal({ show, data, close }) {
     }
     updatePlaylistMutation.mutate({
       id: informations?.id,
-      data: formData
+      data: formData,
+      token : accessToken
     })
   }
 

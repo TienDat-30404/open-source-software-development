@@ -1,54 +1,27 @@
-import { getItem, createItem, deleteItem, updateItemByFormData, addItemToItem, deleteItemOutOfIem } from "./apis"
-export const getAllPlaylist = async(query) => {
-    return getItem('playlists', query)
+import { getItem, createItem, deleteItem, updateItemByFormData, addItemToItem, deleteItemOutOfIem, getItemForToken, addItemUsingToken } from "./apis"
+export const getAllPlaylist = async(query, token) => {
+    return getItemForToken('playlists', query, token)
 }
 
-export const createPlayList = async(data) => {
-    return createItem('playlists', data)
+export const createPlayList = async(data, token) => {
+    return addItemUsingToken('playlists', data, token)
 }
 
-export const deletePlaylist = async (id) => {  
-    return deleteItem('playlists', id)
+export const deletePlaylist = async (id, token) => {  
+    return deleteItem('playlists', id, token)
 }
 
-export const updatePlaylist = async(id, data) => {
-    return updateItemByFormData('playlists', id, data)
-}
-
-
-export const addSongOnPlaylist = async(id, data) => {
-    return addItemToItem('playlists', id, 'add-song-to-playlist', data)
-}
-
-export const deleteSongOutOfPlaylist = async(idParent, idChild) => {
-    return deleteItemOutOfIem('playlists', idParent, 'remove-song-out-playlist', idChild)
+export const updatePlaylist = async({id, data, token}) => {
+    return updateItemByFormData('playlists', id, data, token)
 }
 
 
+export const addSongOnPlaylist = async(id, data, token) => {
+    return addItemToItem('playlists', id, 'add-song-to-playlist', data, token)
+}
 
-// export const getAllPlaylist = async(query) => {
-//     if(query)
-//     {
-//         query += "/"
-//     }
-//     const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/${query}`, {
-//         method : 'GET',
-//         headers : {
-//             'Content-Type' : 'application/json'
-//         }
-//     })
-//     return response.json()
-// }
+export const deleteSongOutOfPlaylist = async({idPlaylist, idSong, token}) => {
+    return deleteItemOutOfIem('playlists', idPlaylist, 'remove-song-out-playlist', idSong, token)
+}
 
-// export const createPlayList = async(data) => {
-//     const response = await fetch(`${import.meta.env.VITE_API_URL}/playlists/`, {
-//         method : 'POST',
-//         headers : {
-//             'Content-Type' : 'application/json'
-//         },
-//         body : JSON.stringify(data)
-//     })
-//     return response.json()
-// }
 
- 

@@ -1,18 +1,20 @@
-import React from 'react';
-import { Layout } from 'antd';
-import Navigation from '../../components/Navigation';
+import React from 'react'
+import AdminHeader from './AdminHeader'
+import AdminSidebar from './AdminSidebar'
 
-const { Content } = Layout;
-
-const AdminLayout = ({ children }) => {
+export default function AdminLayout({ children }) {
   return (
-    <Layout className="min-h-screen">
-      <Navigation />
-      <Content className="p-6">
-        {children}
-      </Content>
-    </Layout>
-  );
-};
-
-export default AdminLayout;
+    <div className='bg-white h-screen w-screen flex flex-col z-50'>
+      <AdminHeader />
+      {/* <Body /> */}
+      <div className='flex w-full h-full'>
+        <div className='w-1/6 h-full bg-yellow-200'>
+          <AdminSidebar />
+        </div>
+        <div className="w-5/6 text-white rounded-lg h-full overflow-y-auto bg-blue-200">
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}

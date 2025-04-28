@@ -4,8 +4,10 @@ import Select from "react-select";
 import { useGetAllSong } from "../../../hooks/useSong";
 
 import { useCreateAlbum } from "../../../hooks/useAlbum";
+import { useSelector } from "react-redux";
 
 const AddAlbumModal = ({ show, onClose }) => {
+    const {accessToken} = useSelector(state => state.auth)
     const [form, setForm] = useState({
         name: "",
         releaseDate : "",
@@ -78,7 +80,7 @@ const AddAlbumModal = ({ show, onClose }) => {
         formData.append("image", image);
         formData.append("song_ids", JSON.stringify(songsOnAlbum));
 
-        createAlbumMutation.mutate(formData);
+        createAlbumMutation.mutate({ data: formData, token: accessToken });
 
     };
 

@@ -1,18 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllPlaylist, createPlayList, deletePlaylist, updatePlaylist, deleteSongOutOfPlaylist } from '../services/PlayListService';
 
-export const usePlaylists = (query = "") => {
+export const usePlaylists = (query = "", token) => {
   return useQuery({
-    queryKey: ['playlists', query],
-    queryFn: () => getAllPlaylist(query),
+    queryKey: ['playlists', query, token],
+    queryFn: () => getAllPlaylist(query, token),
     
   })
 }
 
-export const useCreatePlaylist = () => {
+export const useCreatePlaylist = (token) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createPlayList,
+    mutationFn: (data) => createPlayList(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries(['playlists']);
     },
@@ -22,10 +22,10 @@ export const useCreatePlaylist = () => {
   });
 };
 
-export const useDeletePlayList = () => {
+export const useDeletePlayList = (token) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id) => deletePlaylist(id),
+    mutationFn: (id) => deletePlaylist(id, token),
     onSuccess: () => {
       queryClient.invalidateQueries(['playlists'])
     },
@@ -38,7 +38,7 @@ export const useDeletePlayList = () => {
 export const useUpdatePlaylist = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({id, data}) => updatePlaylist(id, data),
+    mutationFn:  updatePlaylist,
     onSuccess: () => {
       queryClient.invalidateQueries(['playlists'])
     },
@@ -51,9 +51,8 @@ export const useUpdatePlaylist = () => {
 export const useDeleteSongOutOfPlaylist = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn : ({idPlaylist, idSong}) => deleteSongOutOfPlaylist(idPlaylist, idSong),
+    mutationFn : ({idPlaylist, idSong, token}) => deleteSongOutOfPlaylist({idPlaylist, idSong, token}),
     onSuccess : () => {
-      console.log("222222")
       queryClient.invalidateQueries(['playlists'])
     },
     onError: (error) => {

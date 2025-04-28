@@ -5,8 +5,11 @@ import { calculateStartDayWithDuration } from '../../until/function';
 import { buyPremiumService, paymentMomoService, paymentZalopayService } from '../../services/TransactionService';
 import { toast, ToastContainer } from 'react-toastify';
 import { paymentByVnpService } from '../../services/TransactionService';
+import { useSelector } from 'react-redux';
 export default function Payment() {
-    const { data: paymentMethods, isLoading, isError, error, refetch } = useGetAllPaymentMethod("");
+    const {accessToken} = useSelector(state => state.auth)
+    const { data: paymentMethods, isLoading, isError, error, refetch } = useGetAllPaymentMethod("", accessToken);
+    console.log("payment", paymentMethods)
     const location = useLocation();
     const { id, title, price, duration } = location.state || {};
     const startDate = calculateStartDayWithDuration(duration);
@@ -26,7 +29,7 @@ export default function Payment() {
                 if (paymentMethod?.name === 'ZALOPAY') {
                     const response = await paymentZalopayService({
                         amount: price
-                    })
+                    }, accessToken)
 
                     window.location.href = response.order_url
 
@@ -35,8 +38,9 @@ export default function Payment() {
                 else if (paymentMethod?.name === 'VNPAY') {
                     const response = await paymentByVnpService({
                         amount: price,
-                        content: title
-                    })
+                        content: title,
+                        
+                    }, accessToken)
 
                     window.location.href = response.url
 
@@ -46,7 +50,7 @@ export default function Payment() {
                     const response = await paymentMomoService({
                         amount: price,
                         orderInfo: title
-                    })
+                    }, accessToken)
 
                     window.location.href = response.payUrl
 

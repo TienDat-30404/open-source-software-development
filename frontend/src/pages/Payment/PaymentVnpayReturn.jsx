@@ -8,7 +8,9 @@ import LoadMoveUp from '../../components/LoadMoveUp';
 import Button from '../../components/Button';
 import TransactionFailed from '../../components/TransactionFailure';
 import TransactionSuccess from '../../components/TransactionSuccess';
+import { useSelector } from 'react-redux';
 export default function PaymentVnpayReturn() {
+    const {accessToken} = useSelector(state => state.auth)
     const [result, setResult] = useState({})
     const [isLoading, setIsLoading] = useState(true);
 
@@ -18,12 +20,14 @@ export default function PaymentVnpayReturn() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await paymentVpnReturnService(queryString)
+                const response = await paymentVpnReturnService(queryString, accessToken)
                 setResult(response)
                 const informations = localStorage.getItem('informationPayment');
                 const parsedInfo = informations ? JSON.parse(informations) : null;
                 if (response && response?.status === 200 && informations && response?.statusTransaction === "00") {
-                    await buyPremiumService(parsedInfo)
+                    console.log("parsedInfor", parsedInfo)
+                    console.log("accessToke", accessToken)
+                    await buyPremiumService(parsedInfo, accessToken)
                     localStorage.removeItem('informationPayment')
                 }
             }

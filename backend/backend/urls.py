@@ -18,5 +18,5 @@ urlpatterns = [
     path('api/history/', include('apps.listening_histories.urls')),
     path('api/auth/', include('apps.users.urls')),
     path('api/user', include('apps.users.urls')),
-    path('api/role', include('apps.roles.urls')),
+    path('api/roles/', include('apps.roles.urls')),
 ]

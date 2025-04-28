@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
 import { useUpdateCategory } from "../../../hooks/useCategory";
+import { useSelector } from "react-redux";
 const EditCategoryModal = ({ show, onClose, data }) => {
-
+    const {accessToken} = useSelector(state => state.auth)
     const [name, setName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,7 +34,7 @@ const EditCategoryModal = ({ show, onClose, data }) => {
         setIsSubmitting(true)
         formData.append("name", name);
        
-        updateCategoryMutation.mutate({ id: data?.id, data: formData });
+        updateCategoryMutation.mutate({ id: data?.id, data: formData, token : accessToken });
 
     };
 
@@ -54,7 +55,7 @@ const EditCategoryModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Artist</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Category</h2>
 
                 <form onSubmit={handleUpdateCategory} className="space-y-4">
                     <div>

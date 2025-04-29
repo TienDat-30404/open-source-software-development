@@ -62,23 +62,20 @@ class ChatOllamaPlan(APIView):
         plans_data = Plan.objects.all()
         
         # Tạo nội dung yêu cầu cho AI
-        context = "Dưới đây là danh sách các gói:\n"
+        context = "DANH SÁCH GÓI:\n"
         for artist in plans_data:
-            context += f"- Tên: {artist.name}, Giá: {artist.price}, Mô tả: {artist.description}, hạn: {artist.duration_days} ngày.\n"
-
-        # Final prompt
+         context += (
+         f" Tên:{artist.name}, giá:{artist.price}, thời gian dùng:{artist.duration_days}\n"
+    )   
         final_prompt = f"""
 {context}
+Dựa trên DANH SÁCH GÓI, trả lời ngắn gọn chính xác và nhanh nhất có thể cho câu hỏi {prompt}.
+""" 
 
-Dựa trên thông tin trên, hãy trả lời câu hỏi sau một cách ngắn gọn, chính xác và chỉ dựa trên dữ liệu đã cho. 
-Nếu không tìm thấy câu trả lời trong dữ liệu, hãy trả lời: "Không tìm thấy thông tin."
-
-Câu hỏi: {prompt}
-"""
         # Gửi request tới Ollama server để nhận câu trả lời
         try:
             response = requests.post(OLLAMA_URL, json={
-                "model": "mistral",
+                "model": "gemma:2b",
                 "prompt": final_prompt,
                 "stream": False  # lấy luôn kết quả 1 lần
             })
@@ -102,23 +99,20 @@ class ChatOllamaArtist(APIView):
         art_data = Artist.objects.all()
         
         # Tạo nội dung yêu cầu cho AI
-        context = "Dưới đây là danh sách các nghệ sĩ:\n"
+        context = "DANH SÁCH NGHỆ SĨ:\n"
         for artist in art_data:
-            context += f"- Tên: {artist.name}, Tiểu sử: {artist.bio}, Nơi ở: {artist.created_at}, Ngày sinh: {artist.date_of_birth}.\n"
+         context += (
+         f" Tên:{artist.name}, Tiểu sử:{artist.bio}, Nơi ở:{artist.country}, Ngày sinh:{artist.date_of_birth}\n"
+    )   
 
-        # Final prompt
         final_prompt = f"""
 {context}
-
-Dựa trên thông tin trên, hãy trả lời câu hỏi sau một cách ngắn gọn, chính xác và chỉ dựa trên dữ liệu đã cho. 
-Nếu không tìm thấy câu trả lời trong dữ liệu, hãy trả lời: "Không tìm thấy thông tin."
-
-Câu hỏi: {prompt}
-"""
+Dựa trên DANH SÁCH NGHỆ SĨ, trả lời ngắn gọn chính xác và nhanh nhất có thể cho câu hỏi {prompt}.
+""" 
         # Gửi request tới Ollama server để nhận câu trả lời
         try:
             response = requests.post(OLLAMA_URL, json={
-                "model": "mistral",
+                "model": "gemma:2b",
                 "prompt": final_prompt,
                 "stream": False  # lấy luôn kết quả 1 lần
             })

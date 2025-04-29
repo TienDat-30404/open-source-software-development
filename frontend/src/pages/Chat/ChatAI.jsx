@@ -7,10 +7,11 @@ import { useAskQuestionAI, useGetHistoryChatAi } from '../../hooks/useChatAi'
 import LoadingResponseChatAI from '../../components/Element/LoadingResponseChatAI'
 import { useSelector } from 'react-redux'
 export default function ChatAI({ show, onCloseChatAi }) {
+  const {accessToken} = useSelector(state => state.auth)
   const {auth} = useSelector(state => state.auth)
   const query = `/?user=${auth.id}`
-  const { data: historyChat, isLoading, isError, error, refetch } = useGetHistoryChatAi(query)
-  const askQuestionMutation = useAskQuestionAI()
+  const { data: historyChat, isLoading, isError, error, refetch } = useGetHistoryChatAi(query, accessToken)
+  const askQuestionMutation = useAskQuestionAI(accessToken)
   const [message, setMessage] = useState("")
   const [statusResponse, setStatusResponse] = useState(false)
   const handleSendRequest = async() => {

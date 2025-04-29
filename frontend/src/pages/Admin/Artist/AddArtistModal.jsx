@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useCreateArtist } from "../../../hooks/useArtist";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
+import { useSelector } from "react-redux";
 const AddArtistModal = ({ show, onClose }) => {
+  const {accessToken} = useSelector(state => state.auth)
   const [form, setForm] = useState({
     name: "",
     country: "",
@@ -50,7 +52,7 @@ const AddArtistModal = ({ show, onClose }) => {
     if (image) {
       formData.append("image", image);
     }
-    createArtistMutation.mutate(formData);
+    createArtistMutation.mutate({data : formData, token : accessToken});
 
   };
 

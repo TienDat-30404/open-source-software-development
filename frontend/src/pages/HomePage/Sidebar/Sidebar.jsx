@@ -9,14 +9,15 @@ import { deletePlaylist } from '../../../services/PlayListService';
 import EditPlaylistModal from './EditPlaylistModal';
 import { useSelector } from 'react-redux';
 export default function Sidebar() {
+  const {accessToken} = useSelector(state => state.auth)
   const {auth} = useSelector(state => state.auth)
   const [searchPlaylist, setSearchPlaylist] = useState('')
   let queryPlaylist = `/?user_id=${auth?.id}${searchPlaylist ? `&title=${searchPlaylist}` : "" }`
   console.log("queryPlaylist", queryPlaylist)
-  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist);
+  const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(queryPlaylist, accessToken);
   console.log("playlist", playlists)
-  const createPlaylistMutation = useCreatePlaylist();
-  const deletePlaylistMutation = useDeletePlayList()
+  const createPlaylistMutation = useCreatePlaylist(accessToken);
+  const deletePlaylistMutation = useDeletePlayList(accessToken)
   const [showCreatePlayList, setShowCreatePlayList] = useState(false)
   const [selectedPlaylist, setSelectedPlaylist] = useState({
     menuVisible: false,

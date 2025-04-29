@@ -7,11 +7,13 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useAudioPlayer } from "../../../hooks/useAudioPlayer";
 import { useGetHistoryMusicListening } from "../../../hooks/useMusicListeningHistory";
+import { useSelector } from "react-redux";
 export default function Footer() {
+    const {accessToken} = useSelector(state => state.auth)
     const [queuedSong, setQueuedSong] = useState(null);
 
-    const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("");
-    
+    const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("", accessToken);
+    console.log("his", historyMusics)
     const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
     console.log("isPlaying", isPlaying)
     const [progress, setProgress] = useState(0);

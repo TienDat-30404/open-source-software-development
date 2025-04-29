@@ -5,7 +5,9 @@ import { MoreHorizontal } from 'lucide-react';
 import EditArtistModal from './EditArtistModal';
 import Pagination from '../../../components/Pagination/Pagination';
 import { visiblePagination } from '../../../until/function';
+import { useSelector } from 'react-redux';
 function Artist() {
+  const {accessToken} = useSelector(state => state.auth)
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
   let query = `/?page=${page}&size=${size}`
@@ -30,7 +32,7 @@ function Artist() {
   }
 
   const handleDeleteArtist = (id) => {
-    deleteArtistMutation.mutate(id)
+    deleteArtistMutation.mutate({id : id, token : accessToken})
   }
 
   const handlePagination = (newPage) => {

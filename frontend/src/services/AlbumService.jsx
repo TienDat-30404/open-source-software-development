@@ -1,9 +1,9 @@
-import { createItemByFormData, getItem } from "./apis"
+import { addItemUsingTokenFormData, getItem } from "./apis"
 export const getAllAlbum = async (query) => {
     return getItem('albums', query)
 }
 
 
-export const createAlbum = async(data) => {
-    return createItemByFormData('albums', data)
-}
+export const createAlbum = async ({ data, token }) => {
+    return addItemUsingTokenFormData('albums', data, token);
+  };

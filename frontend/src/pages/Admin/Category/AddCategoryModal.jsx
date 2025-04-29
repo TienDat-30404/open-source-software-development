@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useCreateArtist } from "../../../hooks/useArtist";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
 import { useCreateCategory } from "../../../hooks/useCategory";
+import { useSelector } from "react-redux";
 const AddCategoryModal = ({ show, onClose }) => {
+    const {accessToken} = useSelector(state => state.auth)
     const [name, setName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const createCategoryMutation = useCreateCategory({
@@ -19,10 +21,11 @@ const AddCategoryModal = ({ show, onClose }) => {
 
 
     const handleAddCategory = async (e) => {
-        e.preventDefault()
-        setIsSubmitting(true)
+        e.preventDefault();
+        setIsSubmitting(true);
         createCategoryMutation.mutate({
-            name : name
+            data: { name: name },  // Truyền dữ liệu cần thiết vào object 'data'
+            token: accessToken     // Truyền token xác thực vào 'token'
         });
     };
 

@@ -8,7 +8,9 @@ import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import { useDeleteSongOutOfPlaylist } from '../../hooks/usePlaylists';
+import { useSelector } from 'react-redux';
 export default function DetailPlayList() {
+  const {accessToken} = useSelector(state => state.auth)
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
@@ -16,8 +18,7 @@ export default function DetailPlayList() {
   const deleteSongOutOfPlaylistMutation = useDeleteSongOutOfPlaylist()
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAllPlaylist(id);
-      console.log(response)
+      const response = await getAllPlaylist(id, accessToken);
       setDetails(response);
     };
     fetchData();
@@ -25,7 +26,7 @@ export default function DetailPlayList() {
 
   const handleDeleteSongOutOfPlaylist = async (idSong) => {
     deleteSongOutOfPlaylistMutation.mutate(
-      { idPlaylist: id, idSong },
+      { idPlaylist: id, idSong, token : accessToken },
       {
         onSuccess: () => {
           setDetails((prev) => ({

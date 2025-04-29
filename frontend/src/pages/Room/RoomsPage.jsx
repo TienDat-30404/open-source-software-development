@@ -5,14 +5,15 @@ import { formatTime } from '../../until/function';
 import ChatRoom from '../Chat/ChatRoom';
 import './Room.scss'
 import { useSelector } from 'react-redux';
+
 export default function RoomsPage({ show }) {
-  const {auth} = useSelector(state => state.auth)
+  const {auth, accessToken} = useSelector(state => state.auth)
   const [selectedRoom, setSelectedRoom] = useState(false)
   const [roomName, setRoomName] = useState(null)
   const [addNameRoom, setAddNameRoom] = useState('')
-  const { data: rooms, isLoading, isError, error, refetch } = useGetAllRoom("");
-  const createRoomMutation = useCreateRoom();
-  const deleteRoomMutation = useDeleteRoom()
+  const { data: rooms, isLoading, isError, error, refetch } = useGetAllRoom("", accessToken);
+  const createRoomMutation = useCreateRoom(accessToken);
+  const deleteRoomMutation = useDeleteRoom(accessToken)
   const handleEnterRoom = (roomName) => {
     setSelectedRoom(true)
     setRoomName(roomName)

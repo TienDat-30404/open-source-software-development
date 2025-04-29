@@ -6,14 +6,14 @@ import { usePlaylists } from '../../hooks/usePlaylists'
 import { addSongOnPlaylist } from '../../services/PlayListService'
 import { useSelector } from 'react-redux'
 export default function SongPlaylist({ song }) {
-    const {auth} = useSelector(state => state.auth)
+    const {auth, accessToken} = useSelector(state => state.auth)
 
-    const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(`/?user_id=${auth.id}`);
+    const { data: playlists, isLoading, isError, error, refetch } = usePlaylists(`/?user_id=${auth.id}`, accessToken);
     console.log(playlists)
     const handleAddSongOnPlaylist = async (idPlaylist) => {
         const response = await addSongOnPlaylist(idPlaylist, {
             song_id: song?.id
-        })
+        }, accessToken)
         console.log(playlists)
     }
     return (

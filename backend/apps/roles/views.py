@@ -33,11 +33,11 @@ class RoleAPIView(APIView):
             return success_response(data=serializer.data,code=status.HTTP_201_CREATED)
         return error_response(errors=serializer.errors)
 
-    def put(self, request, pk):
+    def patch(self, request, pk):
         """Cập nhật toàn bộ phương thức thanh toán"""
         check_is_admin(request.user)
         payment_method = get_object_or_404(Role, pk=pk)
-        serializer = RoleSerializer(payment_method, data=request.data)
+        serializer = RoleSerializer(payment_method, data=request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
             return success_response(data=serializer.data)

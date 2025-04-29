@@ -12,9 +12,18 @@ from apps.songs_album.models import SongAlbum
 from apps.songs.models import Song
 from apps.songs_album.models import SongAlbum
 import math
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+
 class AlbumViewSet(viewsets.ModelViewSet): 
     queryset = Album.objects.all().order_by('-created_at')
     serializer_class = AlbumSerializer
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:  # Cho phép list và retrieve không cần đăng nhập
+            return [AllowAny()]
+        return [IsAuthenticated()]
+    
     def list(self, request, *args, **kwargs): 
         paginator = self.paginator
         size = request.query_params.get('size', None)
@@ -34,6 +43,8 @@ class AlbumViewSet(viewsets.ModelViewSet):
         
         queryset = self.get_queryset()
         
+       
+            
         if paginate:
             page = paginator.paginate_queryset(queryset, request)
             serializer = self.get_serializer(page, many=True)

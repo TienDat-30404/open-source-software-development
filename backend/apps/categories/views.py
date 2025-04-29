@@ -5,9 +5,16 @@ from .serializers import CategorySerializer
 from rest_framework import status
 from rest_framework.response import Response
 import math
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 class CategoryViewSet(viewsets.ModelViewSet): 
     queryset = Category.objects.all().order_by('-created_at')
     serializer_class = CategorySerializer
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:  # Cho phép list và retrieve không cần đăng nhập
+            return [AllowAny()]
+        return [IsAuthenticated()]
     def list(self, request, *args, **kwargs): 
         paginator = self.paginator
         size = request.query_params.get('size', None)

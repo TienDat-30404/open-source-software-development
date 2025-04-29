@@ -36,7 +36,7 @@ export const useCreateArtist = ({ onSuccess, onError }) => {
 export const useUpdateArtist = ({ onSuccess, onError }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }) => updateArtist(id, data),
+    mutationFn: ({ id, data, token }) => updateArtist({id, data, token}),
     onSuccess: (...args) => {
       queryClient.invalidateQueries(['artists'])
       if (onSuccess) {

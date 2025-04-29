@@ -5,7 +5,9 @@ import { visiblePagination } from '../../../until/function';
 import { useDeleteCategory, useGetAllCatgory } from '../../../hooks/useCategory';
 import AddCategoryModal from './AddCategoryModal';
 import EditCategoryModal from './EditCategoryModal';
+import { useSelector } from 'react-redux';
 function Category() {
+    const {accessToken} = useSelector(state => state.auth)
     const [page, setPage] = useState(1)
     const [size, setSize] = useState(5)
     let query = `/?page=${page}&size=${size}`
@@ -30,7 +32,7 @@ function Category() {
     }
 
     const handleDeleteCategory = (id) => {
-        deleteCategoryMutation.mutate(id)
+        deleteCategoryMutation.mutate({id : id, token : accessToken})
     }
 
     const handlePagination = (newPage) => {

@@ -30,6 +30,11 @@ class SongViewSet(viewsets.ModelViewSet):
     serializer_class = SongSerializer
     queryset = Song.objects.all().order_by("-created_at")
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']: 
+            return [AllowAny()]
+        return [IsAuthenticated()]
+    
     def list(self, request, *args, **kwargs):
         paginator = self.paginator
         size = request.query_params.get("size", None)

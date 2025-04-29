@@ -36,7 +36,7 @@ export const useCreateCategory = ({ onSuccess, onError }) => {
 export const useUpdateCategory = ({ onSuccess, onError }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }) => updateCategory(id, data),
+    mutationFn: ({ id, data, token }) => updateCategory({id, data, token}),
     onSuccess: (...args) => {
       queryClient.invalidateQueries(['artists'])
       if (onSuccess) {
@@ -44,7 +44,7 @@ export const useUpdateCategory = ({ onSuccess, onError }) => {
       }
     },
     onError: (error) => {
-      console.error('Error create artist:', error);
+      console.error('Error update category:', error);
       if (onError) {
         onError(error);
       }

@@ -5,8 +5,10 @@ import Select from "react-select";
 import { useGetAllCatgory } from "../../../hooks/useCategory";
 import { useCreateSong } from "../../../hooks/useSong";
 import { createSong } from "../../../services/SongService";
+import { useSelector } from "react-redux";
 
 const AddSongModal = ({ show, onClose }) => {
+    const {accessToken} = useSelector(state => state.auth)
     const [form, setForm] = useState({
         name: "",
         artist_ids: [],
@@ -30,6 +32,7 @@ const AddSongModal = ({ show, onClose }) => {
         onError: (error) => {
             console.error("Tạo song thất bại:", error);
         },
+        token : accessToken
     });
     const { data: categories } = useGetAllCatgory("")
 

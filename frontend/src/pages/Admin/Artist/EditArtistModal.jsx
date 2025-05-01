@@ -34,7 +34,7 @@ const EditArtistModal = ({ show, onClose, data }) => {
             onClose();
         },
         onError: (error) => {
-            console.error("Tạo artist thất bại:", error);
+            console.error("update artist thất bại:", error);
         },
     })
 
@@ -44,7 +44,7 @@ const EditArtistModal = ({ show, onClose, data }) => {
         const file = e.target.files[0];
         if (file) {
             setImage(file);
-            setForm({ ...form, image: file });
+            setForm({ ...form });
         }
         setFileInputKey(Date.now()); // Reset the file input key to force re-render
     }

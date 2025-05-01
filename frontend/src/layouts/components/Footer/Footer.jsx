@@ -13,9 +13,7 @@ export default function Footer() {
     const [queuedSong, setQueuedSong] = useState(null);
 
     const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("", accessToken);
-    console.log("his", historyMusics)
     const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
-    console.log("isPlaying", isPlaying)
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(1);
     const [muted, setMuted] = useState(false);

@@ -3,11 +3,13 @@ import { useCreateArtist, useDeleteArtist, useGetAllArtist } from '../../../hook
 import { MoreHorizontal } from 'lucide-react';
 import Pagination from '../../../components/Pagination/Pagination';
 import { visiblePagination } from '../../../until/function';
-import { useGetAllAlbum } from '../../../hooks/useAlbum';
+import { useDeleteAlbum, useGetAllAlbum } from '../../../hooks/useAlbum';
 import AddAlbumModal from './AddAlbumModal';
 import LoadingHamster from '../../../components/LoadingHamster';
 import UpdateAlbumModal from './UpdateAlbumModal';
+import { useSelector } from 'react-redux';
 function Album() {
+  const {accessToken} = useSelector(state => state.auth)
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
   let query = `/?page=${page}&size=${size}`
@@ -16,7 +18,7 @@ function Album() {
   const [showModalUpdateAlbum, setShowModalUpdateAlbum] = useState(false)
   const [dataArtist, setDataArtist] = useState(null)
   const [selectedArtist, setSelectedArtist] = useState(null)
-  const deleteArtistMutation = useDeleteArtist()
+  const deleteAlbumMutation = useDeleteAlbum(accessToken)
 
   const handleSelectedArtist = (artist) => {
     if (selectedArtist === null) {
@@ -31,8 +33,8 @@ function Album() {
     setShowModalUpdateAlbum(true)
   }
 
-  const handleDeleteArtist = (id) => {
-    deleteArtistMutation.mutate(id)
+  const handleDeleteAlbum = (id) => {
+    deleteAlbumMutation.mutate(id)
   }
 
   const handlePagination = (newPage) => {
@@ -142,7 +144,7 @@ function Album() {
                         <div className='border border-gray-black my-2 w-full'></div>
                         <h2
                           className="cursor-pointer hover:underline"
-                          onClick={() => handleDeleteArtist(album?.id)}
+                          onClick={() => handleDeleteAlbum(album?.id)}
                         >
                           Delete
                         </h2>

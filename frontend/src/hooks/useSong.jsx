@@ -47,7 +47,7 @@ export const useUpdateSong = ({ onSuccess, onError }) => {
       }
     },
     onError: (error) => {
-      console.error('Error create song:', error);
+      console.error('Error update song:', error);
       if (onError) {
         onError(error);
       }

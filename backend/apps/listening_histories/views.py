@@ -13,14 +13,13 @@ class ListeningHistoryAPIView(APIView):
    #  permission_classes = [IsAuthenticated]
      
     def get(self, request):
-        # user = request.user
-        user=User.objects.first()
+        user = request.user
         histories = ListeningHistory.objects.filter(user=user).order_by('-played_at')
         serializer = ListeningHistorySerializer(histories, many=True)
         return success_response(data=serializer.data)
     
     def post(self, request):
-        user = User.objects.first()  # test
+        user = request.user
         song_id = request.data.get('song_id')
 
         if not song_id:

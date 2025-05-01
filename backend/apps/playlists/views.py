@@ -111,6 +111,6 @@ class PlaylistViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **warkgs):
         response = super().destroy(request, *args, **kwargs)
         return Response({"message": "Xóa thành công"}, status=response.status_code)

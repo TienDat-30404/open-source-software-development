@@ -6,9 +6,10 @@ import PaginationRightButton from '../../../components/Pagination/PaginationRigh
 export default function Song() {
     const [songs, setSongs] = useState({})
     const [page, setPage] = useState(1)
+    const [size, setSize] = useState(7)
     useEffect(() => {
         const fetchData = async () => {
-            let query = `/?page=${page}`
+            let query = `/?page=${page}&size=${size}`
             const response = await getAllSong(query)
             setSongs(response)
         }

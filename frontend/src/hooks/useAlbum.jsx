@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createArtist, deleteArtist, getAllArtist, updateArtist } from '../services/ArtistService';
-import { createSong, getAllSong } from '../services/SongService';
-import { createAlbum, getAllAlbum } from '../services/AlbumService';
+import {  deleteArtist, getAllArtist, updateArtist } from '../services/ArtistService';
+import { createAlbum, deleteAlbum, getAllAlbum, updateAlbum } from '../services/AlbumService';
 
 export const useGetAllAlbum = (query = "") => {
   return useQuery({
@@ -35,18 +34,18 @@ export const useCreateAlbum = ({ onSuccess, onError }) => {
 
 
 
-export const useUpdateArtist = ({ onSuccess, onError }) => {
+export const useUpdateAlbum = ({ onSuccess, onError }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }) => updateArtist(id, data),
+    mutationFn: ({ id, data, token }) => updateAlbum({id, data, token}),
     onSuccess: (...args) => {
-      queryClient.invalidateQueries(['artists'])
+      queryClient.invalidateQueries(['albums'])
       if (onSuccess) {
         onSuccess(...args);
       }
     },
     onError: (error) => {
-      console.error('Error create artist:', error);
+      console.error('Error update album:', error);
       if (onError) {
         onError(error);
       }
@@ -56,15 +55,17 @@ export const useUpdateArtist = ({ onSuccess, onError }) => {
 
 
 
-export const useDeleteArtist = () => {
+
+
+export const useDeleteAlbum = (token) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id) => deleteArtist(id),
+    mutationFn: (id) => deleteAlbum(id, token),
     onSuccess: () => {
-      queryClient.invalidateQueries(['artists'])
+      queryClient.invalidateQueries(['albums'])
     },
     onError: (error) => {
-      console.error('Error deleting room:', error);
+      console.error('Error delete album:', error);
     }
   });
 };

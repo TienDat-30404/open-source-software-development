@@ -5,28 +5,29 @@ import Pagination from '../../../components/Pagination/Pagination';
 import { visiblePagination } from '../../../until/function';
 import { useGetAllSong } from '../../../hooks/useSong';
 import AddSongModal from './AddSongModal';
+import UpdateSongModal from './UpdateSong';
 function Song() {
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
   let query = `/?page=${page}&size=${size}`
   const { data: songs, isLoading, isError, error } = useGetAllSong(query)
   const [showModalAddSong, setShowModalAddSong] = useState(false)
-  const [showModalEditArtist, setShowModalEditArtist] = useState(false)
-  const [dataArtist, setDataArtist] = useState(null)
-  const [selectedArtist, setSelectedArtist] = useState(null)
+  const [showModalUpdateSong, setShowModalUpdateSong] = useState(false)
+  const [dataSong, setDataSong] = useState(null)
+  const [selectedSong, setSelectedSong] = useState(null)
   const deleteArtistMutation = useDeleteArtist()
 
-  const handleSelectedArtist = (artist) => {
-    if (selectedArtist === null) {
-      setSelectedArtist(artist)
+  const handleSelectedSong = (artist) => {
+    if (selectedSong === null) {
+      setSelectedSong(artist)
     }
     else {
-      setSelectedArtist(null)
+      setSelectedSong(null)
     }
   }
-  const handleSelectedArtistEdit = (artist) => {
-    setDataArtist(artist)
-    setShowModalEditArtist(true)
+  const handleSelectedUpdateAlbum = (song) => {
+    setDataSong(song)
+    setShowModalUpdateSong(true)
   }
 
   const handleDeleteArtist = (id) => {
@@ -80,23 +81,24 @@ function Song() {
                   Id
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Artist
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Genre
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
+
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Duration
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Created At
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Updated At
-                </th>
+                </th> */}
 
                 <th className="px-6 py-3 relative">
                   <span className="sr-only">Actions</span>
@@ -111,31 +113,37 @@ function Song() {
                       {(song?.id).slice(0, 10)}...
                     </div>
                   </td>
+                  <td className=" py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className='flex items-center space-x-2'>
+                      <h2>{song.title}</h2>
+                      <img className='w-10' src={song?.image} />
+                    </div>
+                  </td>
+
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center gap-2">
                     {song?.artists[0]?.name}
                     <img className='w-10 ' src={song[0]?.artists?.image} />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song?.genre?.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song.title}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{song?.duration}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(song?.created_at).toLocaleString('vi-VN')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(song?.updated_at).toLocaleString('vi-VN')}
-                  </td>
+                  </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
                     <button className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
-                      onClick={() => handleSelectedArtist(song?.id)}
+                      onClick={() => handleSelectedSong(song?.id)}
                     >
                       <MoreHorizontal />
                     </button>
-                    {selectedArtist === song?.id && (
+                    {selectedSong === song?.id && (
                       <div className="absolute right-6 top-9 mt-2 p-3 rounded bg-gray-500 shadow text-white z-10">
                         <h2
                           className="cursor-pointer hover:underline"
-                          onClick={() => handleSelectedArtistEdit(song)}
+                          onClick={() => handleSelectedUpdateAlbum(song)}
                         >
                           Update
                         </h2>
@@ -166,6 +174,7 @@ function Song() {
       )}
 
       <AddSongModal show={showModalAddSong} onClose={() => setShowModalAddSong(false)} />
+      <UpdateSongModal show={showModalUpdateSong} onClose={() => setShowModalUpdateSong(false)} data={dataSong} />
 
     </div>
   );

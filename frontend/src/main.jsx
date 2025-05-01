@@ -12,12 +12,12 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
-    <AudioPlayerProvider>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AudioPlayerProvider>
           <App />
-        </PersistGate>
-      </Provider>
-    </AudioPlayerProvider>
+        </AudioPlayerProvider>
+      </PersistGate>
+    </Provider>
   </QueryClientProvider>
 )

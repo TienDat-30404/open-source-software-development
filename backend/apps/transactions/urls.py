@@ -19,12 +19,12 @@ urlpatterns = [
     path("renew", RenewSubscriptionView.as_view(), name="renew_subscription"),
     path("check-premium", CheckPremiumAccessView.as_view(), name="check_premium"),
     path("current", CurrentSubscriptionView.as_view(), name="current_subscription"),
-    path("payment-create-vnpay", ProcessPaymentVNPayView.as_view(), name="payment_create_vnpay"),
-    path("payment-return-vnpay", PaymentVNPayReturnView.as_view(), name="payment_return_vnpay"),
-    path("payment-create-zalopay", ProcessPaymentZalopayView.as_view(), name="payment_create_zalopay"),
-    path("check-transaction-zalopay", CheckTransactionZalopayView.as_view(), name="check_transaction_zalopay"),
-    path("payment-create-momo", ProcessPaymentMomoView.as_view(), name="payment_create_momo"),
-    path("check-transaction-momo", CheckTransactionMomoView.as_view(), name="check_transaction_momo"),
+    path("payment-create-vnpay/", ProcessPaymentVNPayView.as_view(), name="payment_create_vnpay"),
+    path("payment-return-vnpay/", PaymentVNPayReturnView.as_view(), name="payment_return_vnpay"),
+    path("payment-create-zalopay/", ProcessPaymentZalopayView.as_view(), name="payment_create_zalopay"),
+    path("check-transaction-zalopay/", CheckTransactionZalopayView.as_view(), name="check_transaction_zalopay"),
+    path("payment-create-momo/", ProcessPaymentMomoView.as_view(), name="payment_create_momo"),
+    path("check-transaction-/", CheckTransactionMomoView.as_view(), name="check_transaction_momo"),
 
 
 ]

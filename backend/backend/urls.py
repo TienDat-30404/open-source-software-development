@@ -10,7 +10,7 @@ urlpatterns = [
     path('', include('apps.playlists.urls')),
     path('', include('apps.albums.urls')),
     path('api/follows', include('apps.follows.urls')),  
-    path('api/favorites', include('apps.favorites.urls')),
+    path('api/favorites/', include('apps.favorites.urls')),
     path('api/plans/', include('apps.plans.urls')),
     path('api/payment-methods/', include('apps.payment_methods.urls')), 
     path('api/transactions/', include('apps.transactions.urls')), 

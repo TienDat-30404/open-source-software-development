@@ -8,16 +8,19 @@ import CardSong from '../../components/Song/CardSong';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
-import { Download } from 'lucide-react';
+import { Download, HeartPulse } from 'lucide-react';
 import LoadingDownload from '../../components/LoadingDownload';
 import { downloadMusic } from '../../until/function';
+import { useAddSongFavorite } from '../../hooks/useFavorite';
+import { useSelector } from 'react-redux';
 export default function DetailAlbum() {
+  const {accessToken} = useSelector(state => state.auth)
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
   const { selectedSong, handleSelectedSong, handleClickOutside, hoveringSong, setHoveringSong } = useSelectedSong();
   const [loadingDownloadMusic, setLoadingDownloadMusic] = useState(false);
-
+  const addSongFavorite = useAddSongFavorite(accessToken)
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllAlbum(id);
@@ -35,6 +38,12 @@ export default function DetailAlbum() {
       setLoadingDownloadMusic(false);
     }
   };
+
+  const handleAddFavoriteSong = async(song) => {
+    addSongFavorite.mutate({
+      song_id : song.id
+    })
+  }
 
   return (
     <div>
@@ -90,6 +99,12 @@ export default function DetailAlbum() {
                       text: "Tải bài hát",
                       isSubMenu: false,
                       onClick: () => handleDownloadMusic(song)
+                    },
+                    {
+                      icon: <HeartPulse />,
+                      text: "Thêm vào bài hát yêu thích",
+                      isSubMenu: false,
+                      onClick: () => handleAddFavoriteSong(song)
                     }
 
                   ]}

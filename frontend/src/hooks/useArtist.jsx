@@ -44,7 +44,7 @@ export const useUpdateArtist = ({ onSuccess, onError }) => {
       }
     },
     onError: (error) => {
-      console.error('Error create artist:', error);
+      console.error('Error update artist:', error);
       if (onError) {
         onError(error);
       }

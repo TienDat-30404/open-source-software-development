@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../redux/authSlice';
 import { persistor } from '../../../redux/store';
-
+import { LogOut, Settings } from 'lucide-react';
 export default function Header() {
   const dispatch = useDispatch()
   const { auth, isAuthenticated } = useSelector(state => state.auth)
@@ -20,24 +20,24 @@ export default function Header() {
     try {
       // Dispatch logout action để xóa state trong Redux
       dispatch(logout());
-  
+
       // Xóa dữ liệu trong localStorage
       await persistor.purge();
-  
+
       // Xóa key persist:root trong localStorage
       localStorage.removeItem('persist:root');
-  
+
       // Chuyển hướng đến trang login
       navigate('/login');
-  
+
       // Tùy chọn: Reload trang sau khi chuyển hướng (nếu cần)
       // window.location.reload();
     } catch (error) {
       console.error('Error purging persist store:', error);
     }
   };
-  
-  
+
+
   return (
     <div className="fixed top-0 left-0 w-full h-16 bg-black text-white flex items-center justify-between shadow-lg z-50 px-4">
       <div className="flex items-center space-x-4">
@@ -85,11 +85,26 @@ export default function Header() {
         <Bell />
         {isAuthenticated ? (
           <div className="group flex flex-col relative">
-            <h2 className="hover:text-blue-500">{auth?.full_name}</h2>
+            <h2 className="hover:text-blue-500 cursor-pointer">{auth?.full_name}</h2>
             <div
-              onClick={() => handleClickLogout()}
-              className="absolute top-5 right-1 bg-gray-400 p-5 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
-              <p>Đăng xuất</p>
+              className="absolute top-5 right-1 w-[200px] bg-gray-400 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className='flex items-center space-x-2 hover:bg-black p-2'>
+                <LogOut size={20} />
+
+                <p
+                  onClick={() => handleClickLogout()}
+                >
+                  Đăng xuất
+                </p>
+              </div>
+              <div className="border-t border-gray-500 "></div>
+              <div className='flex items-center space-x-2 p-2 hover:bg-black'>
+                <Settings size = {20}/>
+                <p
+                  onClick={() => navigate('/profile')}
+                >
+                  Thông tin tài khoản</p>
+              </div>
             </div>
           </div>
         ) : (

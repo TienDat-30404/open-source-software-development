@@ -1,59 +1,70 @@
 import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
-import { useUpdateArtist } from "../../../hooks/useArtist";
+import { useGetAllArtist, useUpdateArtist } from "../../../hooks/useArtist";
 import Select from "react-select";
-import { useGetAllSong } from "../../../hooks/useSong";
+import { useGetAllSong, useUpdateSong } from "../../../hooks/useSong";
 import { useUpdateAlbum } from "../../../hooks/useAlbum";
 import { useSelector } from "react-redux";
+import { useGetAllCatgory } from "../../../hooks/useCategory";
 
-const UpdateAlbumModal = ({ show, onClose, data }) => {
-    const {accessToken} = useSelector(state => state.auth)
+const UpdateSongModal = ({ show, onClose, data }) => {
+    const { accessToken } = useSelector(state => state.auth)
     const [form, setForm] = useState({
         name: "",
+        genre: "",
         releaseDate: "",
-        songids: []
+        artistIds: []
     });
     const [image, setImage] = useState(null);
+    const [audioFile, setAudioFile] = useState(null)
+
     const [fileInputKey, setFileInputKey] = useState(Date.now());
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { data: songs, isLoading, isError, error } = useGetAllSong("")
-    const options = songs?.results.map((song) => ({
-        value: song.id, label: song.title
+    const { data: categories } = useGetAllCatgory("")
+    const { data: artists, isLoading, isError, error } = useGetAllArtist("")
+
+    const options = artists?.results.map((artist) => ({
+        value: artist.id, label: artist.name
     }))
+
     useEffect(() => {
         if (data) {
-            const songsSelect = data?.songs?.map((song) => ({
-                value: song.id, label: song.title
+            const artistsSelect = data?.artists?.map((artist) => ({
+                value: artist.id, label: artist.name
             }))
             setForm({
                 name: data?.title || "",
-                releaseDate: data?.release_date || "",
-                songids: songsSelect
+                genre: data?.genre?.id || "",
+                releaseDate: data?.release_date,
+                artistIds: artistsSelect
             });
             setImage(data?.image || null);
+            setAudioFile(data?.audio_url || null)
         }
     }, [show])
 
-    const handleChooseSong = (selected) => {
+    const handleChooseArtist = (selected) => {
         setForm((prevForm) => ({
             ...prevForm,
-            songids: selected
+            artistIds: selected
         }));
     };
 
-    const updateAlbumMutation = useUpdateAlbum({
+    const updateSongMutation = useUpdateSong({
         onSuccess: () => {
             setForm({
                 name: "",
+                genre: "",
                 releaseDate: "",
-                songids: []
+                artistIds: []
             });
             setIsSubmitting(false);
             setImage(null);
+            setAudioFile(null)
             onClose();
         },
         onError: (error) => {
-            console.error("Update album thất bại:", error);
+            console.error("Update song thất bại:", error);
         },
     })
 
@@ -61,42 +72,48 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
 
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
-        if (file) {
+        const name = e.target.name;
+    
+        if (name === "image" && file) {
             setImage(file);
+        } else if (name === "audio" && file) {
+            setAudioFile(file);
         }
-        setFileInputKey(Date.now()); 
-    }
+    
+        setFileInputKey(Date.now());
+    };
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
-    console.log("image", image)
 
 
 
-    const handleUpdateAlbum = async (e) => {
+    const handleUpdateSong = async (e) => {
         e.preventDefault()
         const formData = new FormData();
         setIsSubmitting(true)
-        console.log("formIds", form.songids)
-        let songsOnAlbum;
-        if (form.songids?.length > 0) {
-            songsOnAlbum = form?.songids?.map(song => song?.value) || [];
-        } 
-        console.log("songAlbum", songsOnAlbum)
+        let artistOnSong;
+        if (form.artistIds?.length > 0) {
+            artistOnSong = form?.artistIds?.map(artist => artist?.value) || [];
+        }
         formData.append("title", form.name);
         formData.append("release_date", form.releaseDate);
-        console.log("songOnA;bum", songsOnAlbum)
-        formData.append("song_ids", JSON.stringify(songsOnAlbum));
+        formData.append("genre_id", form.genre);
+
+        formData.append("artist_ids", JSON.stringify(artistOnSong));
 
         if (image instanceof File) {
             formData.append("image", image);
         }
+        if (audioFile instanceof File) {
+            formData.append("audio_url", audioFile);
+        }
 
-        updateAlbumMutation.mutate({
+        updateSongMutation.mutate({
             id: data?.id,
             data: formData,
-            token : accessToken
+            token: accessToken
         });
 
     };
@@ -122,7 +139,7 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
                 </div>
                 <h2 className="text-xl p-2 text-center font-semibold text-black">Update Album</h2>
 
-                <form onSubmit={handleUpdateAlbum} className="space-y-4">
+                <form onSubmit={handleUpdateSong} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
@@ -133,6 +150,21 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                        <select
+                            name="genre"
+                            value={form.genre}
+                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={handleChange}
+                        >
+                            <option value="">Select a category</option>
+                            {categories?.results?.map((category) => (
+                                <option value={category?.id}>{category?.name}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
@@ -147,6 +179,35 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
                     </div>
 
 
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Audio</label>
+                        <input
+                            type="file"
+                            name="audio"
+                            accept="audio/*"
+                            onChange={handleChangeFile}
+                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div className="">
+                        <label className="block text-sm font-medium text-gray-700">Artist</label>
+                        <Select
+                            isMulti
+                            value={form.artistIds}
+                            options={options}
+                            onChange={handleChooseArtist}
+                            styles={{
+                                menu: (provided) => ({
+                                    ...provided,
+                                    overflowY: 'auto',
+                                    maxHeight: 200,
+                                    borderColor: 'red',
+                                    color: 'black'
+                                })
+                            }}
+                        />
+                    </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Release Date</label>
@@ -155,28 +216,11 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
                             name="releaseDate"
                             value={form.releaseDate}
                             onChange={handleChange}
-                            required
                             className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Song</label>
-                        <Select
-                            isMulti
-                            value={form.songids}
-                            options={options}
-                            onChange={handleChooseSong}
-                            styles={{
-                                menu: (provided) => ({
-                                    ...provided,
-                                    overflowY: 'auto',
-                                    borderColor: 'red',
-                                    color: 'black'
-                                })
-                            }}
-                        />
-                    </div>
+
 
 
 
@@ -194,4 +238,4 @@ const UpdateAlbumModal = ({ show, onClose, data }) => {
     );
 };
 
-export default UpdateAlbumModal;
+export default UpdateSongModal;

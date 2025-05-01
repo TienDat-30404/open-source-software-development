@@ -30,49 +30,51 @@ class SongViewSet(viewsets.ModelViewSet):
     serializer_class = SongSerializer
     queryset = Song.objects.all().order_by("-created_at")
 
+    
     def get_permissions(self):
         if self.action in ['list', 'retrieve']: 
             return [AllowAny()]
         return [IsAuthenticated()]
     
     def list(self, request, *args, **kwargs):
-        paginator = self.paginator
-        size = request.query_params.get("size", None)
-        if size is not None: 
-            try:
-                size = int(size)
-                if size > 0:
-                    paginator.page_size = size
-                else:
-                    paginator.page_size = 7
-            except ValueError:
-                return Response(
-                    {"error": "Invalid page size"}, status=status.HTTP_400_BAD_REQUEST
-                )
-        else:
-            paginator.page_size = 7
-            
         search = request.query_params.get("search", None)
-        
+        size = request.query_params.get("size", None)
+
         queryset = self.get_queryset()
         if search:
-            print("search", search)
             queryset = queryset.filter(title__icontains=search)
-      
-        page = paginator.paginate_queryset(queryset, request)
 
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            total_pages = math.ceil(paginator.page.paginator.count / paginator.page_size)
-            
-            return Response({
-                'results': serializer.data,
-                'count': paginator.page.paginator.count,
-                'total_pages': total_pages,
-                'next': paginator.get_next_link(),
-                'previous': paginator.get_previous_link(),
-                'status': 200
-            }, status=status.HTTP_200_OK)
+        if size is not None:
+            try:
+                size = int(size)
+                if size <= 0:
+                    size = 7
+            except ValueError:
+                return Response({"error": "Invalid page size"}, status=status.HTTP_400_BAD_REQUEST)
+
+            self.paginator.page_size = size
+            page = self.paginator.paginate_queryset(queryset, request)
+
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                total_pages = math.ceil(self.paginator.page.paginator.count / self.paginator.page_size)
+                return Response({
+                    'results': serializer.data,
+                    'count': self.paginator.page.paginator.count,
+                    'total_pages': total_pages,
+                    'next': self.paginator.get_next_link(),
+                    'previous': self.paginator.get_previous_link(),
+                    'status': 200
+                }, status=status.HTTP_200_OK)
+        
+        # Nếu không có paginate
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'results': serializer.data,
+            'count': len(serializer.data),
+            'status': 200
+        }, status=status.HTTP_200_OK)
+
             
        
 
@@ -172,13 +174,25 @@ class SongViewSet(viewsets.ModelViewSet):
 
         audio_url = song.audio_url
         image_url = song.image
-
+        duration = song.duration 
         if audio_file:
             try:
+                file_buffer = io.BytesIO(audio_file.read())
+                audio_info = File(file_buffer)
+                if audio_info is not None and audio_info.info is not None:
+                    duration = round(audio_info.info.length)
+                else:
+                    return Response(
+                        {"error": "Unsupported audio format"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                audio_file.seek(0)
+                    
                 upload_result = cloudinary.uploader.upload(
                     audio_file, resource_type="auto"
                 )
                 audio_url = upload_result["secure_url"]
+              
             except Exception as e:
                 return Response(
                     {"error": f"Audio upload failed: {str(e)}"},
@@ -199,6 +213,7 @@ class SongViewSet(viewsets.ModelViewSet):
             **request.data.dict(),
             "audio_url": audio_url,
             "image": image_url,
+            "duration": duration,
         }
 
         serializer = self.get_serializer(song, data=mutable_data, partial=True)
@@ -206,11 +221,8 @@ class SongViewSet(viewsets.ModelViewSet):
         updated_song = serializer.save()
 
         if artist_ids:
-            song.songartist_set.all().delete()
-            song_artists = [
-                SongArtist(song=updated_song, artist_id=artist_id)
-                for artist_id in artist_ids
-            ]
+            SongArtist.objects.filter(song=updated_song).delete()
+            song_artists = [SongArtist(song=updated_song, artist_id=artist_id) for artist_id in artist_ids]
             SongArtist.objects.bulk_create(song_artists)
 
         return Response(

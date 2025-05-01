@@ -27,14 +27,10 @@ class LikeSongAPIView(APIView):
         if created:
             return success_response(message= "Like bài hát thành công",code=status.HTTP_201_CREATED)
         return error_response(message="Bạn đã like bài hát này rồi")
-    def delete(self, request):
-        """API để unlike một bài hát"""
+    
+    def delete(self, request, pk):
+        """Unlike bài hát dựa vào ID bản ghi Favorite"""
         user = request.user
-        song_id = request.data.get('song_id')
-        song = get_object_or_404(Song, id=song_id)
-        favorite = Favorite.objects.filter(user=user, song=song)
-
-        if favorite.exists():
-            favorite.delete()
-            return success_response(message="Unlike bài hát thành công")
-        return error_response(message="Bạn chưa like bài hát này")
+        favorite = get_object_or_404(Favorite, id=pk, user=user)
+        favorite.delete()
+        return success_response(message="Unlike bài hát thành công")

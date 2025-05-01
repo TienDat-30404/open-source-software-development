@@ -151,3 +151,41 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        data = request.data.copy()
+
+        image_file = request.data.get("image")
+        song_ids = request.data.get("song_ids", [])
+
+        if isinstance(song_ids, str):
+            try:
+                song_ids = json.loads(song_ids)
+            except json.JSONDecodeError:
+                return Response({"error": "Invalid JSON format for song_ids"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if image_file :
+            try:
+                upload_result = cloudinary.uploader.upload(image_file)
+                image_url = upload_result["secure_url"]
+                data["image"] = image_url
+            except Exception as e:
+                return Response({"error": f"Image upload failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            data.pop("image", None)
+            
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        updated_album = serializer.save()
+
+        if song_ids:
+            SongAlbum.objects.filter(album=updated_album).delete()
+            album_songs = [SongAlbum(album=updated_album, song_id=song_id) for song_id in song_ids]
+            SongAlbum.objects.bulk_create(album_songs)
+
+        return Response({
+            "album": serializer.data,
+            "status": 200
+        }, status=status.HTTP_200_OK)

@@ -47,7 +47,7 @@ export default function SongActions(
                     )}
                     {menuItems?.map((item, index) => (
                         <div
-                            className="flex items-center w-100 bg-[#3E3E3E]"
+                            className="flex items-center w-100 bg-[#6b6969]"
 
                             onMouseEnter={() => {
                                 if (item.isSubMenu) {
@@ -55,12 +55,15 @@ export default function SongActions(
                                 }
                             }}
                         >
-                            <MenuItem
-                                icon={item.icon}
-                                text={item.text}
-                                handleClick={() => handleClick(item)} 
-                                clickOutside={() => setShowAddPlaylist(false)}
-                            />
+                            <div className="w-full">
+
+                                <MenuItem
+                                    icon={item.icon}
+                                    text={item.text}
+                                    handleClick={() => handleClick(item)} 
+                                    clickOutside={() => setShowAddPlaylist(false)}
+                                />
+                            </div>
 
 
                             {item.isSubMenu && <ChevronRight />}

@@ -4,30 +4,30 @@ import IconAi from '../../../components/Element/IconAi';
 import ChatAI from '../../Chat/ChatAI';
 import RoomsPage from '../../Room/RoomsPage';
 import { useParams } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import axios from 'axios';
 export default function MusicPlayer() {
   const { id } = useParams();
   const [showRoom, setShowRoom] = useState(false);
   const [showChatAI, setShowChatAI] = useState(false);
-  const [videoUrl, setVideoUrl] = useState(
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4'
-  ); // URL video mẫu
-  // useEffect(() => {
-  //   const fetchVideoUrl = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://your-api.com/api/videos/${id}`
-  //       );
-  //       setVideoUrl(response.data.video_url);
-  //     } catch (error) {
-  //       console.error('Lỗi khi tải video:', error);
-  //     }
-  //   };
+  const [videoUrl, setVideoUrl] = useState(''); // URL video mẫu
+  useEffect(() => {
+    const fetchVideoUrl = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/songs/${id}`
+        );
+        setVideoUrl(response.data.video_url);
+        alert(videoUrl);
+      } catch (error) {
+        console.error('Lỗi khi tải video:', error);
+      }
+    };
 
-  //   if (id) {
-  //     fetchVideoUrl();
-  //   }
-  // }, [id]);
+    if (id) {
+      fetchVideoUrl();
+    }
+  }, [id]);
   return (
     <div className="p-4">
       {/* Tabs */}

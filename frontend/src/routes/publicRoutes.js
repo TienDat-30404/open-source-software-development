@@ -21,10 +21,10 @@ import Login from '../pages/Login/Login';
 import FindSong from '../pages/FindSong/FindSong';
 import Register from '../components/auth/Register';
 import MusicPlayer from '../pages/HomePage/MainContent/MusicPlayer';
+import AiPromptPlayer from '../pages/Chat/ChatMusic';
 
 export const publicRoutes = [
   { path: '/', page: MainContent, layout: DefaultLayout },
-  { path: '/video/:id', page: MusicPlayer, layout: DefaultLayout },
   { path: '/cart', page: Cart, layout: CartLayout },
   { path: '/artist/:id', page: DetailArtist, layout: DefaultLayout },
   { path: '/playlist/:id', page: DetailPlayList, layout: DefaultLayout },
@@ -32,6 +32,8 @@ export const publicRoutes = [
   { path: 'song/:id', page: DetailSong, layout: DefaultLayout },
   { path: 'premium', page: Premium, layout: DefaultLayout },
   { path: '/search', page: FindSong, layout: DefaultLayout },
+  { path: '/video/:id', page: MusicPlayer, layout: DefaultLayout },
+  { path: '/askMusic', page: AiPromptPlayer, layout: DefaultLayout },
   // {path : 'chat', page : ChatApp, layout : null},
   { path: 'login', page: Login, layout: null },
   { path: 'sign-up', page: SignUp, layout: null },

@@ -99,6 +99,7 @@ Dựa trên DANH SÁCH GÓI, trả lời ngắn gọn chính xác và nhanh nh�
             "ai_response": ai_response
         })
 class ChatOllamaArtist(APIView):
+    permission_classes = [AllowAny]  # Không yêu cầu xác thực người dùng
     def post(self, request):
         prompt = request.data.get('prompt')
         if not prompt:

@@ -32,7 +32,7 @@ class SongViewSet(viewsets.ModelViewSet):
 
     
     def get_permissions(self):
-        if self.action in ['list', 'retrieve','create']: 
+        if self.action in ['list', 'retrieve']: 
             return [AllowAny()]
         return [IsAuthenticated()]
     
@@ -104,36 +104,36 @@ class SongViewSet(viewsets.ModelViewSet):
         audio_url = None
         image_url = None
         video_url = None
-        # if audio_file:
-        #     try:
-        #         audio_file.open()
-        #         file_buffer = io.BytesIO(audio_file.read())
-        #         # file_buffer.seek(0)
+        if audio_file:
+            try:
+                audio_file.open()
+                file_buffer = io.BytesIO(audio_file.read())
+                # file_buffer.seek(0)
 
-        #         audio_info = File(file_buffer)
-        #         if audio_info is not None and audio_info.info is not None:
-        #             duration = round(audio_info.info.length)  # Độ dài (tính bằng giây)
-        #         else:
-        #             return Response(
-        #                 {"error": "Unsupported audio format"},
-        #                 status=status.HTTP_400_BAD_REQUEST,
-        #             )
+                audio_info = File(file_buffer)
+                if audio_info is not None and audio_info.info is not None:
+                    duration = round(audio_info.info.length)  # Độ dài (tính bằng giây)
+                else:
+                    return Response(
+                        {"error": "Unsupported audio format"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
-        #         # file_buffer.seek(0)
-        #         upload_result = cloudinary.uploader.upload(
-        #             file_buffer, resource_type="auto"
-        #         )
+                # file_buffer.seek(0)
+                upload_result = cloudinary.uploader.upload(
+                    file_buffer, resource_type="auto"
+                )
 
-        #         audio_url = upload_result["secure_url"]
-        #         request.data.pop("audio_url", None)
-        #         request.data["duration"] = duration
+                audio_url = upload_result["secure_url"]
+                request.data.pop("audio_url", None)
+                request.data["duration"] = duration
 
-        #     except Exception as e:
-        #         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     return Response(
-        #         {"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST
-        #     )
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST
+            )
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)
@@ -149,7 +149,7 @@ class SongViewSet(viewsets.ModelViewSet):
             try:
                 upload_result = cloudinary.uploader.upload(
                     video_file,
-                    resource_type="video"  # <-- Quan trọng: xác định đúng loại
+                    resource_type="video"  
                 )
                 video_url = upload_result["secure_url"]
             except Exception as e:

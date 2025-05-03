@@ -32,7 +32,7 @@ class SongViewSet(viewsets.ModelViewSet):
 
     
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']: 
+        if self.action in ['list', 'retrieve','create']: 
             return [AllowAny()]
         return [IsAuthenticated()]
     
@@ -100,38 +100,40 @@ class SongViewSet(viewsets.ModelViewSet):
 
         audio_file = request.FILES.get("audio_url")
         image_file = request.FILES.get("image")
+        video_file = request.FILES.get("video_file")
         audio_url = None
         image_url = None
-        if audio_file:
-            try:
-                audio_file.open()
-                file_buffer = io.BytesIO(audio_file.read())
-                # file_buffer.seek(0)
+        video_url = None
+        # if audio_file:
+        #     try:
+        #         audio_file.open()
+        #         file_buffer = io.BytesIO(audio_file.read())
+        #         # file_buffer.seek(0)
 
-                audio_info = File(file_buffer)
-                if audio_info is not None and audio_info.info is not None:
-                    duration = round(audio_info.info.length)  # Độ dài (tính bằng giây)
-                else:
-                    return Response(
-                        {"error": "Unsupported audio format"},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+        #         audio_info = File(file_buffer)
+        #         if audio_info is not None and audio_info.info is not None:
+        #             duration = round(audio_info.info.length)  # Độ dài (tính bằng giây)
+        #         else:
+        #             return Response(
+        #                 {"error": "Unsupported audio format"},
+        #                 status=status.HTTP_400_BAD_REQUEST,
+        #             )
 
-                # file_buffer.seek(0)
-                upload_result = cloudinary.uploader.upload(
-                    file_buffer, resource_type="auto"
-                )
+        #         # file_buffer.seek(0)
+        #         upload_result = cloudinary.uploader.upload(
+        #             file_buffer, resource_type="auto"
+        #         )
 
-                audio_url = upload_result["secure_url"]
-                request.data.pop("audio_url", None)
-                request.data["duration"] = duration
+        #         audio_url = upload_result["secure_url"]
+        #         request.data.pop("audio_url", None)
+        #         request.data["duration"] = duration
 
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST
-            )
+        #     except Exception as e:
+        #         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(
+        #         {"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST
+        #     )
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)
@@ -141,9 +143,24 @@ class SongViewSet(viewsets.ModelViewSet):
                     {"error": f"Image upload failed: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        
+        if video_file:
+           
+            try:
+                upload_result = cloudinary.uploader.upload(
+                    video_file,
+                    resource_type="video"  # <-- Quan trọng: xác định đúng loại
+                )
+                video_url = upload_result["secure_url"]
+            except Exception as e:
+                return Response(
+                    {"error": f"Video upload failed: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         request.data["audio_url"] = audio_url
         request.data["image"] = image_url
+        request.data["video_url"] = video_url
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_song = serializer.save()
@@ -171,9 +188,10 @@ class SongViewSet(viewsets.ModelViewSet):
 
         audio_file = request.FILES.get("audio_url")
         image_file = request.FILES.get("image")
-
+        video_file = request.FILES.get("video_file")
         audio_url = song.audio_url
         image_url = song.image
+        video_url= song.video_url
         duration = song.duration 
         if audio_file:
             try:
@@ -208,12 +226,25 @@ class SongViewSet(viewsets.ModelViewSet):
                     {"error": f"Image upload failed: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
+        if video_file:
+           
+            try:
+                upload_result = cloudinary.uploader.upload(
+                    video_file,
+                    resource_type="video"  # <-- Quan trọng: xác định đúng loại
+                )
+                video_url = upload_result["secure_url"]
+            except Exception as e:
+                return Response(
+                    {"error": f"Video upload failed: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         mutable_data = {
             **request.data.dict(),
             "audio_url": audio_url,
             "image": image_url,
             "duration": duration,
+            "video_url": video_url,
         }
 
         serializer = self.get_serializer(song, data=mutable_data, partial=True)

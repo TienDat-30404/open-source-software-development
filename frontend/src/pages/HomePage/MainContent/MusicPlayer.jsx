@@ -18,7 +18,6 @@ export default function MusicPlayer() {
           `http://127.0.0.1:8000/api/songs/${id}`
         );
         setVideoUrl(response.data.video_url);
-        alert(videoUrl);
       } catch (error) {
         console.error('Lỗi khi tải video:', error);
       }
@@ -48,10 +47,11 @@ export default function MusicPlayer() {
 
       {/* Video Player */}
       <div className="w-full max-w-4xl mx-auto mb-12">
-        <video controls className="w-full rounded-xl shadow-lg">
-          <source src={videoUrl} type="video/mp4" />
-          Trình duyệt của bạn không hỗ trợ video.
-        </video>
+        {videoUrl && (
+          <video controls autoPlay muted width="640" height="360">
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        )}
       </div>
 
       {/* Nút mở chat và AI */}

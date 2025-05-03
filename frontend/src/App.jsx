@@ -42,11 +42,11 @@ function App() {
                 key={i}
                 path={route.path}
                 element={
-                  // <PrivateRoute requireAdmin="true">
+                  <PrivateRoute requireAdmin={route.requireAdmin}>
                     <Layout>
                       <Page />
                     </Layout>
-                  // </PrivateRoute>
+                  </PrivateRoute>
                 }
               />
             )

@@ -4,6 +4,30 @@ import django.db.models.deletion
 import uuid
 from django.db import migrations, models
 
+def assign_songs_to_artists(apps, schema_editor):
+    Artist = apps.get_model('artists', 'Artist')
+    Song = apps.get_model('songs', 'Song')
+    SongArtist = apps.get_model('songs_artist', 'SongArtist')
+
+    # Lấy tất cả các nghệ sĩ và bài hát, sắp xếp theo thời gian tạo
+    artists = list(Artist.objects.order_by('created_at'))
+    songs = list(Song.objects.order_by('created_at'))
+
+    artist_index = 0
+    artists_count = len(artists)
+
+    for song in songs:
+        if artists_count == 0:
+            break  # Không có nghệ sĩ nào
+
+        # Lấy nghệ sĩ theo chỉ số và gán cho bài hát
+        artist = artists[artist_index]
+
+        # Tạo bản ghi trong bảng trung gian SongArtist
+        SongArtist.objects.create(song=song, artist=artist)
+
+        # Cập nhật chỉ số nghệ sĩ để lặp lại nếu cần
+        artist_index = (artist_index + 1) % artists_count
 
 class Migration(migrations.Migration):
 
@@ -29,4 +53,5 @@ class Migration(migrations.Migration):
                 'db_table': 'songs_artist',
             },
         ),
+        migrations.RunPython(assign_songs_to_artists),
     ]

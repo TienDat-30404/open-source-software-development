@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
 import { useGetAllArtist, useUpdateArtist } from "../../../hooks/useArtist";
 import Select from "react-select";
-import { useGetAllSong, useUpdateSong } from "../../../hooks/useSong";
-import { useUpdateAlbum } from "../../../hooks/useAlbum";
+import {useUpdateSong } from "../../../hooks/useSong";
 import { useSelector } from "react-redux";
 import { useGetAllCatgory } from "../../../hooks/useCategory";
 
@@ -137,7 +136,7 @@ const UpdateSongModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Album</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Song</h2>
 
                 <form onSubmit={handleUpdateSong} className="space-y-4">
                     <div>

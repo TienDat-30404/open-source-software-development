@@ -5,7 +5,7 @@ import Cart from "../pages/Cart/Cart";
 import DetailProduct from "../pages/DetailProduct/DetailProduct";
 import DetailArtist from "../pages/DetailArtist/DetailArtist";
 import MainContent from "../pages/HomePage/MainContent/MainContent";
-import DetailPlayList from "../pages/DetailPlaylist/DetailPlaylist";
+import DetailPlayList from "../pages/DetailPlayList/DetailPlayList";
 import DetailAlbum from "../pages/DetailAlbum/DetailAlbum";
 import DetailSong from "../pages/DetailSong/DetailSong";
 import Premium from "../pages/Premium/Premium";

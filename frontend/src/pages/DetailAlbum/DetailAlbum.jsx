@@ -13,8 +13,10 @@ import LoadingDownload from '../../components/LoadingDownload';
 import { downloadMusic } from '../../until/function';
 import { useAddSongFavorite } from '../../hooks/useFavorite';
 import { useSelector } from 'react-redux';
+import { checkPremium } from '../../services/TransactionService';
+import { toast, ToastContainer } from 'react-toastify';
 export default function DetailAlbum() {
-  const {accessToken} = useSelector(state => state.auth)
+  const { accessToken } = useSelector(state => state.auth)
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
@@ -31,17 +33,23 @@ export default function DetailAlbum() {
 
 
   const handleDownloadMusic = async (song) => {
-    const fileUrl = song?.audio_url;
-    if (fileUrl) {
-      setLoadingDownloadMusic(true);
-      await downloadMusic(fileUrl, `${song.title}.mp3`);
-      setLoadingDownloadMusic(false);
+    const isCheckPremium = await checkPremium("", accessToken)
+    if (isCheckPremium?.data?.is_premium) {
+      const fileUrl = song?.audio_url;
+      if (fileUrl) {
+        setLoadingDownloadMusic(true);
+        await downloadMusic(fileUrl, `${song.title}.mp3`);
+        setLoadingDownloadMusic(false);
+      }
+    }
+    else {
+      toast.error("Vui lòng chọn gói premium để tận hưởng chức năng này")
     }
   };
 
-  const handleAddFavoriteSong = async(song) => {
+  const handleAddFavoriteSong = async (song) => {
     addSongFavorite.mutate({
-      song_id : song.id
+      song_id: song.id
     })
   }
 
@@ -120,8 +128,20 @@ export default function DetailAlbum() {
           )}
         </div>
       )}
-      {/* Audio element */}
-      {/* <audio ref={audioRef} onEnded={() => setIsPlaying(false)} /> */}
+      <ToastContainer
+        className="text-base"
+        fontSize="10px"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

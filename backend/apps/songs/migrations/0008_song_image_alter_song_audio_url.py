@@ -2,7 +2,99 @@
 
 from django.db import migrations, models
 
+import datetime
+import uuid
 
+def create_default_songs(apps, schema_editor):
+    Song = apps.get_model('songs', 'Song')
+    Category = apps.get_model('categories', 'Category')
+
+    # Lấy genre mẫu (nếu có)
+    try:
+        genre = Category.objects.first()
+    except:
+        genre = None
+
+    Song.objects.create(
+        title='Nơi tình yêu kết thúc',
+        genre=genre,
+        duration=318,
+        release_date=datetime.date(2023, 1, 1),
+        image='https://i.ytimg.com/vi/4S0jwsH7WYw/maxresdefault.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742879717/zeh1nbq0aqvk7wifknha.mp3',
+    )
+    Song.objects.create(
+        title='Nơi này có anh',
+        genre=genre,
+        duration=260,
+        release_date=datetime.date(2023, 1, 2),
+        image='https://i.ytimg.com/vi/FN7ALfpGxiI/maxresdefault.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742880099/sqshwg94xaotkxcxxve5.mp3',
+    )
+    Song.objects.create(
+        title='Dù cho tận thế',
+        genre=genre,
+        duration=233,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://cdn.lawnet.vn/uploads/giao-duc/DVM/trang-thue-1300.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742882450/dicdkflaaidvp1sk5d7h.mp3',
+    )
+    Song.objects.create(
+        title='Một đời',
+        genre=genre,
+        duration=328,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://tse2.mm.bing.net/th?id=OIP.PUiRVQNDmlH3vbMznA1wbQHaEK&pid=Api&P=0&h=180',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742880037/wa76spp13ekcavkxly4x.mp3',
+    )
+    Song.objects.create(
+        title='Tái Sinh',
+        genre=genre,
+        duration=240,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://hellokey.org/upload/original-image/loi-bai-hat-tai-sinh.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742879922/lhlx9vmpur99p0z6azcb.mp3',
+    )
+    Song.objects.create(
+        title='1 Phút',
+        genre=genre,
+        duration=376,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://i.ytimg.com/vi/dLQe4qEfVJw/maxresdefault.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742879957/mry5455svic0ufuk6cjc.mp3',
+    )
+    Song.objects.create(
+        title='Âm thầm bên em',
+        genre=genre,
+        duration=291,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://i.ytimg.com/vi/30KI5SuECuc/hqdefault.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742880140/xsftvrt30vh9fgxt057h.mp3',
+    )
+    Song.objects.create(
+        title='Giờ thì',
+        genre=genre,
+        duration=208,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://img.youtube.com/vi/ItRExComFJ4/maxresdefault.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742818655/a9obur5a7rjwm1mmoghn.mp3',
+    )
+    Song.objects.create(
+        title='Mất kết nối',
+        genre=genre,
+        duration=208,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://tse2.mm.bing.net/th?id=OIP.FUu2bUk5KbVChxd5Rj4DgAHaEK&pid=Api&P=0&h=180',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742879852/ahbtc1kabksbhhraqtlw.mp3',
+    )
+    Song.objects.create(
+        title='Trái tim em cũng biết đau',
+        genre=genre,
+        duration=208,
+        release_date=datetime.date(2022, 1, 1),
+        image='https://toplist.vn/images/800px/5trai-tim-em-cung-biet-dau-sang-tacmr-siro-210368.jpg',
+        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1742879893/yvqnhbzbixc1j9utzhgp.mp3',
+    )
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -20,4 +112,5 @@ class Migration(migrations.Migration):
             name='audio_url',
             field=models.URLField(blank=True, null=True),
         ),
+        migrations.RunPython(create_default_songs),
     ]

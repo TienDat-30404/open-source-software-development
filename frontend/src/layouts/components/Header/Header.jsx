@@ -27,11 +27,7 @@ export default function Header() {
       // Xóa key persist:root trong localStorage
       localStorage.removeItem('persist:root');
 
-      // Chuyển hướng đến trang login
       navigate('/login');
-
-      // Tùy chọn: Reload trang sau khi chuyển hướng (nếu cần)
-      // window.location.reload();
     } catch (error) {
       console.error('Error purging persist store:', error);
     }
@@ -84,37 +80,28 @@ export default function Header() {
         <button className="text-gray-400">Cài đặt ứng dụng</button>
         <Bell />
         {isAuthenticated ? (
-          <div className="group flex flex-col relative">
-            <h2 className="hover:text-blue-500 cursor-pointer">{auth?.full_name}</h2>
-            <div
-              className="absolute top-5 right-1 w-[200px] bg-gray-400 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className='flex items-center space-x-2 hover:bg-black p-2'>
-                <LogOut size={20} />
-
-                <p
-                  onClick={() => handleClickLogout()}
-                >
-                  Đăng xuất
-                </p>
-              </div>
-              <div className="border-t border-gray-500 "></div>
-              <div className='flex items-center space-x-2 p-2 hover:bg-black'>
-                <Settings size = {20}/>
-                <p
-                  onClick={() => navigate('/profile')}
-                >
-                  Thông tin tài khoản</p>
-              </div>
+          <div className="relative group">
+          {/* Tên người dùng */}
+          <h2 className="hover:text-blue-500 cursor-pointer">{auth?.full_name}</h2>
+        
+          {/* Dropdown menu */}
+          <div className="absolute top-full right-0 w-[200px] bg-gray-400 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-50 rounded shadow-lg">
+            <div className='flex items-center space-x-2 hover:bg-black p-2 cursor-pointer'>
+              <LogOut size={20} />
+              <p onClick={handleClickLogout}>Đăng xuất</p>
+            </div>
+            <div className="border-t border-gray-500"></div>
+            <div className='flex items-center space-x-2 p-2 hover:bg-black cursor-pointer'>
+              <Settings size={20} />
+              <p onClick={() => navigate('/profile')}>Thông tin tài khoản</p>
             </div>
           </div>
+        </div>
+        
         ) : (
-
-          <Link
-            to="./login"
-          >
-            Đăng nhập
-          </Link>
+          <Link to="/login">Đăng nhập</Link>
         )}
+
 
       </div>
     </div>

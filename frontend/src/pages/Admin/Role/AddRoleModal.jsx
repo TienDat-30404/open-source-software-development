@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useCreateArtist } from "../../../hooks/useArtist";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
-import { useCreateCategory } from "../../../hooks/useCategory";
 import { useSelector } from "react-redux";
 import { useCreateRole } from "../../../hooks/useRole";
 const AddRoleModal = ({ show, onClose }) => {
@@ -47,7 +45,7 @@ const AddRoleModal = ({ show, onClose }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Category</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Role</h2>
 
                 <form onSubmit={handleCreateRole} className="space-y-4">
                     <div>

@@ -17,6 +17,6 @@ urlpatterns = [
     path('api/conversations/', include('apps.conversations.urls')),  
     path('api/history/', include('apps.listening_histories.urls')),
     path('api/auth/', include('apps.users.urls')),
-    path('api/user', include('apps.users.urls')),
+    path('api/users/', include('apps.users.urls')),
     path('api/roles/', include('apps.roles.urls')),
 ]

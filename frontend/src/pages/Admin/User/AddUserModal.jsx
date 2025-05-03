@@ -1,46 +1,56 @@
 import React, { useState } from "react";
-import { useCreateArtist } from "../../../hooks/useArtist";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
-import { useCreateCategory } from "../../../hooks/useCategory";
 import { useSelector } from "react-redux";
 import { useCreatePlan } from "../../../hooks/usePlan";
-const AddPlanModal = ({ show, onClose }) => {
+import { useCreateUser } from "../../../hooks/useUser";
+const AddUserModal = ({ show, onClose }) => {
     const { accessToken } = useSelector(state => state.auth)
     const [content, setContent] = useState({
-        name: '',
-        price: '',
-        description: '',
-        duration: ''
+        userName: '',
+        email: '',
+        password: '',
+        fullName: '',
+        gender: '',
+        dateOfBirth: '',
+        role : '',
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const createPlanMutation = useCreatePlan({
+    const createUserMutation = useCreateUser({
         onSuccess: () => {
             setContent({
-                name: '',
-                price: '',
-                description: '',
-                duration: ''
+                userName: '',
+                email: '',
+                password: '',
+                fullName: '',
+                gender: '',
+                dateOfBirth: '',
+                role : ''
             })
             onClose();
         },
         onError: (error) => {
-            console.error("Tạo plan thất bại:", error);
+            console.error("Tạo user thất bại:", error);
         }
     });
 
 
 
 
-    const handleCreatePlan = async (e) => {
+    const handleCreateUser = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         const formData = new FormData()
-        formData.append('name', content.name)
-        formData.append('price', content.price)
-        formData.append('description', content.description)
-        formData.append('duration_days', content.duration)
+        formData.append('username', content.userName)
+        formData.append('email', content.email)
+        formData.append('password', content.password)
+        formData.append('full_name', content.fullName)
+        formData.append('gender', content.gender)
+        formData.append('date_of_birth', content.dateOfBirth)
+        formData.append('full_name', content.fullName)
+        formData.append('role_id', content.role)
 
-        createPlanMutation.mutate({data : formData, token : accessToken});
+
+        createUserMutation.mutate({ data: formData, token: accessToken });
     };
 
     const handleChange = (e) => {
@@ -66,13 +76,13 @@ const AddPlanModal = ({ show, onClose }) => {
                 </div>
                 <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Plan</h2>
 
-                <form onSubmit={handleCreatePlan} className="space-y-4">
+                <form onSubmit={handleCreateUser} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Name</label>
+                        <label className="block text-sm font-medium text-gray-700">UserName</label>
                         <input
                             type="text"
-                            name="name"
-                            value={content.name}
+                            name="userName"
+                            value={content.userName}
                             onChange={handleChange}
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -80,11 +90,11 @@ const AddPlanModal = ({ show, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Price</label>
+                        <label className="block text-sm font-medium text-gray-700">Email</label>
                         <input
                             type="text"
-                            name="price"
-                            value={content.price}
+                            name="email"
+                            value={content.email}
                             onChange={handleChange}
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -92,11 +102,11 @@ const AddPlanModal = ({ show, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
+                        <label className="block text-sm font-medium text-gray-700">Password</label>
                         <input
-                            type="text"
-                            name="description"
-                            value={content.description}
+                            type="password"
+                            name="password"
+                            value={content.password}
                             onChange={handleChange}
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -104,29 +114,47 @@ const AddPlanModal = ({ show, onClose }) => {
                     </div>
 
                     <div>
-                        <label className="block mb-1 font-medium text-black">Duration</label>
+                        <label className="block text-sm font-medium text-gray-700">Fullname</label>
+                        <input
+                            type="text"
+                            name="fullName"
+                            value={content.fullName}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 font-medium text-black">Gender</label>
                         <select
-                            name="duration"
-                            value={content.duration}
+                            name="gender"
+                            value={content.gender}
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded px-3 py-1 text-black"
                         >
                             <option value="">Select</option>
-                            <option value="1">1 tháng</option>
-                            <option value="2">2 tháng </option>
-                            <option value="3">3 tháng</option>
-                            <option value="5">4 tháng</option>
-                            <option value="5">5 tháng</option>
-                            <option value="6">6 tháng</option>
-                            <option value="7">7 tháng</option>
-                            <option value="8">8 tháng</option>
-                            <option value="9">9 tháng</option>
-                            <option value="10">10 tháng</option>
-                            <option value="11">11 tháng</option>
-                            <option value="12">12 tháng</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ </option>
+                            <option value="Khác">Khác</option>
 
                         </select>
                     </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                        <input
+                            type="date"
+                            name="dateOfBirth"
+                            value={content.dateOfBirth}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+
+                   
                     <div className="text-right">
                         <button
                             type="submit"
@@ -141,4 +169,4 @@ const AddPlanModal = ({ show, onClose }) => {
     );
 };
 
-export default AddPlanModal;
+export default AddUserModal;

@@ -14,16 +14,9 @@ RUN npm install
 COPY . .
 
 # Build ứng dụng với Vite
-RUN npm run dev
+RUN npm run build
 
-# Bước 2: Tạo image cho production, sử dụng Nginx để phục vụ ứng dụng
-FROM nginx:alpine
+EXPOSE 5173
 
-# Copy build folder từ container build vào thư mục của Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Mở cổng 80 (Nginx sẽ phục vụ trên cổng này)
-EXPOSE 80
-
-# Khởi động Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Chạy ứng dụng trong chế độ preview của Vite (sau khi đã build)
+CMD ["npm", "run", "preview"]

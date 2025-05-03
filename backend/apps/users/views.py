@@ -124,16 +124,24 @@ class UserAPIView(APIView):
             return success_response(data=usersrial.data,code=status.HTTP_201_CREATED,message="tạo user thành công")
         return error_response(errors=serializer.errors)
 
-    def put(self, request, pk):
-        """Cập nhật toàn bộ phương thức thanh toán"""
+    def patch(self, request, pk):
         check_is_admin(request.user)
-        payment_method = get_object_or_404(User, pk=pk)
-        serializer = RegisterSerializer(payment_method, data=request.data)
+        user_instance = get_object_or_404(User, pk=pk)
+        serializer = RegisterSerializer(user_instance, data=request.data, partial=True)
         if serializer.is_valid():
-            user=serializer.save()
-            usersrial= UserSerializer(user)
-            return success_response(data=usersrial.data,message="chỉnh sửa user thành công ",code=status.HTTP_200_OK)
-        return error_response(errors=serializer.errors,message="sửa user thất bại",code=status.HTTP_400_BAD_REQUEST)
+            user = serializer.save()
+            user_serialized = UserSerializer(user)
+            return success_response(
+                data=user_serialized.data,
+                message="Cập nhật người dùng thành công",
+                code=status.HTTP_200_OK
+        )
+        return error_response(
+            errors=serializer.errors,
+            message="Cập nhật người dùng thất bại",
+            code=status.HTTP_400_BAD_REQUEST
+        )
+        
     def delete(self, request, pk):
         """Xóa phương thức thanh toán"""
         check_is_admin(request.user)

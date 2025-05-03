@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllArtist } from '../../services/ArtistService';
-import { CircleCheckBig, Ellipsis, Plus } from 'lucide-react';
+import { CircleCheckBig, Ellipsis, HeartPulse, Plus } from 'lucide-react';
 import { switchDurationVideo } from '../../until/function';
 import CardSong from '../../components/Song/CardSong';
 import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
@@ -10,13 +10,18 @@ import useSelectedSong from '../../hooks/useSelectedSong';
 import { downloadMusic } from '../../until/function';
 import { Download } from 'lucide-react';
 import LoadingDownload from '../../components/LoadingDownload';
+import { useSelector } from 'react-redux';
+import { checkPremium } from '../../services/TransactionService';
+import { toast, ToastContainer } from 'react-toastify';
+import { useAddSongFavorite } from '../../hooks/useFavorite';
 export default function DetailArtist() {
+  const { accessToken } = useSelector(state => state.auth)
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const { currentSong, isPlaying, handlePlaySong, audioRef } = useAudioPlayer();
-  console.log(currentSong)
   const { selectedSong, handleSelectedSong, handleClickOutside, hoveringSong, setHoveringSong } = useSelectedSong();
   const [loadingDownloadMusic, setLoadingDownloadMusic] = useState(false);
+  const addSongFavorite = useAddSongFavorite(accessToken)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,13 +32,27 @@ export default function DetailArtist() {
   }, [id]);
 
   const handleDownloadMusic = async (song) => {
-    const fileUrl = song?.audio_url;
-    if (fileUrl) {
-      setLoadingDownloadMusic(true);
-      await downloadMusic(fileUrl, `${song.title}.mp3`);
-      setLoadingDownloadMusic(false);
+    const isCheckPremium = await checkPremium("", accessToken)
+    console.log("isCheckPremium", isCheckPremium)
+    if (isCheckPremium?.data?.is_premium) {
+      const fileUrl = song?.audio_url;
+      if (fileUrl) {
+        setLoadingDownloadMusic(true);
+        await downloadMusic(fileUrl, `${song.title}.mp3`);
+        setLoadingDownloadMusic(false);
+      }
+    }
+    else {
+      toast.error("Vui lòng chọn gói premium để tận hưởng chức năng này")
     }
   };
+
+  const handleAddFavoriteSong = async (song) => {
+    addSongFavorite.mutate({
+      song_id: song.id
+    })
+  }
+
 
   return (
     <div>
@@ -60,7 +79,7 @@ export default function DetailArtist() {
                   isPlaying={isPlaying}
                   songDefault={details?.songs?.length > 0 ? details.songs[0] : null}
                   handlePlaySong={handlePlaySong}
-                 
+
                 />
                 <button class="relative inline-flex items-center justify-center p-0.5 ms-3 me-3 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-white border border-white">
                   <span class="relative px-4 py-1 transition-all ease-in duration-75 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
@@ -99,6 +118,12 @@ export default function DetailArtist() {
                       text: "Tải bài hát",
                       isSubMenu: false,
                       onClick: () => handleDownloadMusic(song)
+                    },
+                    {
+                      icon: <HeartPulse />,
+                      text: "Thêm vào bài hát yêu thích",
+                      isSubMenu: false,
+                      onClick: () => handleAddFavoriteSong(song)
                     }
                   ]}
                 />
@@ -113,8 +138,20 @@ export default function DetailArtist() {
           )}
         </Fragment>
       )}
-      {/* Audio element */}
-      {/* <audio ref={audioRef} onEnded={() => setIsPlaying(false)} /> */}
+      <ToastContainer
+        className="text-base"
+        fontSize="10px"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

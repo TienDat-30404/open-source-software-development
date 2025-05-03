@@ -3,6 +3,17 @@
 import uuid
 from django.db import migrations, models
 
+def create_default_categories(apps, schema_editor):
+    Category = apps.get_model('categories', 'Category')
+    Category.objects.create(name='Pop')
+    Category.objects.create(name='Rock')
+    Category.objects.create(name='Jazz')
+    Category.objects.create(name='Classical')
+    Category.objects.create(name='Hip Hop')
+
+def delete_default_categories(apps, schema_editor):
+    Category = apps.get_model('categories', 'Category')
+    Category.objects.filter(name__in=['Pop', 'Rock', 'Jazz', 'Classical', 'Hip Hop']).delete()
 
 class Migration(migrations.Migration):
 
@@ -24,5 +35,6 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'categories',
             },
-        ),
+        ), 
+        migrations.RunPython(create_default_categories, delete_default_categories),
     ]

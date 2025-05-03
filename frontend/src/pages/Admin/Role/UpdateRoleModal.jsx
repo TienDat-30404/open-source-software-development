@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import LoadingResponseChatAI from "../../../components/Element/LoadingResponseChatAI";
-import { useUpdateCategory } from "../../../hooks/useCategory";
 import { useSelector } from "react-redux";
 import { useUpdateRole } from "../../../hooks/useRole";
 const UpdateRoleModal = ({ show, onClose, data }) => {
@@ -56,7 +55,7 @@ const UpdateRoleModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Category</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Role</h2>
 
                 <form onSubmit={handleUpdateRole} className="space-y-4">
                     <div>

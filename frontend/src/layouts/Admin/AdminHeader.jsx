@@ -1,9 +1,45 @@
-import React from 'react'
+import React, { useState , useRef, useEffect} from 'react'
 import { Search, ChevronDown } from 'lucide-react'
 import SwitchScreenBackground from '../../components/Element/SwitchScreenBackground'
-export default function
-  () {
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../../redux/authSlice'
+import { persistor } from '../../redux/store'
+import { useNavigate } from 'react-router-dom'
+export default function () {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { auth } = useSelector(state => state.auth)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = async() => {
+    try {
+      dispatch(logout());
+
+      await persistor.purge();
+
+      // Xóa key persist:root trong localStorage
+      localStorage.removeItem('persist:root');
+
+      navigate('/login');
+    } catch (error) {
+      console.error('Error purging persist store:', error);
+    }
+  };
   return (
+
     <div className="bg-white h-20 px-6 flex items-center justify-between shadow-sm">
       {/* Ô tìm kiếm */}
       <div className="flex items-center space-x-2">
@@ -55,19 +91,33 @@ export default function
         </div>
 
         {/* Thông tin người dùng */}
-        <div className="flex items-center">
-          <div className="text-right">
-            <h6 className="text-sm font-semibold text-gray-700">Thomas Arena</h6>
+        <div className="relative flex items-center" ref={dropdownRef}>
+          <div onClick={() => setIsDropdownOpen(prev => !prev)} className='flex items-center'>
+
+            <div className="text-right cursor-pointer" >
+              <h6 className="text-sm font-semibold text-gray-700">{auth?.full_name}</h6>
+            </div>
+            <div className="ml-3 flex items-center space-x-1 cursor-pointer">
+              <img
+                src="https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png"
+                alt="User Avatar"
+                className="rounded-full h-10 w-10 object-cover"
+              />
+              <ChevronDown size={16} className='text-gray-500' />
+            </div>
           </div>
-          <div className="ml-3 flex items-center space-x-1 cursor-pointer">
-            <img
-              src="https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png" // Thay thế bằng URL ảnh thật
-              alt="User Avatar"
-              className="rounded-full h-10 w-10 object-cover"
-            />
-            {/* Dropdown arrow */}
-            <ChevronDown size={16} className='text-gray-500' />
-          </div>
+
+          {/* Dropdown xuất hiện khi mở */}
+          {isDropdownOpen && (
+            <div className="absolute top-14 right-0 bg-white shadow-lg rounded-md w-40 p-2 z-10">
+              <button
+                onClick={() => handleLogout()}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 rounded"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

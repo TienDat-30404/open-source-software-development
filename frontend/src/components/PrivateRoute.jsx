@@ -12,7 +12,7 @@ const PrivateRoute = ({ children, requireAdmin = false }) => {
   }
 
   // Kiểm tra nếu cần quyền admin mà người dùng không phải admin
-  if (requireAdmin && auth.role_name !== 'admin') {
+  if (requireAdmin && auth.role_name !== 'Admin') {
     return <Navigate to="/" replace />;
   }
 

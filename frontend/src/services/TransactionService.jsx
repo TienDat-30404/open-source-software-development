@@ -32,3 +32,6 @@ export const checkTransactionMomo = async(data, token) => {
     return addItemUsingToken('transactions/check-transaction-momo', data, token)
 }
 
+export const checkPremium = async(query, token) => {
+    return getItemUsingToken('transactions/check-premium', query, token)
+}

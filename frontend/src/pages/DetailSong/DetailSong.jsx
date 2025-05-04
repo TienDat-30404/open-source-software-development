@@ -2,18 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllSong } from '../../services/SongService';
 import { Ellipsis, Plus, Play, Pause } from 'lucide-react';
-import { switchDurationVideo } from '../../until/function';
 import Header from './Header';
-import CardSong from '../../components/Song/CardSong';
-import { useAudioPlayer } from '../../hooks/useAudioPlayer';
-import useSelectedSong from '../../hooks/useSelectedSong';
-import PlayOrPauseMainButton from '../../components/PlayOrPauseMainButton';
+
 export default function DetailSong() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
   const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,10 +58,9 @@ export default function DetailSong() {
             </div>
           </div>
         </div>
-      )
-      }
-      {/* Audio element */}
-      {/* <audio ref={audioRef} onEnded={() => setIsPlaying(false)} /> */}
+      )}
+
+     
     </div >
   );
 }

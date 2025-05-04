@@ -15,6 +15,8 @@ class Song(BaseModel):
     release_date = models.DateField()
     image = models.CharField(max_length=255, null=True, blank=True)
     audio_url = models.URLField(blank=True, null=True)  
+    video_url = models.URLField(blank=True, null=True)  
+
     
     def __str__(self):
         return self.title

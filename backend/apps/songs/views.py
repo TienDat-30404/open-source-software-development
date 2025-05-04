@@ -21,15 +21,15 @@ import redis
 from django.http import HttpResponse
 import time
 import math
-# redis_client = redis.StrictRedis(
-#     host="localhost", port=6379, db=0, decode_responses=True
-# )
 redis_client = redis.StrictRedis(
-    host=os.getenv("REDIS_HOST"),
-    port=int(os.getenv("REDIS_PORT")),
-    db=0,
-    decode_responses=True
+    host="localhost", port=6379, db=0, decode_responses=True
 )
+# redis_client = redis.StrictRedis(
+#     host=os.getenv("REDIS_HOST"),
+#     port=int(os.getenv("REDIS_PORT")),
+#     db=0,
+#     decode_responses=True
+# )
 
 
 class SongViewSet(viewsets.ModelViewSet):
@@ -105,8 +105,10 @@ class SongViewSet(viewsets.ModelViewSet):
                 )
 
         audio_file = request.FILES.get("audio_url")
+        video_file = request.FILES.get("video_url")
         image_file = request.FILES.get("image")
         audio_url = None
+        video_url = None
         image_url = None
         if audio_file:
             try:
@@ -138,6 +140,25 @@ class SongViewSet(viewsets.ModelViewSet):
             return Response(
                 {"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST
             )
+            
+        if video_file:
+            try:
+                video_file.open()
+                video_buffer = io.BytesIO(video_file.read())
+                upload_result = cloudinary.uploader.upload(
+                    video_buffer, resource_type="auto"
+                )
+
+                video_url = upload_result["secure_url"]
+                request.data.pop("video_url", None)
+
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {"error": "No video file provided"}, status=status.HTTP_400_BAD_REQUEST
+            )
+            
         if image_file:
             try:
                 upload_result = cloudinary.uploader.upload(image_file)
@@ -149,6 +170,8 @@ class SongViewSet(viewsets.ModelViewSet):
                 )
 
         request.data["audio_url"] = audio_url
+        request.data["video_url"] = video_url
+
         request.data["image"] = image_url
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

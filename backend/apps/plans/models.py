@@ -11,3 +11,9 @@ class Plan(BaseModel):
         return self.name
     class Meta: 
         db_table = 'plans'
+
+class QuestionHistory(models.Model):
+    prompt = models.TextField(unique=True)
+    response = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    frequency = models.IntegerField(default=1)

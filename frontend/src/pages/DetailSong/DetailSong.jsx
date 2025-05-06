@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import { getAllSong } from '../../services/SongService';
-import { Ellipsis, Plus, Play, Pause } from 'lucide-react';
+import { Ellipsis, Plus, Play, Pause, CookingPot } from 'lucide-react';
 import Header from './Header';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 
 export default function DetailSong() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
-  const audioRef = useRef(new Audio());
-  const [isPlaying, setIsPlaying] = useState(false);
+
+  const { currentSong, handlePlaySong, isPlaying } = useAudioPlayer();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,17 +20,12 @@ export default function DetailSong() {
     fetchData();
   }, [id]);
 
-  const handlePlaySong = () => {
-    const audio = audioRef.current;
-    audio.play(); // Resume or start playing the song
-    setIsPlaying(true);
-  };
 
-  const handlePauseSong = () => {
-    const audio = audioRef.current;
-    audio.pause(); // Pause the audio
-    setIsPlaying(false);
-  };
+  // const handlePauseSong = () => {
+  //   const audio = audioRef.current;
+  //   audio.pause(); // Pause the audio
+  //   setIsPlaying(false);
+  // };
   return (
     <div>
       {details && (
@@ -39,13 +35,13 @@ export default function DetailSong() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
 
-                {isPlaying ? (
-                  <div className="bg-[#1DB954] rounded-full cursor-pointer p-4">
-                    <Pause size={20} onClick={() => handlePauseSong()} />
+                {isPlaying && currentSong?.id === details.id ? (
+                  <div className="bg-[#1DB954] rounded-full cursor-pointer p-4" onClick={() => handlePlaySong(details)}>
+                    <Pause size={20} />
                   </div>
                 ) : (
-                  <div className="bg-[#1DB954] rounded-full cursor-pointer p-4">
-                    <Play size={20} onClick={() => handlePlaySong()} />
+                  <div className="bg-[#1DB954] rounded-full cursor-pointer p-4" onClick={() => handlePlaySong(details)}>
+                    <Play size={20} />
                   </div>
                 )}
                 < button class=" inline-flex items-center justify-center p-0.5 ms-3 me-3 overflow-hidden text-sm font-medium text-white rounded-full group bg-gradient-to-white border border-white">
@@ -60,7 +56,7 @@ export default function DetailSong() {
         </div>
       )}
 
-     
+
     </div >
   );
 }

@@ -11,7 +11,7 @@ export default function AdminLayout({ children }) {
         <div className='w-1/6 h-full bg-yellow-200'>
           <AdminSidebar />
         </div>
-        <div className="w-5/6 text-white rounded-lg h-full overflow-y-auto bg-blue-200">
+        <div className="w-5/6 text-white rounded-lg h-full overflow-y-auto ">
           {children}
         </div>
       </div>

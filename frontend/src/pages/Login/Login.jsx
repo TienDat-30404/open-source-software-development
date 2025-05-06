@@ -4,6 +4,9 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import api from '../../services/api';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../redux/authSlice';
+import { registerAccount } from '../../services/UserService';
+import { jwtDecode } from 'jwt-decode';
+
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -39,20 +42,27 @@ function Login() {
     }
   };
 
-  const handleLoginGoogle = async (credentialResponse) => {
-    try {
-      const response = await api.post('/auth/google/', {
-        credential: credentialResponse.credential
-      });
-      const {data } = response.data;
-      
-      localStorage.setItem('user', JSON.stringify(data));
-
-      navigate('/');
-    } catch (error) {
-      setError('Đăng nhập bằng Google thất bại');
+  const handleLoginGoogle = async (response) => {
+    if (response.error) {
+      console.error("Login failed:", response.error);
+      return;
     }
-  };
+    const token = response.credential;
+    try {
+      const response = await api.post('/auth/login/', {
+        email: jwtDecode(token).email,
+        full_name: jwtDecode(token).name,
+        type_login: "google"
+      });
+      console.log("response", response.data)
+      dispatch(setCredentials(response.data))
+      navigate('/');
+    }
+    catch (err) {
+      console.error('An error occurred during Google login:', error);
+
+    }
+  }
 
   return (
     <div className="bg-black min-h-screen flex items-center justify-center w-screen">
@@ -93,14 +103,14 @@ function Login() {
             {loading ? 'Đang xử lý...' : 'Đăng nhập'}
           </button>
         </form>
-        
+
         <div className="flex items-center justify-center mb-4">
           <div className="border-b border-gray-600 w-1/3"></div>
           <span className="text-white mx-2">hoặc</span>
           <div className="border-b border-gray-600 w-1/3"></div>
         </div>
-        
-        <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID_AUTH}>
+
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_CLIENTID_AUTH}>
           <GoogleLogin
             buttonText="Login with Google"
             onSuccess={handleLoginGoogle}

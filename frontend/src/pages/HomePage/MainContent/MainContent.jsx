@@ -7,6 +7,7 @@ import IconChat from '../../../components/Element/IconChat'
 import RoomsPage from '../../Room/RoomsPage'
 import IconAi from '../../../components/Element/IconAi'
 import ChatAI from '../../Chat/ChatAI'
+import TopSongs from './TopSongs'
 export default function MainContent() {
   const [showRoom, setShowRoom] = useState(false)
   const [showChatAI, setShowChatAI] = useState(false)
@@ -34,6 +35,7 @@ export default function MainContent() {
         <IconAi />
       </div>
       <RoomsPage show={showRoom} />
+      <TopSongs />
       <Song />
       <Album />
       <Artist />

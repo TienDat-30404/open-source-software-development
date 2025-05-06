@@ -8,14 +8,16 @@ from apps.roles.serializers import RoleSerializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'gender', 'full_name', 'date_of_birth' ]
-        extra_kwargs = {
+        fields = ['id', 'username', 'email', 'password', 'gender', 'full_name', 'date_of_birth', 'type_login' ]
+        extra_kwargs =   {
             'password': {'write_only': True}
         }
 
     def create(self, validated_data):
         # Hash password
-        validated_data['password'] = make_password(validated_data['password'])
+        if 'password' in validated_data:
+            # Hash password
+            validated_data['password'] = make_password(validated_data['password'])
         # Gỡ role nếu có trong validated_data (do form gửi lên)
         validated_data.pop("role", None)
         # Get default user role

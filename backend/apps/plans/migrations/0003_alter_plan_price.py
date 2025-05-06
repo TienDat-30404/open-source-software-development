@@ -3,20 +3,6 @@
 from django.db import migrations, models
 
 
-def create_default_plans(apps, schema_editor):
-    Plan = apps.get_model("plans", "Plan")
-    Plan.objects.create(
-        name="Student",
-        price=150000,
-        description="Gói sinh viên 3 tháng",
-        duration_days=3,
-    )
-    Plan.objects.create(
-        name="Individual",
-        price=99000,
-        description="1 tài khoản Premium, Hủy bất cứ lúc nào , đăng ký hoặc thanh toán một lần",
-        duration_days=5,
-    )
 
 
 class Migration(migrations.Migration):
@@ -31,5 +17,4 @@ class Migration(migrations.Migration):
             name="price",
             field=models.IntegerField(),
         ),
-        migrations.RunPython(create_default_plans),
     ]

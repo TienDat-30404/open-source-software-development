@@ -1,0 +1,674 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{spotify}
+\author{Hello World}
+\date{May 2025}
+
+\begin{document}  % Phải có lệnh này để bắt đầu phần nội dung
+
+\maketitle  % Tạo tiêu đề
+
+\textbf{r}\includegraphics[width=8.08333in,height=9.86979in]{media/image8.png}
+
+\textbf{TRƯỜNG ĐẠI HỌC SÀI GÒN}
+
+\textbf{KHOA CÔNG NGHỆ THÔNG TIN}
+
+\includegraphics[width=2.34375in,height=2.34375in]{media/image7.png}
+
+\textbf{PHÁT TRIỂN PHẦN MỀM MÃ NGUỒN MỞ}
+
+\textbf{ĐỀ TÀI: XÂY DỰNG ỨNG DỤNG NGHE NHẠC SPOTIFY}
+
+\textbf{Giảng viên hướng dẫn: ThS. Từ Lãng Phiêu}
+
+\textbf{Nhóm Thực Hiện: Nhóm 12}
+
+\textbf{Đặng Tiến Đạt - 3122560011}
+
+\textbf{Nguyễn Ngọc Minh - 3118410270}
+
+\textbf{Hồ Minh Toàn - 3121560091}
+
+\textbf{La Hữu Mẫn - 3122410235}
+
+\textbf{La Hữu Minh - 3122410238}
+
+\subsubsection{\texorpdfstring{\textbf{PHÂN CÔNG THÀNH VIÊN TRONG
+NHÓM}}{PHÂN CÔNG THÀNH VIÊN TRONG NHÓM}}\label{phuxe2n-cuxf4ng-thuxe0nh-viuxean-trong-nhuxf3m}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Họ tên
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Nội dung công việc thực hiện
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Đánh giá
+\end{minipage} \\
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\end{longtable}
+
+\subsubsection{\texorpdfstring{\textbf{MỞ
+ĐẦU}}{MỞ ĐẦU}}\label{mux1edf-ux111ux1ea7u}
+
+\subsection{Trong thời đại số hiện nay, các nền tảng nghe nhạc trực
+tuyến đóng vai trò quan trọng trong việc đáp ứng nhu cầu giải trí, học
+tập và kết nối cảm xúc của con người. Trong số đó, Spotify là một trong
+những ứng dụng dẫn đầu toàn cầu về trải nghiệm nghe nhạc nhờ vào giao
+diện thân thiện, thuật toán gợi ý thông minh và kho nhạc phong
+phú.}\label{trong-thux1eddi-ux111ux1ea1i-sux1ed1-hiux1ec7n-nay-cuxe1c-nux1ec1n-tux1ea3ng-nghe-nhux1ea1c-trux1ef1c-tuyux1ebfn-ux111uxf3ng-vai-truxf2-quan-trux1ecdng-trong-viux1ec7c-ux111uxe1p-ux1ee9ng-nhu-cux1ea7u-giux1ea3i-truxed-hux1ecdc-tux1eadp-vuxe0-kux1ebft-nux1ed1i-cux1ea3m-xuxfac-cux1ee7a-con-ngux1b0ux1eddi.-trong-sux1ed1-ux111uxf3-spotify-luxe0-mux1ed9t-trong-nhux1eefng-ux1ee9ng-dux1ee5ng-dux1eabn-ux111ux1ea7u-touxe0n-cux1ea7u-vux1ec1-trux1ea3i-nghiux1ec7m-nghe-nhux1ea1c-nhux1edd-vuxe0o-giao-diux1ec7n-thuxe2n-thiux1ec7n-thuux1eadt-touxe1n-gux1ee3i-uxfd-thuxf4ng-minh-vuxe0-kho-nhux1ea1c-phong-phuxfa.}
+
+\subsection{Nhằm mục tiêu vận dụng kiến thức đã học trong môn Phát triển
+phần mềm mã nguồn mở, nhóm sinh viên chúng em lựa chọn đề tài: "Xây dựng
+ứng dụng clone Spotify -- nền tảng nghe nhạc trực tuyến". Dự án tập
+trung mô phỏng các chức năng cơ bản của Spotify như: phát nhạc trực
+tuyến, tìm kiếm bài hát, tạo playlist, và gợi ý bài hát theo người dùng
+-- đồng thời áp dụng tư duy mã nguồn mở vào quá trình xây dựng, quản lý
+mã nguồn và phát triển phần
+mềm.}\label{nhux1eb1m-mux1ee5c-tiuxeau-vux1eadn-dux1ee5ng-kiux1ebfn-thux1ee9c-ux111uxe3-hux1ecdc-trong-muxf4n-phuxe1t-triux1ec3n-phux1ea7n-mux1ec1m-muxe3-nguux1ed3n-mux1edf-nhuxf3m-sinh-viuxean-chuxfang-em-lux1ef1a-chux1ecdn-ux111ux1ec1-tuxe0i-xuxe2y-dux1ef1ng-ux1ee9ng-dux1ee5ng-clone-spotify-nux1ec1n-tux1ea3ng-nghe-nhux1ea1c-trux1ef1c-tuyux1ebfn.-dux1ef1-uxe1n-tux1eadp-trung-muxf4-phux1ecfng-cuxe1c-chux1ee9c-nux103ng-cux1a1-bux1ea3n-cux1ee7a-spotify-nhux1b0-phuxe1t-nhux1ea1c-trux1ef1c-tuyux1ebfn-tuxecm-kiux1ebfm-buxe0i-huxe1t-tux1ea1o-playlist-vuxe0-gux1ee3i-uxfd-buxe0i-huxe1t-theo-ngux1b0ux1eddi-duxf9ng-ux111ux1ed3ng-thux1eddi-uxe1p-dux1ee5ng-tux1b0-duy-muxe3-nguux1ed3n-mux1edf-vuxe0o-quuxe1-truxecnh-xuxe2y-dux1ef1ng-quux1ea3n-luxfd-muxe3-nguux1ed3n-vuxe0-phuxe1t-triux1ec3n-phux1ea7n-mux1ec1m.}
+
+\subsection{Bên cạnh việc rèn luyện kỹ năng lập trình, đề tài giúp nhóm
+sinh viên tiếp cận quy trình phát triển phần mềm theo hướng cộng tác, mở
+rộng tư duy về cách các nền tảng lớn được tổ chức, và trau dồi tinh thần
+học hỏi, chia sẻ trong cộng đồng mã nguồn
+mở.}\label{buxean-cux1ea1nh-viux1ec7c-ruxe8n-luyux1ec7n-kux1ef9-nux103ng-lux1eadp-truxecnh-ux111ux1ec1-tuxe0i-giuxfap-nhuxf3m-sinh-viuxean-tiux1ebfp-cux1eadn-quy-truxecnh-phuxe1t-triux1ec3n-phux1ea7n-mux1ec1m-theo-hux1b0ux1edbng-cux1ed9ng-tuxe1c-mux1edf-rux1ed9ng-tux1b0-duy-vux1ec1-cuxe1ch-cuxe1c-nux1ec1n-tux1ea3ng-lux1edbn-ux111ux1b0ux1ee3c-tux1ed5-chux1ee9c-vuxe0-trau-dux1ed3i-tinh-thux1ea7n-hux1ecdc-hux1ecfi-chia-sux1ebb-trong-cux1ed9ng-ux111ux1ed3ng-muxe3-nguux1ed3n-mux1edf.}
+
+\subsection{}\label{section}
+
+\subsubsection{\texorpdfstring{\textbf{1. MỤC TIÊU ĐỀ
+TÀI}}{1. MỤC TIÊU ĐỀ TÀI}}\label{mux1ee5c-tiuxeau-ux111ux1ec1-tuxe0i}
+
+- Dự án "Clone Spotify -- Ứng dụng nghe nhạc trực tuyến" được thực hiện
+với các mục tiêu chính sau:
+
+\begin{itemize}
+\item
+  \textbf{Mô phỏng lại các chức năng cơ bản của Spotify}, bao gồm phát
+  nhạc trực tuyến, tìm kiếm bài hát, tạo playlist cá nhân, và giao diện
+  người dùng thân thiện.
+\item
+  \textbf{Áp dụng kiến thức mã nguồn mở}: sử dụng các thư viện, công cụ,
+  framework mã nguồn mở phổ biến trong cộng đồng để phát triển ứng dụng.
+\item
+  \textbf{Rèn luyện kỹ năng làm việc nhóm}, quản lý mã nguồn qua Git và
+  GitHub, phân chia công việc, xử lý conflict và làm quen với quy trình
+  cộng tác phần mềm chuyên nghiệp.
+\item
+  \textbf{Tăng cường khả năng tích hợp hệ thống}, giao tiếp API, sử dụng
+  cơ sở dữ liệu và triển khai ứng dụng trên môi trường thực tế (local
+  hoặc cloud).
+\item
+  \textbf{Hiểu được quy trình phát triển phần mềm hoàn chỉnh}, từ phân
+  tích yêu cầu đến thiết kế, lập trình, kiểm thử và đánh giá sản phẩm.
+\end{itemize}
+
+\subsubsection{}\label{section-1}
+
+\subsubsection{\texorpdfstring{\textbf{2. CÔNG NGHỆ SỬ
+DỤNG}}{2. CÔNG NGHỆ SỬ DỤNG}}\label{cuxf4ng-nghux1ec7-sux1eed-dux1ee5ng}
+
+* Để triển khai dự án, nhóm sử dụng các công nghệ và công cụ mã nguồn mở
+sau:
+
+\textbf{- Frontend :}
+
+\begin{itemize}
+\item
+  \textbf{ReactJS :} ReactJS là một thư viện JavaScript phổ biến dùng để
+  xây dựng giao diện người dùng theo dạng component. Việc sử dụng React
+  giúp ứng dụng có khả năng tái sử dụng thành phần, cập nhật DOM một
+  cách hiệu quả và phản hồi nhanh với các tương tác của người dùng.
+  Trong dự án này, React được sử dụng để xây dựng toàn bộ giao diện
+  chính bao gồm trang chủ, trang phát nhạc, trang người dùng và trang
+  quản lý playlist.
+\item
+  \textbf{Vite} -- Công cụ build và dev server siêu nhanh cho frontend.
+\item
+  \textbf{Tailwind CSS :} Tailwind CSS là một framework CSS tiện lợi
+  giúp xây dựng giao diện nhanh chóng bằng cách sử dụng các lớp tiện ích
+  (utility classes). Việc sử dụng Tailwind giúp giao diện trở nên đẹp,
+  đồng nhất, responsive (tương thích với nhiều kích thước màn hình) mà
+  không cần viết nhiều CSS thủ công. Ngoài ra, Tailwind kết hợp tốt với
+  React, giúp dễ dàng kiểm soát giao diện ngay trong mã JSX
+\item
+  \textbf{Lucide-react :} Lucide là một bộ icon mã nguồn mở được thiết
+  kế tối giản và hiện đại. Gói lucide-react cung cấp các icon dưới dạng
+  component React, giúp dễ dàng tích hợp vào giao diện người dùng mà vẫn
+  giữ được hiệu năng tốt và khả năng tuỳ biến cao.
+\item
+  \textbf{Redux Toolkit :} Redux Toolkit được sử dụng để quản lý trạng
+  thái toàn cục của ứng dụng, chẳng hạn như thông tin người dùng, danh
+  sách bài hát, trạng thái đăng nhập, bài hát đang phát... Việc sử dụng
+  Redux giúp đảm bảo dữ liệu nhất quán và dễ kiểm soát khi ứng dụng mở
+  rộng về sau.
+\item
+  \textbf{React Query}: Thư viện dùng để quản lý truy vấn dữ liệu bất
+  đồng bộ từ API. React Query giúp đơn giản hoá việc gọi API, xử lý
+  trạng thái tải dữ liệu (loading, error, success), cache dữ liệu, và tự
+  động refresh khi cần. Nhờ đó, hiệu năng của ứng dụng được cải thiện và
+  code trở nên dễ bảo trì hơn.
+\end{itemize}
+
+- Backend :
+
+\begin{itemize}
+\item
+  \textbf{Django REST Framework (DRF) :} Django REST Framework là một
+  thư viện mạnh mẽ giúp xây dựng API dễ dàng với Django. Trong dự án
+  này, DRF được sử dụng để xây dựng các endpoint cho việc đăng nhập, lấy
+  danh sách bài hát, playlist, người dùng, cũng như xử lý các hành động
+  như theo dõi người dùng, cập nhật thông tin cá nhân
+\item
+  \textbf{PostgreSQL :} PostgreSQL là hệ quản trị cơ sở dữ liệu quan hệ
+  mã nguồn mở, nổi tiếng với độ ổn định và khả năng xử lý dữ liệu phức
+  tạp. Dữ liệu về người dùng, bài hát, playlist và các mối quan hệ giữa
+  chúng được lưu trữ và truy vấn từ PostgreSQL.
+\item
+  \textbf{JWT (JSON Web Token) :} JWT được sử dụng làm cơ chế xác thực
+  bảo mật, giúp frontend giao tiếp an toàn với backend. Sau khi người
+  dùng đăng nhập, backend sẽ trả về một access token. Token này sẽ được
+  frontend lưu trữ (trong Redux hoặc localStorage) và đính kèm vào mỗi
+  request API tiếp theo.
+\item
+  \textbf{Google OAuth 2.0 :} Để nâng cao trải nghiệm người dùng, hệ
+  thống cho phép đăng nhập nhanh qua tài khoản Google thông qua giao
+  thức OAuth 2.0. Khi người dùng đăng nhập thành công, thông tin từ
+  Google sẽ được xác thực và tạo người dùng tương ứng trong hệ thống nếu
+  chưa tồn tại.
+\end{itemize}
+
+\subsubsection{\texorpdfstring{\textbf{WebSocket :} WebSocket là giao
+thức giao tiếp hai chiều, cho phép kết nối liên tục giữa client và
+server. Nó giúp truyền tải dữ liệu trong thời gian thực mà không cần
+phải thực hiện nhiều lần request như HTTP. WebSocket có thể được sử dụng
+để cập nhật thông tin trạng thái người dùng trong thời gian thực, ví dụ
+như người dùng đang nghe bài hát nào. Ngoài ra, WebSocket còn giúp hiển
+thị trạng thái bạn bè đang hoạt động, như bạn bè đang online hoặc đang
+nghe
+nhạc.}{WebSocket : WebSocket là giao thức giao tiếp hai chiều, cho phép kết nối liên tục giữa client và server. Nó giúp truyền tải dữ liệu trong thời gian thực mà không cần phải thực hiện nhiều lần request như HTTP. WebSocket có thể được sử dụng để cập nhật thông tin trạng thái người dùng trong thời gian thực, ví dụ như người dùng đang nghe bài hát nào. Ngoài ra, WebSocket còn giúp hiển thị trạng thái bạn bè đang hoạt động, như bạn bè đang online hoặc đang nghe nhạc.}}\label{websocket-websocket-luxe0-giao-thux1ee9c-giao-tiux1ebfp-hai-chiux1ec1u-cho-phuxe9p-kux1ebft-nux1ed1i-liuxean-tux1ee5c-giux1eefa-client-vuxe0-server.-nuxf3-giuxfap-truyux1ec1n-tux1ea3i-dux1eef-liux1ec7u-trong-thux1eddi-gian-thux1ef1c-muxe0-khuxf4ng-cux1ea7n-phux1ea3i-thux1ef1c-hiux1ec7n-nhiux1ec1u-lux1ea7n-request-nhux1b0-http.-websocket-cuxf3-thux1ec3-ux111ux1b0ux1ee3c-sux1eed-dux1ee5ng-ux111ux1ec3-cux1eadp-nhux1eadt-thuxf4ng-tin-trux1ea1ng-thuxe1i-ngux1b0ux1eddi-duxf9ng-trong-thux1eddi-gian-thux1ef1c-vuxed-dux1ee5-nhux1b0-ngux1b0ux1eddi-duxf9ng-ux111ang-nghe-buxe0i-huxe1t-nuxe0o.-ngouxe0i-ra-websocket-cuxf2n-giuxfap-hiux1ec3n-thux1ecb-trux1ea1ng-thuxe1i-bux1ea1n-buxe8-ux111ang-houx1ea1t-ux111ux1ed9ng-nhux1b0-bux1ea1n-buxe8-ux111ang-online-houx1eb7c-ux111ang-nghe-nhux1ea1c.}
+
+\begin{itemize}
+\item
+  \textbf{Cloudinary :} Cloudinary là nền tảng lưu trữ và xử lý ảnh
+  chuyên nghiệp. Trong hệ thống, Cloudinary được sử dụng để lưu avatar
+  người dùng, ảnh bài hát, ảnh nghệ sĩ. Việc lưu ảnh trên Cloudinary
+  giúp giảm tải cho backend và cải thiện tốc độ tải trang.
+\end{itemize}
+
+* \textbf{DevOps}
+
+\begin{itemize}
+\item
+  \textbf{Docker \& Docker Compose :} Docker được sử dụng để container
+  hoá toàn bộ hệ thống, bao gồm frontend (React), backend (Django), cơ
+  sở dữ liệu (PostgreSQL) và Redis. Việc sử dụng Docker giúp đảm bảo môi
+  trường phát triển giống với môi trường triển khai, hạn chế lỗi không
+  tương thích. Docker Compose giúp khởi chạy nhiều container cùng lúc
+  một cách dễ dàng, hỗ trợ việc phát triển và kiểm thử hiệu quả.
+\item
+  AWS (Amazon Web Services) : Nền tảng đám mây của Amazon cung cấp một
+  loạt các dịch vụ điện toán, lưu trữ và cơ sở dữ liệu. Dự án sử dụng
+  AWS để triển khai backend và lưu trữ dữ liệu trên các dịch vụ như EC2
+  (Elastic Compute Cloud) cho việc chạy ứng dụng, S3 (Simple Storage
+  Service) cho việc lưu trữ hình ảnh, video, và tài liệu, cùng với RDS
+  (Relational Database Service) để quản lý cơ sở dữ liệu PostgreSQL.
+\end{itemize}
+
+\subsubsection{}\label{section-2}
+
+\subsubsection{}\label{section-3}
+
+\subsubsection{}\label{section-4}
+
+\subsubsection{}\label{section-5}
+
+\subsubsection{}\label{section-6}
+
+\subsubsection{}\label{section-7}
+
+\subsubsection{}\label{section-8}
+
+\subsubsection{}\label{section-9}
+
+\subsubsection{}\label{section-10}
+
+\subsubsection{}\label{section-11}
+
+\subsubsection{\texorpdfstring{\textbf{3. KIẾN TRÚC HỆ
+THỐNG}}{3. KIẾN TRÚC HỆ THỐNG}}\label{kiux1ebfn-truxfac-hux1ec7-thux1ed1ng}
+
+* Cấu trúc mã nguồn :
+
+- Cấu trúc mã nguồn trong dự án \textbf{Spotify Clone} được thiết kế
+theo kiến trúc phân tầng để dễ dàng bảo trì, mở rộng và phát triển thêm
+tính năng. Dưới đây là sơ đồ tổ chức thư mục của dự án:
+
+\textbf{- Frontend (React + TailwindCSS)}
+
+/src
+
+\begin{quote}
+\textbar-\/- /assets \# Lưu trữ các tệp hình ảnh, icon
+
+\textbar-\/- /components \# Các thành phần UI tái sử dụng (Header,
+Sidebar, Player)
+
+\textbar-\/- /contexts \# Quản lý trạng thái toàn cục bằng React Context
+
+\textbar-\/- /hooks \# Các hook tùy chỉnh dùng chung cho dự án
+
+\textbar-\/- /layouts \# Các layout chung cho các trang
+
+\textbar-\/- /pages \# Các trang của ứng dụng (Home, Profile, Playlist)
+
+\textbar-\/- /redux \# Redux slice và các action
+
+\textbar-\/- /routes \# Quản lý các tuyến đường trong ứng dụng
+
+\textbar-\/- /services \# Các dịch vụ gọi API, kết nối với backend
+
+\textbar-\/- /utils \# Các hàm tiện ích dùng chung
+\end{quote}
+
+\includegraphics[width=4.0625in,height=5.58468in]{media/image1.png}
+
+\paragraph{\texorpdfstring{\textbf{- Backend (Django +
+PostgreSQL)}}{- Backend (Django + PostgreSQL)}}\label{backend-django-postgresql}
+
+/backend
+
+\begin{quote}
+\textbar-\/- /apps
+
+\textbar-\/- /album \# Quản lý album (Album CRUD, tìm kiếm album, upload
+ảnh)
+
+\textbar-\/- /artist \# Quản lý nghệ sĩ (Artist CRUD, thêm bài hát cho
+nghệ sĩ)
+
+\textbar-\/- /base\_model \# Các mô hình cơ bản dùng chung cho các ứng
+dụng khác
+
+\textbar-\/- /categories \# Quản lý thể loại (CRUD thể loại bài hát,
+album)
+
+\textbar-\/- /chats \# Quản lý trò chuyện giữa người dùng
+
+\textbar-\/- /conversations \# Quản lý cuộc trò chuyện (kết nối các cuộc
+trò chuyện và người dùng)
+
+\textbar-\/- /favorites \# Quản lý các bài hát yêu thích của người dùng
+
+\textbar-\/- /listening\_histories \# Quản lý lịch sử nghe nhạc của
+người dùng
+
+\textbar-\/- /payment\_methods \# Quản lý phương thức thanh toán của
+người dùng
+
+\textbar-\/- /plans \# Quản lý các gói thanh toán cho người dùng
+
+\textbar-\/- /playlists \# Quản lý playlist (CRUD playlist, thêm bài hát
+vào playlist)
+
+\textbar-\/- /roles \# Quản lý vai trò của người dùng (Admin, User,
+v.v.)
+
+\textbar-\/- /songs \# Quản lý bài hát (CRUD, upload bài hát, tìm kiếm
+bài hát)
+
+\textbar-\/- /transactions \# Quản lý giao dịch (giao dịch thanh toán,
+mua gói dịch vụ)
+
+\textbar-\/- /users \# Quản lý người dùng (Authentication, Profile, đăng
+ký, đăng nhập)
+
+\textbar-\/- /backend \# Cấu hình backend chung (cấu hình settings, URL,
+các cài đặt môi trường)
+
+\textbar-\/- /setting \# Cấu hình chung, bao gồm các cấu hình liên quan
+đến Django (Database, Cache, JWT, v.v.)
+
+\textbar-\/- /urls \# Quản lý các đường dẫn URL của ứng dụng
+
+\textbar-\/- /venv \# Môi trường ảo (virtual environment) chứa tất cả
+các thư viện của dự án
+
+\textbar-\/- /manage.py \# Tệp quản lý ứng dụng Django (chạy server,
+migrate DB, v.v.)
+
+\textbar-\/- /Dockerfile \# Dockerfile để đóng gói ứng dụng vào
+container
+
+\textbar-\/- /requirements.txt \# Các thư viện cần thiết cho dự án
+\end{quote}
+
+\includegraphics[width=3.79167in,height=8.21875in]{media/image21.png}
+
+\subsubsection{\texorpdfstring{\textbf{- Các tính năng được xây
+dựng}}{- Các tính năng được xây dựng}}\label{cuxe1c-tuxednh-nux103ng-ux111ux1b0ux1ee3c-xuxe2y-dux1ef1ng}
+
+\paragraph{\texorpdfstring{\textbf{+ Đăng ký :} Người dùng nhập các
+thông tin tên đăng nhập, email và mật khẩu, nếu tên đăng nhập chưa tồn
+tại thì thực hiện mã hóa mật khẩu của người dùng. Lưu thông tin người
+dùng và hiện thông báo đăng kí thành
+công.}{+ Đăng ký : Người dùng nhập các thông tin tên đăng nhập, email và mật khẩu, nếu tên đăng nhập chưa tồn tại thì thực hiện mã hóa mật khẩu của người dùng. Lưu thông tin người dùng và hiện thông báo đăng kí thành công.}}\label{ux111ux103ng-kuxfd-ngux1b0ux1eddi-duxf9ng-nhux1eadp-cuxe1c-thuxf4ng-tin-tuxean-ux111ux103ng-nhux1eadp-email-vuxe0-mux1eadt-khux1ea9u-nux1ebfu-tuxean-ux111ux103ng-nhux1eadp-chux1b0a-tux1ed3n-tux1ea1i-thuxec-thux1ef1c-hiux1ec7n-muxe3-huxf3a-mux1eadt-khux1ea9u-cux1ee7a-ngux1b0ux1eddi-duxf9ng.-lux1b0u-thuxf4ng-tin-ngux1b0ux1eddi-duxf9ng-vuxe0-hiux1ec7n-thuxf4ng-buxe1o-ux111ux103ng-kuxed-thuxe0nh-cuxf4ng.}
+
+\textbf{+ Đăng nhập:} Người dùng nhập tên đăng nhập và mật khẩu để thực
+hiện đăng nhập. Nếu thông tin đăng nhập hợp lệ thì thông báo đăng nhập
+thành công, hệ thống cũng sẽ cung cấp token cho người dùng.Token này sẽ
+dùng để sử dụng cho các lần đăng nhập tiếp theo.
+
+\textbf{+ Cập nhật thông tin:} Người dùng đăng nhập vào hệ thống, cập
+nhật các thông tin cần thiết như email, tên, ngày sinh sau đó nhấn nút
+lưu
+
+\textbf{+ Mua gói premium:} Người dùng có thể mua gói premium để tận
+hưởng âm nhạc thỏa thích, trải nghiệm các đặc quyền mà chỉ premium mới
+có
+
+\textbf{+ Gia hạn gói:} Cho phép người dùng gia hạn gói khi gói hết hạn
+
+\textbf{+ Tạo phòng:} Người dùng nhập tên để tạo phòng
+
+\textbf{+ Xóa phòng:} Cho phép người tạo phòng thực hiện xóa phòng mà
+mình tạo
+
+\textbf{+ Nhắn tin:} Người dùng có thể tham gia chung phòng để nhắn tin,
+trò chuyện với nhau thỏa thích
+
+\textbf{+ Tích hợp AI gemini,ollama:} Người dùng có thể đặt câu hỏi cho
+AI về các bài hát trên web
+
+\textbf{+ Phát nhạc và video} Người dùng có thể phát nhạc và video âm
+nhạc
+
+\textbf{+ Tải video :} Người dùng có thể thực hiện thao tác tải video về
+máy
+
+\textbf{+ Thêm vai trò:} Người quản trị nhập tên để tạo mới một vai trò.
+
+\textbf{+ Cập nhật vai trò:} Người quản trị cập nhật lại tên vai trò.
+
+\textbf{+ Thêm người dùng:} Người quản trị nhập tên đăng nhập, email và
+một số thông tin khác để tạo mới một người dùng
+
+\textbf{+ Sửa thông tin người dùng:} Người quản trị có thể cập nhật tên,
+vai trò, và một số thông tin khác cho người dùng
+
++ Thêm bài hát: Người quản trị nhập tên , chọn thể loại , chọn video và
+audio để tạo mới một bài hát.
+
++ Cập nhật bài hát: Người quản trị cập nhật lại tên , thể loại và số
+thông tin khác cho bài hát
+
++ Thêm nghệ sĩ: Người quản trị nhập tên , tiểu sử, quốc gia ,chọn ảnh để
+tạo một nghệ sĩ mới .
+
++ Cập nhật nghệ sĩ: Người quản trị cập nhật lại tên, tiểu sử, quốc gia,
+ngày sinh cho nghệ sĩ .
+
++ Thêm album: Người quản trị nhập tên , ngày phát hành,chọn ảnh để tạo
+một album mới .
+
++ Cập nhật album: Người quản trị cập nhật lại tên , ngày phát hành, chọn
+ảnh cho album .
+
++ Thêm gói: Người quản trị nhập tên ,giá,mô tả, số ngày sử dụng để tạo
+một gói mới .
+
++ Cập nhật gói: Người quản trị cập nhật lại tên, giá, mô tả, số ngày sử
+dụng để tạo một gói
+
+\subsubsection{\texorpdfstring{\textbf{2. Chuẩn bị môi
+trường}}{2. Chuẩn bị môi trường}}\label{chuux1ea9n-bux1ecb-muxf4i-trux1b0ux1eddng}
+
+\begin{itemize}
+\item
+  Cài đặt Python (phiên bản \textgreater= 3.6).
+\item
+  Cài đặt Django thông qua pip: pip install django
+\end{itemize}
+
+\textbf{3. Di chuyển đến thư mục dự án}
+
+Truy cập vào thư mục chứa file manage.py:
+
+cd \textless\textgreater{}
+
+\begin{itemize}
+\item
+  .
+\end{itemize}
+
+\subsubsection{\texorpdfstring{\textbf{4. MỘT SỐ HÌNH ẢNH DEMO CHO DỰ
+ÁN}}{4. MỘT SỐ HÌNH ẢNH DEMO CHO DỰ ÁN}}\label{mux1ed9t-sux1ed1-huxecnh-ux1ea3nh-demo-cho-dux1ef1-uxe1n}
+
+- Trang chủ :
+
+\includegraphics[width=6.5in,height=2.95833in]{media/image27.png}
+
+\subsubsection{\texorpdfstring{\textbf{-} Đăng ký :
+}{- Đăng ký : }}\label{ux111ux103ng-kuxfd}
+
+\includegraphics[width=6.5in,height=2.90278in]{media/image17.png}
+
+\includegraphics[width=6.5in,height=2.875in]{media/image18.png}
+
+\includegraphics[width=6.5in,height=2.88889in]{media/image20.png}
+
+- Đăng nhập :
+
+\includegraphics[width=6.5in,height=2.86111in]{media/image9.png}
+
+- Trang danh sách những bài hát thuộc album
+
+\includegraphics[width=6.5in,height=2.90278in]{media/image5.png}
+
+- Trang nghệ sĩ
+
+\includegraphics[width=6.5in,height=2.88889in]{media/image24.png}
+
+- Trang premium :
+
+\includegraphics[width=6.5in,height=1.99479in]{media/image22.png}
+
+- Trang thanh toán :
+
+\includegraphics[width=6.5in,height=2.93056in]{media/image15.png}
+
+- Thông tin tài khoản :
+
+\includegraphics[width=6.5in,height=2.66581in]{media/image6.png}
+
+\includegraphics[width=6.5in,height=2.46354in]{media/image11.png}
+
+- Playlist :
+
+\includegraphics[width=6.5in,height=2.68311in]{media/image10.png}
+
+- Chat :
+
+\includegraphics[width=6.5in,height=2.64498in]{media/image16.png}
+
+\includegraphics[width=6.47917in,height=2.83854in]{media/image2.png}
+
+- Tích hợp AI gemini :
+
+\includegraphics[width=6.5in,height=2.90278in]{media/image23.png}
+
+- Giao diện admin (quản lý nghệ sĩ) :
+
+\includegraphics[width=6.5in,height=2.74915in]{media/image26.png}
+
+- Giao diện admin ( quản lý danh mục ) :
+
+\includegraphics[width=6.5in,height=2.36727in]{media/image12.png}
+
+- Giao diện admin ( quản lý bài hát ) :
+
+\includegraphics[width=6.5in,height=2.75603in]{media/image13.png}
+
+- Giao diện admin (quản lý album) :
+
+\includegraphics[width=6.5in,height=2.68665in]{media/image19.png}-Giao
+diện admin ( quản lý user) :
+
+\includegraphics[width=6.5in,height=2.52604in]{media/image14.png}
+
+- Giao diện admin ( quản lý gói premium ) :
+
+\includegraphics[width=6.5in,height=2.91667in]{media/image4.png}
+
+- Giao diện admin ( quản lý gói role) :
+
+\includegraphics[width=6.5in,height=2.875in]{media/image3.png}
+
+Khi xây dựng phần mềm clone Spotify, bạn có thể đạt được nhiều kết quả
+rõ rệt, cả về kỹ thuật và kỹ năng phát triển phần mềm. Dưới đây là các
+kết quả cụ thể:
+
+\subsubsection{\texorpdfstring{ \textbf{Kỹ thuật phần mềm đạt
+được:}}{ Kỹ thuật phần mềm đạt được:}}\label{kux1ef9-thuux1eadt-phux1ea7n-mux1ec1m-ux111ux1ea1t-ux111ux1b0ux1ee3c}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Xây dựng hệ thống quản lý người dùng\\
+  }
+
+  \begin{itemize}
+  \item
+    Đăng ký, đăng nhập, xác thực token (JWT hoặc session).
+  \item
+    Phân quyền người dùng: miễn phí và premium.
+  \end{itemize}
+\item
+  \textbf{Xử lý phát nhạc\\
+  }
+
+  \begin{itemize}
+  \item
+    Phát nhạc và vdieo âm nhạc
+  \item
+    Quản lý danh sách phát, bài hát yêu thích.
+  \end{itemize}
+\item
+  \textbf{Hệ thống gói premium\\
+  }
+
+  \begin{itemize}
+  \item
+    Cho phép mua, gia hạn, hủy các gói
+  \item
+    Tính năng kiểm tra hạn sử dụng gói.
+  \end{itemize}
+\item
+  \textbf{Lưu trữ và quản lý nội dung âm nhạc\\
+  }
+
+  \begin{itemize}
+  \item
+    Cơ sở dữ liệu bài hát, nghệ sĩ, album, thể loại.
+  \item
+    Upload và quản lý file audio (upload video và audio lên cloudfare)
+  \end{itemize}
+\item
+  \textbf{Realtime Features\\
+  }
+
+  \begin{itemize}
+  \item
+    Giao tiếp realtime (người dùng có thể nhắn tin cùng nhau).
+  \item
+    Sử dụng WebSocket hoặc Django Channels.
+  \end{itemize}
+\item
+  \textbf{API design (RESTful)\\
+  }
+
+  \begin{itemize}
+  \item
+    Hiểu sâu về việc thiết kế, phân trang
+  \item
+    Có tích hợp frontend (React,Taildwind)
+  \end{itemize}
+\end{enumerate}
+
+\subsubsection{\texorpdfstring{\textbf{🧠 Kỹ năng \& kiến thức đạt
+được:}}{🧠 Kỹ năng \& kiến thức đạt được:}}\label{kux1ef9-nux103ng-kiux1ebfn-thux1ee9c-ux111ux1ea1t-ux111ux1b0ux1ee3c}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Thiết kế hệ thống backend \& frontend tách biệt.}
+\item
+  \textbf{Thành thạo database quan hệ (PostgreSQL) , NoSQL ( Redis).\\
+  }
+\item
+  \textbf{Áp dụng Redis để cache dữ liệu, tăng hiệu năng truy vấn.\\
+  }
+\item
+  \textbf{Xử lý phân quyền, bảo mật API ( token, CSRF, CORS...).\\
+  }
+\item
+  \textbf{Triển khai (deployment) ứng dụng dùng Docker và Aws.\\
+  }
+\item
+  \textbf{Kỹ năng debug, tối ưu hóa hiệu suất truy vấn và lưu trữ.\\
+  }
+\item
+  \textbf{Kỹ năng phân tích nghiệp vụ và xây dựng sản phẩm giống sản
+  phẩm thực tế.\\
+  }
+\end{enumerate}
+
+\subsubsection{\texorpdfstring{\textbf{✅ Kết quả cuối
+cùng:}}{✅ Kết quả cuối cùng:}}\label{kux1ebft-quux1ea3-cuux1ed1i-cuxf9ng}
+
+\begin{itemize}
+\item
+  Một \textbf{ứng dụng web} có thể:
+
+  \begin{itemize}
+  \item
+    Nghe nhạc trực tuyến.
+  \item
+    Trò chuyện nhắn tin cùng nhau
+  \item
+    Quản lý playlist, tài khoản cá nhân.
+  \item
+    Mua gói premium, phân quyền người dùng.
+  \item
+    Giao diện đẹp, thân thiện giống Spotify.
+  \end{itemize}
+\end{itemize}
+
+\includegraphics[width=6.5in,height=4.61111in]{media/image25.png}

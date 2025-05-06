@@ -9,6 +9,8 @@ from .serializers import RegisterSerializer, LoginSerializer,UserSerializer, Ref
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from .models import User
+from apps.roles.models import Role
+
 from ..utils.response import success_response,error_response
 from django.contrib.auth.hashers import make_password
 from ..utils.response import check_is_admin
@@ -68,6 +70,12 @@ class LoginAPIView(APIView):
     def post(self, request):
         
         serializer = LoginSerializer(data=request.data)
+        type_login = request.data.get('type_login', 'normal')
+        
+        if type_login == 'google':
+            # Đăng nhập qua Google
+            return self.google_login(request)
+        
         if serializer.is_valid():
             user = serializer.validated_data['user']
             refresh = RefreshToken.for_user(user)
@@ -81,6 +89,37 @@ class LoginAPIView(APIView):
             self.set_refresh_cookie(response, refresh)
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def google_login(self, request):
+        email = request.data.get('email')
+        full_name = request.data.get('full_name')
+
+        if not email or not full_name:
+            return Response({'error': 'Email and full_name are required for Google login.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Kiểm tra nếu người dùng đã tồn tại trong hệ thống với email
+        user = User.objects.filter(email=email).first()
+
+        if not user:
+            # Nếu chưa có người dùng, tạo mới người dùng
+            user_role = Role.objects.get(name='User')  
+            user = User.objects.create(email=email, full_name=full_name, role=user_role)
+
+        # Tạo token cho người dùng (chúng ta sẽ sử dụng RefreshToken để tạo access token)
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+
+        # Serialize dữ liệu người dùng
+        userserial = UserSerializer(user)
+        response = Response({
+            'data': userserial.data,
+            'accessToken': access_token
+        })
+        # self.set_access_token_cookie(response, access_token)  # Nếu cần cookie accessToken
+        self.set_refresh_cookie(response, refresh)
+        return response
+        
 class UserProfileView(APIView):
 
 

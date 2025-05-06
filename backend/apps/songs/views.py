@@ -107,9 +107,7 @@ class SongViewSet(viewsets.ModelViewSet):
         audio_file = request.FILES.get("audio_url")
         video_file = request.FILES.get("video_url")
         image_file = request.FILES.get("image")
-        video_file = request.FILES.get("video_file")
         audio_url = None
-        video_url = None
         image_url = None
         video_url = None
         if audio_file:
@@ -170,26 +168,12 @@ class SongViewSet(viewsets.ModelViewSet):
                     {"error": f"Image upload failed: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-        
-        if video_file:
-           
-            try:
-                upload_result = cloudinary.uploader.upload(
-                    video_file,
-                    resource_type="video"  
-                )
-                video_url = upload_result["secure_url"]
-            except Exception as e:
-                return Response(
-                    {"error": f"Video upload failed: {str(e)}"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+   
 
         request.data["audio_url"] = audio_url
         request.data["video_url"] = video_url
 
         request.data["image"] = image_url
-        request.data["video_url"] = video_url
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_song = serializer.save()

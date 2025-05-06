@@ -5,13 +5,15 @@ from apps.roles.models import Role
 
 # Create your models here.
 class User(BaseModel):
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=True, blank=True, null=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=100, null = True, blank=True)
     gender = models.CharField(max_length=100, null=True, blank=True)
     full_name = models.CharField(max_length=255)
     date_of_birth = models.DateField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    type_login = models.CharField(max_length=255, default = 'normal')
+
     
     @property
     def is_authenticated(self):

@@ -8,8 +8,8 @@ def create_default_categories(apps, schema_editor):
     Category.objects.create(name='Pop')
     Category.objects.create(name='Rock')
     Category.objects.create(name='Jazz')
-    Category.objects.create(name='Classical')
-    Category.objects.create(name='Hip Hop')
+    Category.objects.create(name='Nhạc buồn tâm trạng')
+    Category.objects.create(name='Nhạc trẻ')
 
 def delete_default_categories(apps, schema_editor):
     Category = apps.get_model('categories', 'Category')

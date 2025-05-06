@@ -8,6 +8,7 @@ class ListeningHistory(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     played_at = models.DateTimeField()
+    count = models.PositiveIntegerField(default=1)
     
     class Meta:
         db_table = 'listening_histories'

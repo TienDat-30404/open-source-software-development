@@ -114,8 +114,21 @@ export const updateItemNotId = async (url, data, token) => {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
-        body: data
+        body: JSON.stringify(data)
+    })
+    return response.json()
+}
+
+export const updateItemNotIdByPatch = async (url, data, token) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}/`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
     })
     return response.json()
 }

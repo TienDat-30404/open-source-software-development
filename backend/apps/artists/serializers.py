@@ -20,6 +20,7 @@ class ArtistSerializer(serializers.ModelSerializer):
                 "duration" : sa.song.duration,
                 "release_date" : sa.song.release_date,
                 "audio_url" : sa.song.audio_url,
+                "video_url" : sa.song.video_url,
                 "image" : sa.song.image
                 
             }

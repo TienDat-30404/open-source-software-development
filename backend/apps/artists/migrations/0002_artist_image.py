@@ -8,13 +8,6 @@ def create_default_artists(apps, schema_editor):
     Artist = apps.get_model("artists", "Artist")
     default_artists = [
         {
-            "name": "Noo Phước Thinh",
-            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
-            "country": "Việt Nam",
-            "date_of_birth": datetime.date(1994, 7, 5),
-            "image": "https://vnn-imgs-f.vgcloud.vn/2020/10/30/08/noo-phuoc-thinh-toi-luon-ly-tri-trong-chuyen-tinh-cam-1.jpg",
-        },
-        {
             "name": "Bùi Anh Tuấn",
             "bio": "Rapper nổi tiếng với phong cách trữ tình.",
             "country": "Việt Nam",
@@ -36,13 +29,6 @@ def create_default_artists(apps, schema_editor):
             "image": "https://res.cloudinary.com/dneh4yrye/image/upload/v1746077775/jqoplu4cgxbxeyhlm4zd.jpg",
         },
         {
-            "name": "Quốc Thiên",
-            "bio": "Ca sĩ với giọng ca nội lực và sự nghiệp lâu dài.",
-            "country": "Việt Nam",
-            "date_of_birth": datetime.date(1981, 1, 16),
-            "image": "https://yt3.ggpht.com/a-/AAuE7mDjwajH3FmG_NUsrV_q-7AEnE4tGa5i7dXhrg=s900-mo-c-c0xffffffff-rj-k-no",
-        },
-        {
             "name": "Erik",
             "bio": "Ca sĩ với giọng ca nội lực và sự nghiệp lâu dài.",
             "country": "Việt Nam",
@@ -50,11 +36,74 @@ def create_default_artists(apps, schema_editor):
             "image": "https://tse1.mm.bing.net/th?id=OIP.oGXQz2v2fmU6ZFUyFIHnZQHaEG&pid=Api&P=0&h=180",
         },
         {
-            "name": "Quân AP",
-            "bio": "Ca sĩ với giọng ca nội lực và sự nghiệp lâu dài.",
+            "name": "Tiến Minh",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
             "country": "Việt Nam",
-            "date_of_birth": datetime.date(1981, 1, 16),
-            "image": "https://static2.yan.vn/YanNews/2167221/201906/hot-boy-cover-quan-ap-la-ai-57d0aa6e.jpg",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://ngoisao.net.vn/uploads/images/2023/05/18/z4356507367716-109aa1126468ae7bb18fedf70159b1f8-1-1684415547.jpg",
+        },
+        {
+            "name": "Min",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse1.mm.bing.net/th?id=OIP.ITEfGHLLjNucpqJMuqehHwHaEm&pid=Api&P=0&h=180",
+        },
+        {
+            "name": "Jack",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse4.mm.bing.net/th?id=OIP.j_hWiTubD5pkxtoNJ3P-MAHaE8&pid=Api&P=0&h=180",
+        },
+        {
+            "name": "Đen Vâu",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse4.mm.bing.net/th?id=OIP.9JZ9_0PAzajmC7Jq1PHuFwHaEK&pid=Api&P=0&h=180",
+        },
+        {
+            "name": "Dương Domic",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse2.mm.bing.net/th?id=OIP.mcPC-Ot2BvxsvYdCitXQyAHaD4&pid=Api&P=0&h=180",
+        },
+        {
+            "name": "Tùng Dương",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://toquoc.mediacdn.vn/280518851207290880/2022/10/4/td25251-16648521244081155929666.jpg",
+        },
+        {
+            "name": "Bon Nghiêm",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://i.ytimg.com/vi/rGZ6yqDeyPE/maxresdefault.jpg",
+        },
+        {
+            "name": "Hứa Kim Tuyền",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://trixie.com.vn/media/images/article/12534678/c7a6fc41036b2367ef8767523585de28.jpg",
+        },
+        {
+            "name": "Orange",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse1.mm.bing.net/th?id=OIP.IEOfvkwPei_MUwUSTtbjwwHaE7&pid=Api&P=0&h=180",
+        },
+        {
+            "name": "Hồ Quang Hiếu",
+            "bio": "Ca sĩ nhạc pop nổi tiếng của Việt Nam.",
+            "country": "Việt Nam",
+            "date_of_birth": datetime.date(1994, 7, 5),
+            "image": "https://tse4.mm.bing.net/th?id=OIP.qmrpfTKoCKVNLy_JO91ougHaEc&pid=Api&P=0&h=180",
         },
     ]
     for artist in default_artists:

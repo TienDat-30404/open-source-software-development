@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllHistoryMusicOfUser, saveHistoryListeningMusic } from '../services/MusicListeningHistoryService';
+import { getAllHistoryMusicOfUser, getTopSong, saveHistoryListeningMusic } from '../services/MusicListeningHistoryService';
 export const useGetHistoryMusicListening = (query = "", token) => {
   return useQuery({
     queryKey: ['history_music', query, token],
@@ -21,3 +21,12 @@ export const useSaveHistoryListeningMusic = (token) => {
     }
   });
 };
+
+
+export const useGetTopSong = (query = "") => {
+  return useQuery({
+    queryKey: ['history/top-songs', query],
+    queryFn: () => getTopSong(query),
+
+  })
+}

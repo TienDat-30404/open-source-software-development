@@ -27,6 +27,7 @@ const AddSongModal = ({ show, onClose }) => {
             });
             setImage(null);
             setAudio(null)
+            setVideo(null)
             onClose();
         },
         onError: (error) => {
@@ -52,6 +53,8 @@ const AddSongModal = ({ show, onClose }) => {
     console.log("selectedOptions", selectedOptions)
     const [image, setImage] = useState(null);
     const [audio, setAudio] = useState(null);
+    const [video, setVideo] = useState(null);
+
     const [fileInputKey, setFileInputKey] = useState(Date.now());
 
     const handleChangeFile = (e) => {
@@ -64,6 +67,10 @@ const AddSongModal = ({ show, onClose }) => {
             } else if (name === 'audio') {
                 setAudio(file);
                 setForm((prev) => ({ ...prev, audio: file }));
+            }
+            else if (name === 'video') {
+                setVideo(file);
+                setForm((prev) => ({ ...prev, video: file }));
             }
         }
         setFileInputKey(Date.now()); // Reset the file input key to force re-render
@@ -86,10 +93,10 @@ const AddSongModal = ({ show, onClose }) => {
         console.log("artistIds", artistIds)
         formData.append("artist_ids", JSON.stringify(artistIds));
         formData.append("genre_id", form?.category);
-        formData.append("release_date", "2001-05-25");
+        formData.append("release_date", form?.releaseDate);
         formData.append("image", image);
         formData.append("audio_url", audio);
-
+        formData.append("video_url", video)
         createSongMutation.mutate(formData);
 
     };
@@ -113,7 +120,6 @@ const AddSongModal = ({ show, onClose }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Song</h2>
 
                 <form onSubmit={handleAddSong} className="space-y-4">
                     <div>
@@ -164,6 +170,18 @@ const AddSongModal = ({ show, onClose }) => {
                             type="file"
                             name="audio"
                             accept="audio/*"
+                            onChange={handleChangeFile}
+                            required
+                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Video</label>
+                        <input
+                            type="file"
+                            name="video"
+                            accept="video/*"
                             onChange={handleChangeFile}
                             required
                             className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

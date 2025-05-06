@@ -93,8 +93,8 @@ function SignUpByStepTwo() {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="male"
-                                        checked={formData.gender === 'male'}
+                                        value="Nam"
+                                        checked={formData.gender === 'Nam'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />
@@ -104,8 +104,8 @@ function SignUpByStepTwo() {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="female"
-                                        checked={formData.gender === 'female'}
+                                        value="Nữ"
+                                        checked={formData.gender === 'Nữ'}
                                         onChange={handleChange}
                                         className="mr-2"
                                     />

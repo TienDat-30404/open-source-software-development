@@ -10,11 +10,13 @@ import { useGetHistoryMusicListening } from "../../../hooks/useMusicListeningHis
 import { useSelector } from "react-redux";
 import { switchDurationVideo } from "../../../until/function";
 import { checkPremium } from "../../../services/TransactionService";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { updateViewsSong } from "../../../services/MusicListeningHistoryService";
 export default function Footer() {
     const { accessToken } = useSelector(state => state.auth)
     const [queuedSong, setQueuedSong] = useState(null);
     const [showVideo, setShowVideo] = useState(false);
+    const [isUpdatedViews, setIsUpdatedViews] = useState(false)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("0:00");
     const [durationDisplay, setDurationDisplay] = useState("0:00");
     const { data: historyMusics, isLoading, isError, error, refetch } = useGetHistoryMusicListening("", accessToken);
@@ -24,7 +26,6 @@ export default function Footer() {
     const [volume, setVolume] = useState(1);
     const [muted, setMuted] = useState(false);
     const [lastVolume, setLastVolume] = useState(1);
-
     useEffect(() => {
 
         const audio = audioRef.current;
@@ -54,6 +55,14 @@ export default function Footer() {
             const progressPercent = (currentTime / duration) * 100;
             setProgress(progressPercent);
             setCurrentTimeDisplay(formatTime(currentTime));
+
+            if (currentTime >= 2 && !isUpdatedViews) { // Kiểm tra thời gian >= 30s và chưa cập nhật lượt nghe
+                setIsUpdatedViews(true);
+                updateViewsSong({
+                    song_id: currentSong?.id
+                }, accessToken)
+            }
+
             if (currentSong?.duration) {
                 setDurationDisplay(formatTime(duration));  // Sử dụng currentSong.duration
             }
@@ -70,11 +79,16 @@ export default function Footer() {
             if (audio) audio.removeEventListener("seeked", handleAudioSeek);
             if (video) video.removeEventListener("seeked", handleVideoSeek);
         };
-    }, [audioRef, videoRef, currentSong]);
+    }, [audioRef, videoRef, currentSong, isUpdatedViews]);
+
+    useEffect(() => {
+        setIsUpdatedViews(false);  // Mỗi khi currentSong đổi, reset cờ
+    }, [currentSong?.id]);
+
+
     const audio = audioRef.current;
 
     const currentTime = audio.currentTime;
-    console.log(currentTime)
 
     const formatTime = (time) => {
         if (isNaN(time)) return "0:00";
@@ -298,6 +312,27 @@ export default function Footer() {
         }
     };
 
+    useEffect(() => {
+        const video = videoRef.current;
+        const audio = audioRef.current;
+
+        if (!video || !audio || !currentSong?.video_url) return;
+
+        // Cập nhật src thủ công
+        video.pause();
+        video.src = currentSong.video_url;
+        video.load();
+
+        video.onloadedmetadata = () => {
+            video.currentTime = audio.currentTime;
+            video.play().catch(err => {
+                console.warn("Không thể phát video mới:", err);
+            });
+        };
+
+    }, [currentSong?.video_url]);
+
+
 
     return (
         <div className="fixed bottom-0 left-0 w-full h-1/6 bg-black text-white flex items-center px-6 justify-between shadow-lg z-50">
@@ -390,6 +425,7 @@ export default function Footer() {
                     <video
                         ref={videoRef}
                         muted
+                        controls
                         onLoadedMetadata={() => {
                             const video = videoRef.current;
                             const audio = audioRef.current;
@@ -400,7 +436,6 @@ export default function Footer() {
                                 });
                             }
                         }}
-                        controls
                         className="rounded-lg shadow-md w-full"
                     >
                         <source src={currentSong?.video_url} type="video/mp4" />
@@ -413,6 +448,21 @@ export default function Footer() {
                     </div>
                 )}
             </div>
+
+            <ToastContainer
+                className="text-base"
+                fontSize="10px"
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 }

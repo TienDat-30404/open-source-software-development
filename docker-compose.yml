@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "5173:5173"  # Mở cổng 5173 trên máy chủ để truy cập ứng dụng
+    networks:
+      - mynetwork
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: 2  # Đặt tên database
+      POSTGRES_USER: postgres  # Đặt tên user cho database
+      POSTGRES_PASSWORD: 123456  # Đặt mật khẩu cho user
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Lưu trữ dữ liệu PostgreSQL trên máy chủ
+    networks:
+      - mynetwork
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    environment:
+      - DEBUG=True
+      - DB_HOST=db  # Dùng tên service 'db' từ Docker Compose
+      - DB_PORT=5432
+      - DB_NAME=2  # Phải khớp với POSTGRES_DB trong service db
+      - DB_USER=postgres  # Phải khớp với POSTGRES_USER trong service db
+      - DB_PASSWORD=123456
+    depends_on:
+      - db  # Đảm bảo backend khởi động sau db
+    ports:
+      - "8000:8000"  # Mở cổng 8000 của Django app
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  postgres_data:

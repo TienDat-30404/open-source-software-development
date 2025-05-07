@@ -285,32 +285,32 @@ class SongViewSet(viewsets.ModelViewSet):
 
         try:
             # Cấu hình Gemini với API Key
-            genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-            cached_suggestions = redis_client.get(f"suggest_songs:{query}")
-            if cached_suggestions:
-                # Nếu có lịch sử gợi ý, trả lại từ Redis
-                print("cached_suggestions", cached_suggestions)
-                return Response(
-                    {
-                        "suggestions": cached_suggestions.split("\n"),
-                        "status": status.HTTP_200_OK,
-                    }
-                )
+            # genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+            # cached_suggestions = redis_client.get(f"suggest_songs:{query}")
+            # if cached_suggestions:
+            #     # Nếu có lịch sử gợi ý, trả lại từ Redis
+            #     print("cached_suggestions", cached_suggestions)
+            #     return Response(
+            #         {
+            #             "suggestions": cached_suggestions.split("\n"),
+            #             "status": status.HTTP_200_OK,
+            #         }
+            #     )
 
-            # Khởi tạo model
-            model = genai.GenerativeModel("gemini-1.5-pro")
-            # Prompt để AI hiểu đúng yêu cầu
-            prompt = f"Suggest 5 popular or interesting song titles that match this theme or keyword: '{query}'"
+            # # Khởi tạo model
+            # model = genai.GenerativeModel("gemini-1.5-pro")
+            # # Prompt để AI hiểu đúng yêu cầu
+            # prompt = f"Suggest 5 popular or interesting song titles that match this theme or keyword: '{query}'"
 
-            # Gọi AI trả lời
-            response = model.generate_content(prompt)
+            # # Gọi AI trả lời
+            # response = model.generate_content(prompt)
 
-            suggestions = response.text.strip().split("\n")
+            # suggestions = response.text.strip().split("\n")
             timestamp = int(time.time())
             redis_client.setex(
-                f"{user_id}*****{query}*****{timestamp}", 3000, "\n".join(suggestions)
+                f"{user_id}*****{query}*****{timestamp}", 3000, "hello"
             )
-            return Response({"suggestions": suggestions, "status": status.HTTP_200_OK})
+            return Response({"suggestions": "hello", "status": status.HTTP_200_OK})
 
         except Exception as e:
             print("e" ,e)

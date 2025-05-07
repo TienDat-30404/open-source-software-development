@@ -173,7 +173,6 @@ export const getItemUsingToken = async (endpoint, query, token) => {
                 'Authorization': `Bearer ${token}`,
             }
         })
-        console.log("response", response)
         // Gửi request POST đến API
 
 
@@ -252,4 +251,31 @@ export const addItemUsingTokenFormData = async (url, data, token) => {
     }
 };
 
+
+
+
+
+// add Item have using token
+export const callMcpServer = async (data, token) => {
+    try {
+        // Gửi request POST đến API
+        const response = await fetch(`${import.meta.env.VITE_API_MCP_SERVER}`, {
+            method: 'POST', // hoặc PUT nếu bạn đang cập nhật một item
+            headers: {
+                'Content-Type': 'application/json', // yêu cầu body là JSON
+                'Authorization': `Bearer ${token}`, // thêm token vào header Authorization
+            },
+            body: JSON.stringify(data), // gửi dữ liệu dưới dạng JSON
+        });
+
+
+        const result = await response.json();
+        console.log(result)
+        return result; // Trả về kết quả từ API
+
+    } catch (error) {
+        console.error('Error adding item:', error);
+        throw error; // Ném lỗi nếu có
+    }
+};
 

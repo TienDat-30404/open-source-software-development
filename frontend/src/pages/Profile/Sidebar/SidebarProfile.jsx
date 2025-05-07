@@ -16,7 +16,13 @@ export default function SidebarProfile() {
                 onClick={() => navigate('/favorite')}
                 className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-indigo-600 transition duration-300 ease-in-out py-2 mt-2 border-t border-gray-200 pt-2"
             >
-                Song Favorite
+                Bài hát ưa thích của tôi
+            </h2>
+            <h2
+                onClick={() => navigate('/history-music')}
+                className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-indigo-600 transition duration-300 ease-in-out py-2 mt-2 border-t border-gray-200 pt-2"
+            >
+                Lịch sử nghe nhạc
             </h2>
         </div>
     );

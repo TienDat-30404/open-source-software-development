@@ -19,6 +19,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from django.conf import settings
 from django.http import JsonResponse
+from dateutil.relativedelta import relativedelta
 
 load_dotenv()
 def sort_object_vnpay(obj):
@@ -77,7 +78,7 @@ class PurchaseSubscriptionView(APIView):
                 user=user,
                 plan=plan,
                 start_date=now(),
-                end_date=now() + timedelta(days=plan.duration_days),
+                end_date=now() + relativedelta(months=plan.duration_days),
                 status='active',
                 auto_renew=auto_renew
             )

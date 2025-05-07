@@ -3,8 +3,12 @@ import LoadingResponseChatAI from "../../../components/Element/LoadingResponseCh
 import { useSelector } from "react-redux";
 import { useCreatePlan } from "../../../hooks/usePlan";
 import { useCreateUser } from "../../../hooks/useUser";
+import { useDeleteRole, useGetAllRole } from '../../../hooks/useRole';
+
 const AddUserModal = ({ show, onClose }) => {
     const { accessToken } = useSelector(state => state.auth)
+    const { data: roles, isLoading, isError, error } = useGetAllRole("", accessToken)
+    console.log(roles)
     const [content, setContent] = useState({
         userName: '',
         email: '',
@@ -46,9 +50,7 @@ const AddUserModal = ({ show, onClose }) => {
         formData.append('full_name', content.fullName)
         formData.append('gender', content.gender)
         formData.append('date_of_birth', content.dateOfBirth)
-        formData.append('full_name', content.fullName)
-        formData.append('role_id', content.role)
-
+        formData.append('role', content.role)
 
         createUserMutation.mutate({ data: formData, token: accessToken });
     };
@@ -74,7 +76,7 @@ const AddUserModal = ({ show, onClose }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Plan</h2>
+                {/* <h2 className="text-xl p-2 text-center font-semibold text-black">Add New Plan</h2> */}
 
                 <form onSubmit={handleCreateUser} className="space-y-4">
                     <div>
@@ -125,6 +127,7 @@ const AddUserModal = ({ show, onClose }) => {
                         />
                     </div>
 
+
                     <div>
                         <label className="block mb-1 font-medium text-black">Gender</label>
                         <select
@@ -151,6 +154,21 @@ const AddUserModal = ({ show, onClose }) => {
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Role</label>
+                        <select
+                            name="role"
+                            value={content.role}
+                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={handleChange}
+                        >
+                            <option value="">Select a role</option>
+                            {roles?.data?.map((role) => (
+                                <option value={role?.id}>{role?.name}</option>
+                            ))}
+                        </select>
                     </div>
 
 

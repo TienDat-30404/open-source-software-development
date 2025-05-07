@@ -8,7 +8,7 @@ from apps.roles.serializers import RoleSerializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'gender', 'full_name', 'date_of_birth', 'type_login' ]
+        fields = ['id', 'username', 'email', 'password', 'gender', 'full_name', 'date_of_birth', 'type_login', 'role' ]
         extra_kwargs =   {
             'password': {'write_only': True}
         }
@@ -19,12 +19,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             # Hash password
             validated_data['password'] = make_password(validated_data['password'])
         # Gỡ role nếu có trong validated_data (do form gửi lên)
-        validated_data.pop("role", None)
-        # Get default user role
-        user_role = Role.objects.get(name='User')
+        
+       
         # Create user
-        user = User.objects.create(role=user_role, **validated_data)
-        return user
+        return User.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         if 'password' in validated_data:
@@ -47,10 +45,11 @@ class LoginSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     role_name = serializers.CharField(source='role.name', read_only=True)
-    
+    role_id = serializers.CharField(source='role.id', read_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'full_name', 'gender', 'date_of_birth', 'role', 'role_name', 'created_at', 'updated_at']
+        fields = ['id', 'username', 'email', 'full_name', 'gender', 'date_of_birth', 'role', 'role_name', 'role_id', 'created_at', 'updated_at']
         extra_kwargs = {
             'role': {'write_only': True}
         }

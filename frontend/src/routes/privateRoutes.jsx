@@ -16,6 +16,7 @@ import PersonalInformation from '../pages/Profile/Content/PersonalInformation';
 import SongOfFavorite from '../pages/Profile/Content/SongOfFavorite';
 import User from '../pages/Admin/User/User';
 import DashBoard from '../pages/Admin/Dashboard/DashBoard';
+import HistoryMusic from '../pages/Profile/Content/HistoryMusic';
 
 export const privateRoutes = [
     {path : '/admin/dashboard', page : DashBoard, layout : AdminLayout, requireAdmin: true},
@@ -31,6 +32,7 @@ export const privateRoutes = [
 
     { path: '/profile', page: PersonalInformation, layout: ProfileLayout, requireAdmin: false  },
     { path: '/favorite', page: SongOfFavorite, layout: ProfileLayout, requireAdmin: false  },
+    { path: '/history-music', page: HistoryMusic, layout: ProfileLayout, requireAdmin: false  },
 
 ]
 

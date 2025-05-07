@@ -10,7 +10,7 @@ export default function FindSong() {
     const nameSong = params.get('name')
     useEffect(() => {
         const fetchData = async () => {
-            let query = `/?page=${page}&search=${nameSong}`
+            let query = `/?page=${page}&size=7search=${nameSong}`
             const response = await getAllSong(query)
             setSongs(response)
         }

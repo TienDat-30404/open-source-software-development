@@ -56,17 +56,14 @@ class ListeningHistoryAPIView(APIView):
         serializer = ListeningHistorySerializer(history)
         return success_response(data=serializer.data, message=message, code=code)
    
-    def delete(self, request):
-        user = User.objects.first()
-        history_id = request.data.get('id')  # truyền id trong body
-        
-        if history_id:
-            # Xoá một lịch sử cụ thể
-            history = get_object_or_404(ListeningHistory, id=history_id, user=user)
+    def delete(self, request, id=None):
+        user = request.user  # hoặc test = User.objects.first()
+
+        if id:
+            history = get_object_or_404(ListeningHistory, id=id, user=user)
             history.delete()
             return success_response(message="Listening history deleted successfully.")
         else:
-            # Xoá toàn bộ lịch sử nghe nhạc của user
             deleted_count, _ = ListeningHistory.objects.filter(user=user).delete()
             return success_response(message=f"Deleted {deleted_count} listening history records.")
         

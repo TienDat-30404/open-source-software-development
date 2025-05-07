@@ -3,16 +3,19 @@ import LoadingResponseChatAI from "../../../components/Element/LoadingResponseCh
 import { useSelector } from "react-redux";
 import { useUpdatePlan } from "../../../hooks/usePlan";
 import { useUpdateUser } from "../../../hooks/useUser";
+import { useGetAllRole } from "../../../hooks/useRole";
 const UpdateUserModal = ({ show, onClose, data }) => {
     console.log("data", data)
+    
     const { accessToken } = useSelector(state => state.auth)
+    const { data: roles, isLoading, isError, error } = useGetAllRole("", accessToken)
     const [content, setContent] = useState({
         userName: '',
         email: '',
         fullName: '',
         gender: '',
         dateOfBirth: '',
-        // role : '',
+        role: '',
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
@@ -23,7 +26,7 @@ const UpdateUserModal = ({ show, onClose, data }) => {
                 fullName: data.full_name,
                 gender: data.gender,
                 dateOfBirth: data.date_of_birth,
-                // role: data.role,
+                role: data.role_id,
 
             })
         }
@@ -39,6 +42,7 @@ const UpdateUserModal = ({ show, onClose, data }) => {
                 fullName: '',
                 gender: '',
                 dateOfBirth: '',
+                role : ''
             })
             setIsSubmitting(false);
             onClose();
@@ -54,7 +58,7 @@ const UpdateUserModal = ({ show, onClose, data }) => {
     };
 
 
-    const handleUpdatePlan = async (e) => {
+    const handleUpdateUser = async (e) => {
         e.preventDefault()
         setIsSubmitting(true)
         const formData = new FormData();
@@ -64,6 +68,7 @@ const UpdateUserModal = ({ show, onClose, data }) => {
         formData.append("full_name", content.fullName);
         formData.append("gender", content.gender);
         formData.append("date_of_birth", content.dateOfBirth);
+        formData.append("role", content.role);
 
         updateUserMutation.mutate({ id: data?.id, data: formData, token: accessToken });
 
@@ -86,9 +91,9 @@ const UpdateUserModal = ({ show, onClose, data }) => {
                         &times;
                     </button>
                 </div>
-                <h2 className="text-xl p-2 text-center font-semibold text-black">Update Plan</h2>
+                <h2 className="text-xl p-2 text-center font-semibold text-black">Update User</h2>
 
-                <form onSubmit={handleUpdatePlan} className="space-y-4">
+                <form onSubmit={handleUpdateUser} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
@@ -137,7 +142,7 @@ const UpdateUserModal = ({ show, onClose, data }) => {
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded px-3 py-1 text-black"
                         >
-                             <option value="">Select</option>
+                            <option value="">Select</option>
                             <option value="Nam">Nam</option>
                             <option value="Nữ">Nữ </option>
                             <option value="Khác">Khác</option>
@@ -154,6 +159,20 @@ const UpdateUserModal = ({ show, onClose, data }) => {
                             required
                             className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Role</label>
+                        <select
+                            name="role"
+                            value={content.role}
+                            className="mt-1 w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={handleChange}
+                        >
+                            <option value="">Select a role</option>
+                            {roles?.data?.map((role) => (
+                                <option value={role?.id}>{role?.name}</option>
+                            ))}
+                        </select>
                     </div>
 
 

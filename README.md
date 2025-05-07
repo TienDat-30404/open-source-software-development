@@ -121,6 +121,17 @@
    cd frontend
    npm run dev
    ```
+4. In addition, you can run the application using Docker:
+
+   - Docker and Docker Compose following the official installation guides on their websites.
+
+   - Once installed, you can verify the installation by running the following commands:
+
+      + docker --version
+
+      + docker-compose --version
+
+   - After successful installation, navigate to the root directory of the project and run the following command in the terminal: docker-compose up -d
 
 ## 🔒 Security Notes
 

@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import TextAnimation from "../../components/Element/TextAnimation";
 import './ChatRoom.scss';
 import { useSelector } from "react-redux";
+import { getMessageByRoom } from "../../services/RoomService";
 export default function ChatRoom({ roomName, onCloseRoom }) {
 
-  const {auth} = useSelector(state => state.auth)
+  const {auth, accessToken} = useSelector(state => state.auth)
   const [username, setUsername] = useState("");
   useEffect(() => {
     setUsername(auth.username)
@@ -73,17 +74,20 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
 
   const loadMessages = async (room) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/conversations/messages/${room}`);
-      const data = await response.json();
-      if (data.status === "success" && Array.isArray(data.data)) {
-        setMessages(data.data.map((msg) => ({
+      // const response = await fetch(`http://127.0.0.1:8000/api/conversations/messages/${room}`);
+      const res = await getMessageByRoom(room, "", accessToken)
+      if(res.status === 'success')
+      {
+        setMessages(res.data.map((msg) => ({
           username: msg.username,
           message: msg.content,
           timestamp: msg.timestamp,
         })));
-      } else {
-        console.error("Invalid message response format:", data);
       }
+      else {
+        console.error("Invalid message response format:", res);
+      }
+     
     } catch (error) {
       console.error("Error loading messages:", error);
     }

@@ -1,4 +1,4 @@
-import { addItemUsingToken, addItemUsingTokenFormData, createItem, createItemByFormData, getItem, getItemUsingToken, updateItemByFormData } from "./apis"
+import { addItemUsingToken, addItemUsingTokenFormData, callMcpServer, createItem, createItemByFormData, getItem, getItemUsingToken, updateItemByFormData } from "./apis"
 export const getAllSong = async (query) => {
     return getItem('songs', query)
 }
@@ -13,9 +13,12 @@ export const updateSong = async({id, data, token}) => {
 }
 
 
-export const chatWithAI = async (query, token) => {
-    return addItemUsingToken('songs/suggest-songs-ai', query, token)
+export const chatWithAI = async (data, token) => {
+    return callMcpServer(data, token)
 }
+// export const chatWithAI = async (data, token) => {
+//     return addItemUsingToken('songs/suggest-songs-ai', data, token)
+// }
 
 export const getHistoryChatAI = async (query, token) => {
     return getItemUsingToken('songs/get-history-chat-ai', query, token)

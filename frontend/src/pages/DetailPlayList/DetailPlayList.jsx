@@ -9,6 +9,7 @@ import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 import useSelectedSong from '../../hooks/useSelectedSong';
 import { useDeleteSongOutOfPlaylist } from '../../hooks/usePlaylists';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 export default function DetailPlayList() {
   const {accessToken} = useSelector(state => state.auth)
   const { id } = useParams()
@@ -105,8 +106,21 @@ export default function DetailPlayList() {
           </div>
         </Fragment>
       )}
-      {/* Audio element */}
-      {/* <audio ref={audioRef} onEnded={() => setIsPlaying(false)} /> */}
+      
+      <ToastContainer
+        className="text-base"
+        fontSize="10px"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

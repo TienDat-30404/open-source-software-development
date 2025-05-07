@@ -5,7 +5,6 @@ import {
 import CartPlayList from '../../../components/CartPlayList';
 import { usePlaylists, useCreatePlaylist, useDeletePlayList } from '../../../hooks/usePlaylists';
 import MenuItem from '../../../components/MenuItem';
-import { deletePlaylist } from '../../../services/PlayListService';
 import EditPlaylistModal from './EditPlaylistModal';
 import { useSelector } from 'react-redux';
 export default function Sidebar() {

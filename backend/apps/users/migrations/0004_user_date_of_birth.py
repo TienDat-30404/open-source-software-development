@@ -30,6 +30,16 @@ def create_default_users(apps, schema_editor):
         date_of_birth=datetime.date(2000, 1, 1),
         role=user_role
     )
+    
+    User.objects.create(
+        username='1',
+        email='1@gmail.com',
+        password=make_password('123456'),
+        full_name='1',
+        gender='Nam',
+        date_of_birth=datetime.date(1990, 1, 1),
+        role=user_role
+    )
 
 class Migration(migrations.Migration):
 

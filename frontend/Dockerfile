@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json và package-lock.json vào container
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 
 # Cài đặt dependencies
 RUN npm install

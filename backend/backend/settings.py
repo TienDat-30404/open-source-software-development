@@ -22,7 +22,7 @@ DEBUG = True
 # DEBUG = False
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", os.getenv("VITE_FRONTEND_URL")]
 
 
 
@@ -206,6 +206,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite dev server
     "http://127.0.0.1:5173",
+    os.getenv("VITE_FRONTEND_URL")
 ]
 
 CORS_ALLOW_CREDENTIALS = True

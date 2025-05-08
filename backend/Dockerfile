@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y netcat-openbsd gcc libpq-dev && rm -rf 
 WORKDIR /app
 
 # Copy requirements.txt vào container
-COPY requirements.txt ./ 
+COPY backend/requirements.txt ./ 
 
 # Cài đặt các thư viện Python từ requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt

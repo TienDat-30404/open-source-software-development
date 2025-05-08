@@ -48,9 +48,10 @@ export default function DetailAlbum() {
   };
 
   const handleAddFavoriteSong = async (song) => {
-    addSongFavorite.mutate({
+    const g = addSongFavorite.mutate({
       song_id: song.id
     })
+    console.log(g)
   }
 
   return (

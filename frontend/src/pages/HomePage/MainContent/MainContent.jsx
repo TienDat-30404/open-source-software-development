@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import Radio from './Radio'
 import Artist from './Artist'
 import Album from './Album'
@@ -8,20 +8,33 @@ import RoomsPage from '../../Room/RoomsPage'
 import IconAi from '../../../components/Element/IconAi'
 import ChatAI from '../../Chat/ChatAI'
 import TopSongs from './TopSongs'
+import { useGetAllCatgory } from '../../../hooks/useCategory'
 export default function MainContent() {
   const [showRoom, setShowRoom] = useState(false)
   const [showChatAI, setShowChatAI] = useState(false)
-  return (
+  const { data: categories } = useGetAllCatgory("");
+  const [selectedCategory, setSelectedCategory] = useState(null)
 
+  return (
     <div className='p-4'>
       <div className="flex space-x-4 mb-8">
         <button className="bg-white text-black rounded-full p-2  font-semibold">Tất cả</button>
-        <button className="text-white p-2 bg-[#282828] rounded-full">Nhạc</button>
-        <button className="text-white p-2 bg-[#282828] rounded-full">Podcasts</button>
+        {categories && categories.results?.length > 0 &&
+          categories.results.map((category, index) => (
+            <Fragment key={index}>
+              <button
+                onClick={() => setSelectedCategory(category?.id)}
+                className="text-white p-2 bg-[#282828] rounded-full">
+                {category?.name}
+              </button>
+            </Fragment>
+          ))}
+
       </div>
       <div className="flex items-center justify-between mb-8 ">
         <h2 className="text-2xl font-bold">Radio phổ biến</h2>
       </div>
+      
       <div
         onClick={() => setShowRoom(!showRoom)}
         className='fixed z-20 top-20 right-10'
@@ -35,11 +48,11 @@ export default function MainContent() {
         <IconAi />
       </div>
       <RoomsPage show={showRoom} />
+      <Song selectedCategory={selectedCategory} />
       <TopSongs />
-      <Song />
       <Album />
       <Artist />
-      <ChatAI show = {showChatAI} onCloseChatAi={() => setShowChatAI(false)} />
+      <ChatAI show={showChatAI} onCloseChatAi={() => setShowChatAI(false)} />
     </div>
   )
 }

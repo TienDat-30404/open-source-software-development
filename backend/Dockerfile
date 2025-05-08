@@ -14,7 +14,8 @@ COPY backend/requirements.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy toàn bộ mã nguồn vào container
-COPY . .
+COPY backend/ .
+
 
 
 # Lệnh để chạy ứng dụng Django khi container khởi động (dùng Django's development server)

@@ -46,7 +46,7 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
   useEffect(() => {
     if (username && roomName) {
       // const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
-      const newSocket = new WebSocket(`wss://${import.meta.env.VITE_API_URL}/ws/chat/${roomName}/`);
+      const newSocket = new WebSocket(`wss://${import.meta.env.VITE_API_BASE_URL}/ws/chat/${roomName}/`);
 
       setSocket(newSocket);
 

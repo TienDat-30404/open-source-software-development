@@ -56,7 +56,8 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
-
+  console.log("Env from vite.config.js:", env); // In tất cả biến môi trường
+  console.log("VITE_API_URL:", env.VITE_API_URL); // In riêng VITE_API_URL
   return {
     plugins: [react()],
     server: {

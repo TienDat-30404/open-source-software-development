@@ -86,7 +86,7 @@ export default function ManagePlans() {
   const handleDeletePlan = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xóa gói này?')) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/plans/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/plans/${id}`, {
         method: 'DELETE',
       });
       if (res.ok) {

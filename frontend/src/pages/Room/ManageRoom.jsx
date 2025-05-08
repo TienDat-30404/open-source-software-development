@@ -15,7 +15,7 @@ export default function ManageRoom() {
 
   const fetchRooms = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/conversations/rooms');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/conversations/rooms`);
       const data = await res.json();
       if (data.status === 'success' && Array.isArray(data.data)) {
         setRooms(data.data);
@@ -34,7 +34,7 @@ export default function ManageRoom() {
     if (editingRoom) {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/conversations/rooms/${editingRoom.id}`,
+          `${import.meta.env.VITE_API_URL}/conversations/rooms/${editingRoom.id}`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ export default function ManageRoom() {
     } else {
       try {
         const res = await fetch(
-          'http://127.0.0.1:8000/api/conversations/rooms',
+          `${import.meta.env.VITE_API_URL}/conversations/rooms`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,8 @@ export default function ManageRoom() {
     if (!window.confirm('Bạn có chắc muốn xóa phòng này?')) return;
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/conversations/rooms/${id}`,
+        `${import.meta.env.VITE_API_URL}/conversations/rooms/${id}`,
+
         {
           method: 'DELETE',
         }

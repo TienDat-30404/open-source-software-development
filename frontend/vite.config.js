@@ -58,7 +58,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   console.log("Env from vite.config.js:", env); // In tất cả biến môi trường
   console.log("VITE_API_URL:", env.VITE_API_URL); // In riêng VITE_API_URL
+  console.log("System environment:", process.env);
   return {
+
     plugins: [react()],
     server: {
       host: '0.0.0.0', // Đảm bảo server lắng nghe trên tất cả các interface

@@ -32,10 +32,10 @@ def create_default_users(apps, schema_editor):
     )
     
     User.objects.create(
-        username='1',
-        email='1@gmail.com',
+        username='2',
+        email='2@gmail.com',
         password=make_password('123456'),
-        full_name='1',
+        full_name='2',
         gender='Nam',
         date_of_birth=datetime.date(1990, 1, 1),
         role=user_role

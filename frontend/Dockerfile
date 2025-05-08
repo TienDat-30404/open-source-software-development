@@ -11,7 +11,9 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy toàn bộ mã nguồn vào container
-COPY . .
+# COPY . .
+COPY frontend/ .
+
 
 # Build ứng dụng với Vite
 RUN npm run build

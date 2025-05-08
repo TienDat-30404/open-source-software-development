@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 export const getItem = async (endpoint, query) => {
     console.log("endpoint", endpoint)
     console.log("env", import.meta.env.VITE_API_URL)
-
+    console.log(import.meta.env)
     let url = `${import.meta.env.VITE_API_URL}/${endpoint}`
     console.log("url", url)
     console.log("urlsss", url)

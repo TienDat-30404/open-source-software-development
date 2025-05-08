@@ -1,7 +1,11 @@
 import { useSelector } from 'react-redux';
+import { defineConfig, loadEnv } from 'vite';
 
 // get all items
 export const getItem = async (endpoint, query) => {
+    const env = loadEnv(mode, process.cwd());
+    console.log("Env from vite.config.js:", env); // In tất cả biến môi trường
+    console.log("VITE_API_URL:", env.VITE_API_URL); // In riêng VITE_API_URL
     console.log("endpoint", endpoint)
     console.log("env", import.meta.env.VITE_API_URL)
     console.log(import.meta.env)

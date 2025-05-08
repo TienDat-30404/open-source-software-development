@@ -45,8 +45,10 @@ class SongViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         search = request.query_params.get("search", None)
         size = request.query_params.get("size", None)
-
+        genre = request.query_params.get("genre", None)
         queryset = self.get_queryset()
+        if genre:
+            queryset = self.get_queryset().filter(genre__id=genre)
         if search:
             queryset = queryset.filter(title__icontains=search)
 

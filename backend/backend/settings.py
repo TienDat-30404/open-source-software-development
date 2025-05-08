@@ -106,8 +106,8 @@ DATABASES = {
         # "NAME": "spotify",
         "USER": "postgres",
         "PASSWORD": "123456",
-        "HOST": "db",
-        # "HOST" : "localhost",
+        # "HOST": "db",
+        "HOST" : "localhost",
         "PORT": "5432",
     }
 }

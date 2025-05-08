@@ -4,12 +4,16 @@ import { getAllSong } from '../../services/SongService';
 import { Ellipsis, Plus, Play, Pause, CookingPot } from 'lucide-react';
 import Header from './Header';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
+import { useSelector } from 'react-redux';
+import { useAddSongFavorite } from '../../hooks/useFavorite';
 
 export default function DetailSong() {
   const { id } = useParams()
   const [details, setDetails] = useState({})
+  const { accessToken } = useSelector(state => state.auth)
 
   const { currentSong, handlePlaySong, isPlaying } = useAudioPlayer();
+  const addSongFavorite = useAddSongFavorite(accessToken)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,11 +25,11 @@ export default function DetailSong() {
   }, [id]);
 
 
-  // const handlePauseSong = () => {
-  //   const audio = audioRef.current;
-  //   audio.pause(); // Pause the audio
-  //   setIsPlaying(false);
-  // };
+  const handleAddFavoriteSong = async (song) => {
+    addSongFavorite.mutate({
+      song_id: song.id
+    })
+  }
   return (
     <div>
       {details && (
@@ -44,7 +48,9 @@ export default function DetailSong() {
                     <Play size={20} />
                   </div>
                 )}
-                < button class=" inline-flex items-center justify-center p-0.5 ms-3 me-3 overflow-hidden text-sm font-medium text-white rounded-full group bg-gradient-to-white border border-white">
+                < button
+                  onClick={() => handleAddFavoriteSong(details)}
+                   class=" inline-flex items-center justify-center p-0.5 ms-3 me-3 overflow-hidden text-sm font-medium text-white rounded-full group bg-gradient-to-white border border-white">
                   <Plus />
                 </button>
 

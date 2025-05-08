@@ -36,7 +36,7 @@ WORKDIR /app
 COPY frontend/package.json frontend/package-lock.json ./
 
 # Cài đặt dependencies
-RUN npm ci --production
+RUN npm ci
 
 # Copy mã nguồn
 COPY frontend/ .

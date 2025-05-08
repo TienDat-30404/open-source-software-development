@@ -34,11 +34,16 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    preview: {
-      host: '0.0.0.0',
-      port: 5173,
-      allowedHosts: ['*', env.VITE_HOST_FRONTEND]
-    }
+    // preview: {
+    //   host: '0.0.0.0',
+    //   port: 5173,
+    //   allowedHosts: ['*', env.VITE_HOST_FRONTEND]
+    // }
+
+    build: {
+      outDir: 'dist',
+      sourcemap: false, // Tắt sourcemap trong sản xuất để giảm kích thước
+    },
   }
 })
 

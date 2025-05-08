@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 // get all items
 export const getItem = async (endpoint, query) => {
     let url = `${import.meta.env.VITE_API_URL}/${endpoint}`
+    console.log("urlsss", url)
     if (query) {
         url += query.includes("=") ? `${query}` : `/${query}/`;
     }

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 export const getItem = async (endpoint, query) => {
     console.log("endpoint", endpoint)
     console.log("env", import.meta.env.VITE_API_URL)
-    let url = `${import.meta.env.VITE_API_URL}/${endpoint}`
+    let url = `https://open-source-software-development.onrender.com/api/${endpoint}`
     console.log("url", url)
     console.log("urlsss", url)
     if (query) {

@@ -103,18 +103,33 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         'NAME': '2',
+#         # "NAME": "spotify",
+#         "USER": "postgres",
+#         "PASSWORD": "123456",
+#         "HOST": "db",
+#         # "HOST" : "localhost",
+#         "PORT": "5432",
+#     }
+# }
+
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        'NAME': '2',
+        'NAME': os.getenv("DB_NAME"),
         # "NAME": "spotify",
-        "USER": "postgres",
-        "PASSWORD": "123456",
-        "HOST": "db",
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
         # "HOST" : "localhost",
         "PORT": "5432",
     }
 }
+
 
 # DATABASES = {
 #     'default': {

@@ -62,18 +62,18 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0', // Đảm bảo server lắng nghe trên tất cả các interface
       port: 5173,
-      proxy: {
-        '/api': {
-          target: env.VITE_API_BASE_URL,
-          changeOrigin: true,
-          secure: false,
-        },
-      },
+      // proxy: {
+      //   '/api': {
+      //     target: env.VITE_API_BASE_URL,
+      //     changeOrigin: true,
+      //     secure: false,
+      //   },
+      // },
     },
-    preview: {
-      host: '0.0.0.0',
-      port: 5173,
-    },
+    // preview: {
+    //   host: '0.0.0.0',
+    //   port: 5173,
+    // },
     build: {
       outDir: 'dist',
       sourcemap: false, // Tắt sourcemap để giảm kích thước và bảo mật

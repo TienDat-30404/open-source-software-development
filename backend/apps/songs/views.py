@@ -27,9 +27,13 @@ import math
 redis_client = redis.StrictRedis(
     host=os.getenv("REDIS_HOST"),
     port=int(os.getenv("REDIS_PORT")),
-    db=0,
-    decode_responses=True
+    password=os.getenv("REDIS_PASSWORD"),
+    decode_responses=True,
+    ssl=True
 )
+# redis_client.set('foo', 'bar')
+# print(redis_client.get('foo'))
+
 
 
 class SongViewSet(viewsets.ModelViewSet):

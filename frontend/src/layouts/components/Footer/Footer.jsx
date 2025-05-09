@@ -242,39 +242,39 @@ export default function Footer() {
         };
     }, [showVideo]);
 
-    useEffect(() => {
-        const video = videoRef.current;
-        if (video) {
-            video.volume = volume;
-            video.muted = muted;
-        }
-    }, [volume, muted]);
+    // useEffect(() => {
+    //     const video = videoRef.current;
+    //     if (video) {
+    //         video.volume = volume;
+    //         video.muted = muted;
+    //     }
+    // }, [volume, muted]);
 
 
-    useEffect(() => {
-        const video = videoRef.current;
-        const audio = audioRef.current;
+    // useEffect(() => {
+    //     const video = videoRef.current;
+    //     const audio = audioRef.current;
 
-        if (!video || !audio) return;
+    //     if (!video || !audio) return;
 
-        const handleVolumeChange = () => {
-            const newVolume = video.volume;
-            const isMuted = video.muted;
+    //     const handleVolumeChange = () => {
+    //         const newVolume = video.volume;
+    //         const isMuted = video.muted;
 
-            setVolume(newVolume);
-            setMuted(isMuted);
-            if (newVolume > 0) setLastVolume(newVolume);
+    //         setVolume(newVolume);
+    //         setMuted(isMuted);
+    //         if (newVolume > 0) setLastVolume(newVolume);
 
-            audio.volume = newVolume;
-            audio.muted = isMuted;
-        };
+    //         audio.volume = newVolume;
+    //         audio.muted = isMuted;
+    //     };
 
-        video.addEventListener("volumechange", handleVolumeChange);
+    //     video.addEventListener("volumechange", handleVolumeChange);
 
-        return () => {
-            video.removeEventListener("volumechange", handleVolumeChange);
-        };
-    }, [showVideo]);
+    //     return () => {
+    //         video.removeEventListener("volumechange", handleVolumeChange);
+    //     };
+    // }, [showVideo]);
 
 
 

@@ -34,7 +34,12 @@ function Login() {
       console.log("respionse", response.data)
       dispatch(setCredentials(response.data))
 
-      navigate('/');
+      if (response?.data?.data?.role_name === 'Admin') {
+        navigate('/admin/dashboard')
+      }
+      else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Đăng nhập thất bại');
     } finally {
@@ -54,7 +59,6 @@ function Login() {
         full_name: jwtDecode(token).name,
         type_login: "google"
       });
-      console.log("response", response.data)
       dispatch(setCredentials(response.data))
       navigate('/');
     }

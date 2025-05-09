@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { getMessageByRoom } from "../../services/RoomService";
 export default function ChatRoom({ roomName, onCloseRoom }) {
 
-  const {auth, accessToken} = useSelector(state => state.auth)
+  const { auth, accessToken } = useSelector(state => state.auth)
   const [username, setUsername] = useState("");
   useEffect(() => {
     setUsername(auth.username)
@@ -46,8 +46,8 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
   useEffect(() => {
     if (username && roomName) {
       // const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
-      const newSocket = new WebSocket(`wss://${import.meta.env.VITE_API_BASE_URL}/ws/chat/${roomName}/`);
-
+      const newSocket = new WebSocket(`wss://${import.meta.env.VITE_HOST_SOCKET}/ws/chat/${roomName}/`);
+      console.log("newSocker", newSocket)
       setSocket(newSocket);
 
       newSocket.onopen = () => {
@@ -66,7 +66,11 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
 
       newSocket.onclose = () => console.log("WebSocket disconnected");
 
-      return () => newSocket.close();
+      return () => {
+        if (newSocket.readyState === WebSocket.OPEN) {
+          newSocket.close();
+        }
+      };
     }
   }, [roomName, username]);
 
@@ -78,8 +82,7 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
     try {
       // const response = await fetch(`http://127.0.0.1:8000/api/conversations/messages/${room}`);
       const res = await getMessageByRoom(room, "", accessToken)
-      if(res.status === 'success')
-      {
+      if (res.status === 'success') {
         setMessages(res.data.map((msg) => ({
           username: msg.username,
           message: msg.content,
@@ -89,17 +92,19 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
       else {
         console.error("Invalid message response format:", res);
       }
-     
+
     } catch (error) {
       console.error("Error loading messages:", error);
     }
   };
 
   const handleSendMessage = () => {
-    if (message.trim() && socket) {
+    if (message.trim() && socket && socket.readyState === WebSocket.OPEN) {
       const timestamp = new Date().toISOString();
       socket.send(JSON.stringify({ username, message, timestamp }));
       setMessage("");
+    } else {
+      console.error("WebSocket is not open. Current state:", socket?.readyState);
     }
   };
 
@@ -194,7 +199,7 @@ export default function ChatRoom({ roomName, onCloseRoom }) {
         </div>
       </div>
 
-    
+
     </Fragment>
   )
 }

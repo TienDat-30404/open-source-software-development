@@ -19,19 +19,19 @@ export default function ChatAI({ show, onCloseChatAi }) {
   const handleSendRequest = async () => {
     if (!message.trim()) return;
     setStatusResponse(true)
-    askQuestionMutation.mutate({
-      jsonrpc: "2.0",
-      method: "suggest_songs_ai",
-      params: {
-        user_id: auth.id,
-        query: message
-      },
-      id: 1
-    })
     // askQuestionMutation.mutate({
-    //   query: message,
-    //   user: auth.id
+    //   jsonrpc: "2.0",
+    //   method: "suggest_songs_ai",
+    //   params: {
+    //     user_id: auth.id,
+    //     query: message
+    //   },
+    //   id: 1
     // })
+    askQuestionMutation.mutate({
+      query: message,
+      user: auth.id
+    })
   }
   return (
     <div className={`${show ? 'flex' : 'hidden'} background-chat-ai  top-20  text-gray-300 p-2  flex flex-col`}>

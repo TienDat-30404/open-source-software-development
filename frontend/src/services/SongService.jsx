@@ -13,12 +13,12 @@ export const updateSong = async({id, data, token}) => {
 }
 
 
-export const chatWithAI = async (data, token) => {
-    return callMcpServer(data, token)
-}
 // export const chatWithAI = async (data, token) => {
-//     return addItemUsingToken('songs/suggest-songs-ai', data, token)
+//     return callMcpServer(data, token)
 // }
+export const chatWithAI = async (data, token) => {
+    return addItemUsingToken('songs/suggest-songs-ai', data, token)
+}
 
 export const getHistoryChatAI = async (query, token) => {
     return getItemUsingToken('songs/get-history-chat-ai', query, token)

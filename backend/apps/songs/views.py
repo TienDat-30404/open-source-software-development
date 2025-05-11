@@ -291,38 +291,40 @@ class SongViewSet(viewsets.ModelViewSet):
 
         try:
             # Cấu hình Gemini với API Key
-            # genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-            # cached_suggestions = redis_client.get(f"suggest_songs:{query}")
-            # if cached_suggestions:
-            #     # Nếu có lịch sử gợi ý, trả lại từ Redis
-            #     print("cached_suggestions", cached_suggestions)
-            #     return Response(
-            #         {
-            #             "suggestions": cached_suggestions.split("\n"),
-            #             "status": status.HTTP_200_OK,
-            #         }
-            #     )
+            genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+            cached_suggestions = redis_client.get(f"suggest_songs:{query}")
+            if cached_suggestions:
+                # Nếu có lịch sử gợi ý, trả lại từ Redis
+                print("cached_suggestions", cached_suggestions)
+                return Response(
+                    {
+                        "suggestions": cached_suggestions.split("\n"),
+                        "status": status.HTTP_200_OK,
+                    }
+                )
 
-            # # Khởi tạo model
-            # model = genai.GenerativeModel("gemini-1.5-pro")
-            # # Prompt để AI hiểu đúng yêu cầu
-            # prompt = f"Suggest 5 popular or interesting song titles that match this theme or keyword: '{query}'"
+         
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            # Prompt để AI hiểu đúng yêu cầu
+            prompt = f"{query}"
 
-            # # Gọi AI trả lời
-            # response = model.generate_content(prompt)
+            # Gọi AI trả lời
+            response = model.generate_content(prompt)
 
-            # suggestions = response.text.strip().split("\n")
+            suggestions = response.text.strip().split("\n")
             timestamp = int(time.time())
-            redis_client.setex(
-                f"{user_id}*****{query}*****{timestamp}", 3000, "hello"
+            g= redis_client.setex(
+                f"{user_id}*****{query}*****{timestamp}", 3000, "\n".join(suggestions)
             )
-            return Response({"suggestions": "hello", "status": status.HTTP_200_OK})
+            print("ggg", g)
+            return Response({"suggestions": suggestions, "status": status.HTTP_200_OK})
 
         except Exception as e:
-            print("e" ,e)
+            print("e", e)
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
             
             
             
@@ -335,29 +337,30 @@ class SongViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
-           
+
             keys = redis_client.keys(f"{user_id}*****")
+            all_keys = redis_client.keys("*")
+            print("ALL REDIS KEYS:", all_keys)
             sorted_keys = sorted(
-                keys,
-                key=lambda k: int(k.split('*****')[2]), 
-                reverse=False  
+                keys, key=lambda k: int(k.split("*****")[2]), reverse=False
             )
             historys_chat = []
-            for key in sorted_keys:    
+            for key in sorted_keys:
                 content = redis_client.get(key)
                 if content:  # Kiểm tra nếu có nội dung trả về từ Redis
-                    key_parts = key.split('*****')
+                    key_parts = key.split("*****")
                     if len(key_parts) > 2:
                         key_search = key_parts[1]
                     else:
                         key_search = None
-                    historys_chat.append({
-                        "key_search": key_search,
-                        "content": content  # Decoding từ byte sang string nếu cần
-                        
-                    })
-            return Response({
-                'data' : historys_chat
-            })
+                    historys_chat.append(
+                        {
+                            "key_search": key_search,
+                            "content": content,  # Decoding từ byte sang string nếu cần
+                        }
+                    )
+            return Response({"data": historys_chat})
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

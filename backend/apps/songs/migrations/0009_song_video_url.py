@@ -20,8 +20,8 @@ def create_default_songs(apps, schema_editor):
         duration=318,
         release_date=datetime.date(2023, 1, 1),
         image='https://i.ytimg.com/vi/4S0jwsH7WYw/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746503693/hkr755cdntkzhkvdcavj.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746503698/aqjtzb8wm1lzqailbcoc.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746966944/cwp8d6z4ffg5hd3drh9l.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746966952/ih1by8ycbdreyaxo4jfu.webm'
     )
     Song.objects.create(
         title='Nơi này có anh',
@@ -29,8 +29,8 @@ def create_default_songs(apps, schema_editor):
         duration=260,
         release_date=datetime.date(2023, 1, 2),
         image='https://i.ytimg.com/vi/FN7ALfpGxiI/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502295/jyad88xu54aars8wgurs.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502305/vimrypamspuhqorf1umk.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967223/hjq2hhjesgamfjtm4dha.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967230/iim5iwkwk2xpqe85lhvf.webm'
     )
     Song.objects.create(
         title='Dù cho tận thế',
@@ -38,8 +38,8 @@ def create_default_songs(apps, schema_editor):
         duration=233,
         release_date=datetime.date(2022, 1, 1),
         image='https://cdn.lawnet.vn/uploads/giao-duc/DVM/trang-thue-1300.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350980/lrt5tw2xvxdanxpdqgkz.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350982/yjj6iqqpavwetuna8jis.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967302/sojo2yridsbfnnkadceh.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967305/ixgm6pwkkumq7ln6nrmr.webm'
     )
     Song.objects.create(
         title='Một đời',
@@ -47,19 +47,10 @@ def create_default_songs(apps, schema_editor):
         duration=328,
         release_date=datetime.date(2022, 1, 1),
         image='https://s.meta.com.vn/img/thumb.ashx/Data/image/2020/12/26/loi-bai-hat-dom-dom-jack-1.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350887/xjak85x0issl3ieluvkh.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350892/o8xaxa9k2y4oqjilqz7g.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967382/ep0hupjx7yx7gsjfj6fb.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967385/hmgsgp6tgemibbwi1p0l.webm'
     )
-    
-    Song.objects.create(
-        title='Một đời',
-        genre=genre,
-        duration=328,
-        release_date=datetime.date(2022, 1, 1),
-        image='https://s.meta.com.vn/img/thumb.ashx/Data/image/2020/12/26/loi-bai-hat-dom-dom-jack-1.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350887/xjak85x0issl3ieluvkh.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350892/o8xaxa9k2y4oqjilqz7g.webm'
-    )
+ 
 
     Song.objects.create(
         title='Mất kết nối',
@@ -67,8 +58,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://tse2.mm.bing.net/th?id=OIP.FUu2bUk5KbVChxd5Rj4DgAHaEK&pid=Api&P=0&h=180',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746500916/bdevr54330izqbwlwsff.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746500919/acm1r67e6b3nvjl1tnyt.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967511/mrhhqnsuwqe2ibsg0he0.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967514/qnanctz0apdxs92tdsuh.webm'
     )
     Song.objects.create(
         title='Sau tất cả',
@@ -76,8 +67,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.ytimg.com/vi/wHF3Jv6Gk2o/hqdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502811/ejgwkttrxn5vuvsyrrzb.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502816/toare7raaegesdptvt9r.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967582/bi32wiii6rcy71zy6cux.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967587/v8ebtmgei1tpj43tb5pa.webm'
     )
     Song.objects.create(
         title='Nơi ấy con tìm về',
@@ -85,8 +76,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://img.youtube.com/vi/uvIgpYPAcaQ/hqdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502041/y1nyqms4eq1elv9nda2x.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502046/jo15tolrzspz0j1zl1vv.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967645/h56l20in5rudoqm5ljy1.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967651/vxphdlmooeorbivtdfzt.webm'
     )
     
     Song.objects.create(
@@ -95,8 +86,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://tse3.mm.bing.net/th?id=OIP.d7mQWXHStpY6DbrxP43wrAHaEK&pid=Api&P=0&h=180',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351119/ogxvazfffmjpiod76oqt.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351125/zdeavmhlfoitymarltw5.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967713/sfyqcucsyhz4hn3px380.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967719/ydzzfmoj9yjeeg8vkdia.webm'
     )
     
     Song.objects.create(
@@ -105,8 +96,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.ytimg.com/vi/bI7xde9-3BI/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502702/ftydeft1asnxdkocymzi.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502708/ui6mpsaruaciyuscpnte.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967766/a18vuwdbrmikb1ab2fei.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967769/el54n6h4auvlmun8sxjl.webm'
     )
 
     Song.objects.create(
@@ -115,8 +106,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://tse4.mm.bing.net/th?id=OIP.BV6b1vkah6dMnlCv5R489AHaEK&pid=Api&P=0&h=180',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746335106/f5r4ptshk1p0y4hcqo4p.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746335111/ebyiavc4m9lkqwt7ebel.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967817/ozwxb53hodmhyc60z0ay.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967821/ofzxo9dk2h9pyeywyi1u.webm'
     )
     
     Song.objects.create(
@@ -125,8 +116,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.ytimg.com/vi/22jqPbfUZBE/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351027/nibtkjxhmgyfij1qicyn.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351031/zg7xd6fzaqvdimaqagf2.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967868/ltmidqxhuk0j9vrugyrx.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967872/qwrixe5k4gusfrxsnuvu.webm'
     )
     
       
@@ -136,8 +127,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.ytimg.com/vi/2jeqQ6Py-o8/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746333700/djlmjqljj8c2gmzmpyrk.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746333708/tkmhibnoafdipri33rby.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746962630/re5nxu6xfome5vriyitr.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746962636/u2y0vltwao9nkghhexqi.webm'
     )
     
     Song.objects.create(
@@ -146,8 +137,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://tse3.mm.bing.net/th?id=OIP.KorsxucNne614rNyuUqPbQAAAA&pid=Api&P=0&h=180',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502467/pyuvkdn8kf3ydalqdavr.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502477/hilc8d5ngjcfiqnm0fpg.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967943/gwdj7ojkmoqqimxuohwk.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967947/aucw9ut3mdsdmkdtpmsn.webm'
     )
     
     Song.objects.create(
@@ -156,8 +147,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://s.meta.com.vn/img/thumb.ashx/Data/image/2020/12/26/loi-bai-hat-dom-dom-jack-1.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350887/xjak85x0issl3ieluvkh.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746350892/o8xaxa9k2y4oqjilqz7g.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967990/jqi32grqgvbqd7omeker.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746967998/ph7q5nuzybelqikotrkn.webm'
     )
     
     Song.objects.create(
@@ -166,8 +157,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.scdn.co/image/ab67616d0000b2736280a70b22a9778115516eb3',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502583/hvoe0elu20pqsc4jnoz0.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746502591/ft6l3opzmqmseu1oxxc0.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746968043/vsdpo0wnt5p7iufleele.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746968046/jmzf5zwpsfkchffswcg8.webm'
     )
     
     Song.objects.create(
@@ -176,8 +167,8 @@ def create_default_songs(apps, schema_editor):
         duration=208,
         release_date=datetime.date(2022, 1, 1),
         image='https://i.ytimg.com/vi/zX0pOC7y68U/maxresdefault.jpg',
-        audio_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351075/krnnvxcgh6tqk471xujs.mp3',
-        video_url='https://res.cloudinary.com/dneh4yrye/video/upload/v1746351080/zshcn34abnwluhov6yc3.webm'
+        audio_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746968091/bbipxgxuwdwdrub7ph1j.mp3',
+        video_url='https://res.cloudinary.com/dwo0sby8p/video/upload/v1746968096/kidrchnlenjuutzovjnu.webm'
     )
     
     

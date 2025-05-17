@@ -24,7 +24,7 @@ urlpatterns = [
     path("payment-create-zalopay/", ProcessPaymentZalopayView.as_view(), name="payment_create_zalopay"),
     path("check-transaction-zalopay/", CheckTransactionZalopayView.as_view(), name="check_transaction_zalopay"),
     path("payment-create-momo/", ProcessPaymentMomoView.as_view(), name="payment_create_momo"),
-    path("check-transaction-/", CheckTransactionMomoView.as_view(), name="check_transaction_momo"),
+    path("check-transaction-momo/", CheckTransactionMomoView.as_view(), name="check_transaction_momo"),
 
 
 ]

@@ -41,7 +41,7 @@ export default function Header() {
           className="w-8 h-8 "
           onClick={() => navigate('/')}
         >
-          <img src="https://tse2.mm.bing.net/th?id=OIP.fkSXxvt9TDjfoykMqGhrWAHaHa&pid=Api&P=0&h=180" alt="Spotify Logo" className="w-full h-full" />
+          <img src="https://logodix.com/logo/1961524.png" alt="Spotify Logo" className="w-full h-full" />
         </div>
 
         <div

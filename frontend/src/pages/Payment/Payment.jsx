@@ -82,7 +82,7 @@ export default function Payment() {
                     <img
                         className="w-9"
                         style={{ WebkitMaskImage: "radial-gradient(circle, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%)" }}
-                        src="https://static.vecteezy.com/system/resources/previews/023/986/728/original/spotify-logo-spotify-logo-transparent-spotify-icon-transparent-free-free-png.png"
+                        src="https://logodix.com/logo/1961524.png"
                     />
                     <p className='text-base font-bold'>Spotify</p>
                 </div>
@@ -99,7 +99,7 @@ export default function Payment() {
                 <div className="flex items-center">
                     <div className='flex items-center'>
                         <img
-                            src="https://checkout.spotifycdn.com/premium-product-images/4c33c49c-ee13-4fa6-ba48-9980bb5cb90e.png"
+                            src="https://logodix.com/logo/1961524.png"
                             className="w-11 mr-3 rounded-sm"
                         />
                         <div className="">

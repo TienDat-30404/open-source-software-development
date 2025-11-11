@@ -26,7 +26,7 @@ export default function CardPremium({ id, title, price, duration, description })
                 <img
                     className="w-9"
                     style={{ WebkitMaskImage: "radial-gradient(circle, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%)" }}
-                    src="https://static.vecteezy.com/system/resources/previews/023/986/728/original/spotify-logo-spotify-logo-transparent-spotify-icon-transparent-free-free-png.png"
+                    src="https://logodix.com/logo/1961524.png"
                 />
                 <span className="font-bold text-base">Premium</span>
 
